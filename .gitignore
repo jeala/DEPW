@@ -1,0 +1,67 @@
+########## User-specific files #######
+*.sln.docstates
+*.suo
+*.user
+
+## Visual Studio Build result files ##
+[Dd]ebug/
+[Rr]elease/
+[Oo]bj/
+.builds
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.vspscc
+
+
+######## Visual C++ cache files ########
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+
+####### Visual Studio profiler #########
+*.psess
+*.vsp
+
+############ C++ specific files#########
+*.a
+*.la
+*.lai
+*.lo
+*.o
+*.slo
+*.so
+
+
+#################### Windows ###########
+*.Cache
+*.dll
+*.sql
+Thumbs.db
+[Dd]esktop.ini
+
+
+#################### Linux ##############
+.*
+!.gitignore
+
+
+#################### Mac OS X ###########
+._*
+.DS_Store
+.Spotlight-V100
+.Trashes
