@@ -12,8 +12,8 @@
 ## Tools: ##
 * Visual Studio 2010
 * XNA Studio 4.0
-* Git/Github.com
-* SVN/GForge
+* Git/Github.com (for development)
+* SVN/GForge (final deliverable)
 
 ## Meetings: ##
 * Wednesday 2-4pm  Jack's Lounge
