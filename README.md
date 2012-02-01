@@ -18,3 +18,6 @@
 ## Meetings: ##
 * Wednesday 2-4pm  Jack's Lounge
 * Thursday  1-2pm  Jack's Lounge
+
+
+Thomas changes this.
