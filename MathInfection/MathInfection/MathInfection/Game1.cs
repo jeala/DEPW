@@ -1,9 +1,3 @@
-//There is a bit of commented out code that I used to test 
-//for character movement. It all works, but is being moved
-//into Player.cs. I left it behind to be removed after the
-//movement works with the Player.cs class
-//-Jason
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +19,9 @@ namespace MathInfection
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Player user = new Player();
+        Texture2D charSprite;
+        Player user;
 
-/*      Moved to Player.cs for neatness   
-        Texture2D mainChar;
-        Vector2 userPosition;
-        int userSpeed = 5;
-*/
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -52,10 +42,6 @@ namespace MathInfection
             //Calls init function from Player.cs
             user.init();
 
-/*          Sets character position to center screen
-            userPosition.X = Window.ClientBounds.Width / 2;
-            userPosition.Y = Window.ClientBounds.Height / 2;
- */
         }
 
         /// <summary>
@@ -66,12 +52,11 @@ namespace MathInfection
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            //Load Main Character
-            //mainChar = Content.Load<Texture2D>("Player\\CharacterSprite");
+            //Load Main Character       
+            charSprite = Content.Load<Texture2D>("Player\\CharacterSprite");
        
             //Calls load function from Player.cs
-            user.load();
+            user = new Player(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2, charSprite);
 
             // TODO: use this.Content to load your game content here
         }
@@ -104,33 +89,6 @@ namespace MathInfection
             base.Update(gameTime);
         }
 
-        //Track User Input 
-/*        private void UpdatePlayer()
-        {
-            KeyboardState newState = Keyboard.GetState();
-            //Check for Left key
-            if (newState.IsKeyDown(Keys.Left))
-            {
-                userPosition.X -= userSpeed;
-            }
-            //Check for Right Key
-            if (newState.IsKeyDown(Keys.Right))
-            {
-                userPosition.X += userSpeed;
-            }
-            //Check for Up Key
-            if (newState.IsKeyDown(Keys.Up))
-            {
-                userPosition.Y -= userSpeed;
-            }
-            //Check for Down Key
-            if (newState.IsKeyDown(Keys.Down))
-            {
-                userPosition.Y += userSpeed;
-            }
-
-        }
-*/
 
         /// <summary>
         /// This is called when the game should draw itself.

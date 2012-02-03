@@ -1,13 +1,4 @@
-﻿/*
- * 2/2/2012
- * Currently draw is not working properly. The code to make the
- * character sprite move is currently working in Game1.cs, but
- * it is commented out. When uncommented, it will need other minor
- * adjustments, such as removing the call functions to this class
- * in order to work properly.
- * -Jason
-*/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,10 +19,11 @@ namespace MathInfection
         Vector2 userPosition;
         int userSpeed = 5;
 
-        public Player()
+        public Player(int x, int y, Texture2D texture)
         {
-            //For loading images, don't need to type "Player\\", can just type asset name
-            Content.RootDirectory = "Content\\Player";
+            userPosition.X = x;
+            userPosition.Y = y;
+            mainChar = texture;
         }
 
         public void init()
@@ -75,7 +67,7 @@ namespace MathInfection
 
         public void draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(mainChar, new Vector2(userPosition.X, userPosition.Y), Color.White);
+            spriteBatch.Draw(mainChar, userPosition, Color.White);
 
         }
     }
