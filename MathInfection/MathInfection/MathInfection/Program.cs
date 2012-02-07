@@ -1,4 +1,4 @@
-using System;
+//using System;
 
 namespace MathInfection
 {
@@ -10,7 +10,7 @@ namespace MathInfection
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (Main game = new Main())
             {
                 game.Run();
             }

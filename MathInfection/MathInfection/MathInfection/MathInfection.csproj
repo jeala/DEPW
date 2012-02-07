@@ -107,10 +107,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player.cs" />
+    <Compile Include="Character-Boss.cs" />
+    <Compile Include="Character-Enemy.cs" />
+    <Compile Include="Helper-FloatRoundUpDown.cs" />
+    <Compile Include="Helper-ICharacter.cs" />
+    <Compile Include="Helper-Mover-CatmullRom.cs" />
+    <Compile Include="Helper-Mover-Lerp.cs" />
+    <Compile Include="Helper-Mover-Velocity.cs" />
+    <Compile Include="Scene-Background.cs" />
+    <Compile Include="Scene-HeadsUpDisplay.cs" />
+    <Compile Include="Helper-IMoverStrategy.cs" />
+    <Compile Include="Character-Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Helper-RandomGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
