@@ -29,9 +29,9 @@ namespace MathInfection
         private Vector2 playerSize;
         private Vector2 windowSize;
 
-        private int numberMoveStrategies;
         private bool singleMode;
         private int numPlayers;
+        private int numMoveStrategies;
 
         public Main()
         {
@@ -47,7 +47,6 @@ namespace MathInfection
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: build constructors for all stuff below
             rand = new RandomGenerator();
             hud = new HeadsUpDisplay();
             player1 = new Player();
@@ -56,10 +55,10 @@ namespace MathInfection
             enemyTexList = new List<Texture2D>();
             bossTexList = new List<Texture2D>();
             windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
-            numberMoveStrategies = 3;
-            // TODO: find a way to determine game mode: single or versus. Use single for now.
+            // TODO: determine game mode: single or versus. Use single for now.
             singleMode = true;
             numPlayers = singleMode ? 1 : 2;
+            numMoveStrategies = 3;
 
             base.Initialize();
         }

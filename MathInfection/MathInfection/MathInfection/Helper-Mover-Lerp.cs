@@ -1,26 +1,30 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MathInfection
 {
     class LerpMover : IMoverStrategy
     {
         private ICharacter parent;
+        private RandomGenerator rand;
         private Vector2 initialPosition;
         private Vector2 finalPosition;
-        private float location;
         private float speed;
+        private float location;
 
-        public LerpMover(Vector2 init, Vector2 fin, float spd, ICharacter parent)
+        public LerpMover(ICharacter caller, RandomGenerator random, Vector2 init, Vector2 fin, float spd)
         {
-            this.parent = parent;
+            parent = caller;
+            rand = random;
             initialPosition = init;
             finalPosition = fin;
-            location = 0;
             speed = spd;
+            location = 0;
         }
 
         public Vector2 update(Vector2 dummy)
         {
+            // TODO: implemenet random moves targetting at player
             location += speed;
 
             if (location > 1.0f || location < .0f) location = .0f;
@@ -32,7 +36,7 @@ namespace MathInfection
             if(newPosition == initialPosition)
             {
                 initialPosition = finalPosition;
-                finalPosition = RandomGenerator.RandomPosition(this.);
+                finalPosition = rand.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
             }
             return newPosition;

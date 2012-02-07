@@ -4,20 +4,19 @@ namespace MathInfection
 {
     class VelocityMover : IMoverStrategy
     {
+        private ICharacter parent;
         private Vector2 velocity;
-        private Vector2 itemSize;
-        private Vector2 windowSize;
 
-        public VelocityMover(Vector2 vel, Vector2 iSize, Vector2 winSize)
+        public VelocityMover(ICharacter caller, Vector2 vel)
         {
+            parent = caller;
             velocity = vel;
-            itemSize = iSize;
-            windowSize = winSize;
         }
 
         public Vector2 update(Vector2 position)
         {
             position += velocity;
+            // TODO: decide enemies bounce or dispear. Dispear wastes resources used for creating this enemy.
             return BounceEdges(position);
         }
 
@@ -35,16 +34,16 @@ namespace MathInfection
                 velocity.Y *= -1;
             }
 
-            if(position.X + itemSize.X > windowSize.X)
+            if(position.X + parent.CharacterSize.X > parent.WindowSize.X)
             {
-                float over = position.X + itemSize.X - windowSize.X;
+                float over = position.X + parent.CharacterSize.X - parent.WindowSize.X;
                 position.X = position.X - (velocity.X - over);
                 velocity.X *= -1;
             }
 
-            if(position.Y + itemSize.Y > windowSize.Y)
+            if(position.Y + parent.CharacterSize.Y > parent.WindowSize.Y)
             {
-                float over = position.Y + itemSize.Y - windowSize.Y;
+                float over = position.Y + parent.CharacterSize.Y - parent.WindowSize.Y;
                 position.Y = position.Y - (velocity.Y - over);
                 velocity.Y *= -1;
             }

@@ -4,8 +4,28 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
-    public class Player : ICharacter
+    class Player : ICharacter
     {
+        private IMoverStrategy mover;
+        private Vector2 characterSize;
+        private Vector2 windowSize;
+
+        public Vector2 CharacterSize
+        {
+            get
+            {
+                return characterSize;
+            }
+        }
+
+        public Vector2 WindowSize
+        {
+            get
+            {
+                return windowSize;
+            }
+        }
+
         public void update()
         {
             
