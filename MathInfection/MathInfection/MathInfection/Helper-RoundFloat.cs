@@ -5,7 +5,7 @@
         public static int Round(float target)
         {
             // TODO: implement this part later
-            return 0;
+            return (int)target;
         }
     }
 }

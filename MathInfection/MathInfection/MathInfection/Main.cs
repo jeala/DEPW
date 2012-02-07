@@ -28,6 +28,8 @@ namespace MathInfection
 
         private Vector2 playerSize;
         private Vector2 windowSize;
+        private Vector2 initialPlayerPosition;
+        private Vector2 playerVelocity;
 
         private bool singleMode;
         private int numPlayers;
@@ -49,12 +51,13 @@ namespace MathInfection
         {
             rand = new RandomGenerator();
             hud = new HeadsUpDisplay();
-            player1 = new Player();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
             enemyTexList = new List<Texture2D>();
             bossTexList = new List<Texture2D>();
             windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            initialPlayerPosition = new Vector2(windowSize.X/2, windowSize.Y-30);
+            playerVelocity = new Vector2(3, 3);
             // TODO: determine game mode: single or versus. Use single for now.
             singleMode = true;
             numPlayers = singleMode ? 1 : 2;
@@ -80,9 +83,7 @@ namespace MathInfection
                 // TODO: use player1's texture for now, might make a different tex for player2 later.
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
-
-
-            // TODO: use this.Content to load your game content here
+            player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity, playerSize, windowSize);
         }
 
         /// <summary>
@@ -102,10 +103,27 @@ namespace MathInfection
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
+            if(GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+            {
+                player1.StartBoost = true;
+            }
+            if(GamePad.GetState(PlayerIndex.One).IsButtonUp(Buttons.A) || Keyboard.GetState().IsKeyUp(Keys.LeftShift))
+            {
+                player1.StartBoost = false;
+            }
 
-            // TODO: Add your update logic here
+            if(player1.IsAlive())
+            {
+                player1.update();
+            }
+            else
+            {
+                // TODO: gameover implementation
+            }
 
             base.Update(gameTime);
         }
@@ -117,11 +135,13 @@ namespace MathInfection
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
-
+            if(player1.IsAlive())
+            {
+                player1.draw(spriteBatch);
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

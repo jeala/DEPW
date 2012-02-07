@@ -31,7 +31,7 @@ namespace MathInfection
             
         }
 
-        public void draw()
+        public void draw(SpriteBatch sb)
         {
             
         }
