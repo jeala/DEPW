@@ -42,8 +42,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player\CharacterSprite.png">
-      <Name>CharacterSprite</Name>
+    <Compile Include="HUDFont.spritefont">
+      <Name>HUDFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CharacterImages\Player1.png">
+      <Name>Player1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
