@@ -14,6 +14,7 @@ namespace MathInfection
         GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
+        private GamePadState oldGamePadState;
 
         private RandomGenerator rand;
         private HeadsUpDisplay hud;
@@ -49,6 +50,7 @@ namespace MathInfection
         /// </summary>
         protected override void Initialize()
         {
+            oldGamePadState = GamePad.GetState(PlayerIndex.One);
             rand = new RandomGenerator();
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
@@ -107,14 +109,7 @@ namespace MathInfection
             {
                 Exit();
             }
-            if(GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A) || Keyboard.GetState().IsKeyDown(Keys.LeftShift))
-            {
-                player1.StartBoost = true;
-            }
-            if(GamePad.GetState(PlayerIndex.One).IsButtonUp(Buttons.A) || Keyboard.GetState().IsKeyUp(Keys.LeftShift))
-            {
-                player1.StartBoost = false;
-            }
+            CheckBoostKeyPress();
 
             if(player1.IsAlive())
             {
@@ -145,6 +140,23 @@ namespace MathInfection
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void CheckBoostKeyPress()
+        {
+            GamePadState newState = GamePad.GetState(PlayerIndex.One);
+            if (newState.IsButtonDown(Buttons.A))
+            {
+                if(!oldGamePadState.IsButtonDown(Buttons.A))
+                {
+                    player1.StartBoost = true;
+                }
+            }
+            else if(oldGamePadState.IsButtonDown(Buttons.A))
+            {
+                player1.StartBoost = false;
+            }
+            oldGamePadState = newState;
         }
     }
 }
