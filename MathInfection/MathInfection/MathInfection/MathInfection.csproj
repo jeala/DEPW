@@ -114,6 +114,8 @@
     <Compile Include="Helper-Mover-CatmullRom.cs" />
     <Compile Include="Helper-Mover-Lerp.cs" />
     <Compile Include="Helper-Mover-Velocity.cs" />
+    <Compile Include="PowerUp-HealthRegen.cs" />
+    <Compile Include="PowerUp-Shield.cs" />
     <Compile Include="Scene-Background.cs" />
     <Compile Include="Scene-HeadsUpDisplay.cs" />
     <Compile Include="Helper-IMoverStrategy.cs" />
