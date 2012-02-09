@@ -15,6 +15,7 @@ namespace MathInfection
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
         private GamePadState oldGamePadState;
+        private KeyboardState oldKeyboardState;
 
         private RandomGenerator rand;
         private HeadsUpDisplay hud;
@@ -144,19 +145,22 @@ namespace MathInfection
 
         private void CheckBoostKeyPress()
         {
-            GamePadState newState = GamePad.GetState(PlayerIndex.One);
-            if (newState.IsButtonDown(Buttons.A))
+            GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
+            KeyboardState newKeyboardState = Keyboard.GetState();
+            // NOTE: assume user wouldn't switch between keyboard and gamepad while speeding up
+            if (newGamePadState.IsButtonDown(Buttons.A) || newKeyboardState.IsKeyDown(Keys.LeftShift))
             {
-                if(!oldGamePadState.IsButtonDown(Buttons.A))
+                if(!oldGamePadState.IsButtonDown(Buttons.A) || !oldKeyboardState.IsKeyDown(Keys.LeftShift))
                 {
                     player1.StartBoost = true;
                 }
             }
-            else if(oldGamePadState.IsButtonDown(Buttons.A))
+            else if(oldGamePadState.IsButtonDown(Buttons.A) || oldKeyboardState.IsKeyDown(Keys.LeftShift))
             {
                 player1.StartBoost = false;
             }
-            oldGamePadState = newState;
+            oldGamePadState = newGamePadState;
+            oldKeyboardState = newKeyboardState;
         }
     }
 }
