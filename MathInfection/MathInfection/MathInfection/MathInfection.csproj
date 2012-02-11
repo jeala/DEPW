@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Character-Boss.cs" />
     <Compile Include="Character-Enemy.cs" />
+    <Compile Include="Character-Enhancement.cs" />
     <Compile Include="Helper-RoundFloat.cs" />
     <Compile Include="Helper-ICharacter.cs" />
     <Compile Include="Helper-Mover-CatmullRom.cs" />

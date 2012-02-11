@@ -37,6 +37,10 @@ namespace MathInfection
         private int numPlayers;
         private int numMoveStrategies;
 
+        //Currently working on
+        private Texture2D powerUpTex_shield;
+        Enhancement HandlePowerUps;
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -87,6 +91,11 @@ namespace MathInfection
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
             player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity, playerSize, windowSize);
+            
+            //Currently Working on.
+            powerUpTex_shield = Content.Load<Texture2D>(@"PowerUps/Temp-Shield");
+            HandlePowerUps = new Enhancement(powerUpTex_shield, playerSize);
+
         }
 
         /// <summary>
@@ -137,6 +146,7 @@ namespace MathInfection
             if(player1.IsAlive())
             {
                 player1.draw(spriteBatch);
+                HandlePowerUps.ModifyShield(spriteBatch, player1);
             }
             spriteBatch.End();
 

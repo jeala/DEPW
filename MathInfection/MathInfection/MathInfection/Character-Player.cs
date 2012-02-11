@@ -7,7 +7,8 @@ namespace MathInfection
     class Player : ICharacter
     {
         private readonly Texture2D texture;
-        private Vector2 position;
+        //Changed to public for testing purposes
+        public Vector2 position;
         private Vector2 velocity;
         private Vector2 characterSize;
         private Vector2 windowSize;
