@@ -6,16 +6,14 @@ namespace MathInfection
     class LerpMover : IMoverStrategy
     {
         private ICharacter parent;
-        private RandomGenerator rand;
         private Vector2 initialPosition;
         private Vector2 finalPosition;
         private float speed;
         private float location;
 
-        public LerpMover(ICharacter caller, RandomGenerator random, Vector2 init, Vector2 fin, float spd)
+        public LerpMover(ICharacter caller, Vector2 init, Vector2 fin, float spd)
         {
             parent = caller;
-            rand = random;
             initialPosition = init;
             finalPosition = fin;
             speed = spd;
@@ -36,7 +34,7 @@ namespace MathInfection
             if(newPosition == initialPosition)
             {
                 initialPosition = finalPosition;
-                finalPosition = rand.RandomPosition(parent.WindowSize, parent.CharacterSize);
+                finalPosition = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
             }
             return newPosition;

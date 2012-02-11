@@ -11,7 +11,7 @@ namespace MathInfection
         private Vector2 velocity;
         private Vector2 characterSize;
         private Vector2 windowSize;
-        private int health;
+        private int score;
         private bool wasHit;
         private bool startBoost;
 
@@ -22,7 +22,7 @@ namespace MathInfection
             velocity = vel;
             characterSize = cSize;
             windowSize = wSize;
-            health = 100;
+            score = 1000;
             wasHit = false;
             startBoost = false;
         }
@@ -43,6 +43,14 @@ namespace MathInfection
             }
         }
 
+        public bool WasHit
+        {
+            set
+            {
+                wasHit = value;
+            }
+        }
+
         public bool StartBoost
         {
             set
@@ -51,45 +59,37 @@ namespace MathInfection
             }
         }
 
-        public bool IsAlive()
-        {
-            return health > 0;
-        }
-
         public void update()
         {
             if (wasHit)
             {
-                health--;
+                score--;
                 wasHit = false;
             }
 
-            if(IsAlive())
+            Vector2 speed = velocity;
+            if(startBoost)
             {
-                Vector2 speed = velocity;
-                if(startBoost)
-                {
-                    speed = velocity * 2;
-                }
-
-                if(Keyboard.GetState().IsKeyDown(Keys.W) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
-                {
-                    position.Y -= speed.Y;
-                }
-                if(Keyboard.GetState().IsKeyDown(Keys.S) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
-                {
-                    position.Y += speed.Y;
-                }
-                if(Keyboard.GetState().IsKeyDown(Keys.A) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
-                {
-                    position.X -= speed.X;
-                }
-                if(Keyboard.GetState().IsKeyDown(Keys.D) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
-                {
-                    position.X += speed.X;
-                }
-                StopEdge();
+                speed = velocity * 2;
             }
+
+            if(Keyboard.GetState().IsKeyDown(Keys.W) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
+            {
+                position.Y -= speed.Y;
+            }
+            if(Keyboard.GetState().IsKeyDown(Keys.S) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
+            {
+                position.Y += speed.Y;
+            }
+            if(Keyboard.GetState().IsKeyDown(Keys.A) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
+            {
+                position.X -= speed.X;
+            }
+            if(Keyboard.GetState().IsKeyDown(Keys.D) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
+            {
+                position.X += speed.X;
+            }
+            StopEdge();
         }
 
         public void draw(SpriteBatch sb)

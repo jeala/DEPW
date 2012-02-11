@@ -3,14 +3,14 @@ using Microsoft.Xna.Framework;
 
 namespace MathInfection
 {
-    class RandomGenerator
+    public static class RandomGenerator
     {
-        private Random rand;
-        private int speedLimitMin;
-        private int speedLimitMax;
-        private float weight;
+        static private readonly Random rand;
+        static private readonly int speedLimitMin;
+        static private readonly int speedLimitMax;
+        static private readonly float weight;
 
-        public RandomGenerator()
+        static RandomGenerator()
         {
             rand = new Random();
             speedLimitMin = 3;
@@ -18,18 +18,18 @@ namespace MathInfection
             weight = .1f;
         }
 
-        public Vector2 RandomPosition(Vector2 winSize, Vector2 objSize)
+        public static Vector2 RandomPosition(Vector2 winSize, Vector2 objSize)
         {
             return new Vector2(rand.Next((int)(winSize.X - objSize.X)),
                                rand.Next((int)(winSize.Y - objSize.Y)));
         }
 
-        public int RandomMoveStrategy(int numStrategies)
+        public static int RandomMoveStrategy(int numStrategies)
         {
             return rand.Next(numStrategies);
         }
 
-        public Vector2 RandomVelocity()
+        public static Vector2 RandomVelocity()
         {
             int firstSign = PositiveOrNegative() ? 1 : -1;
             int secondSign = PositiveOrNegative() ? 1 : -1;
@@ -37,23 +37,23 @@ namespace MathInfection
                               secondSign * rand.Next(speedLimitMin, speedLimitMax));
         }
 
-        public float RandomLerpSpeed()
+        public static float RandomLerpSpeed()
         {
             return RandomFloatLessThanOne();
         }
 
-        public float RandomCatSpeed()
+        public static float RandomCatSpeed()
         {
             return RandomFloatLessThanOne();
         }
 
 
-        private bool PositiveOrNegative()
+        private static bool PositiveOrNegative()
         {
             return rand.Next() % 2 == 0;
         }
 
-        private float RandomFloatLessThanOne()
+        private static float RandomFloatLessThanOne()
         {
             float temp = (float)rand.NextDouble();
             if(temp >= .9f)

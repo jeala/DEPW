@@ -6,9 +6,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
     public class Main : Game
     {
         GraphicsDeviceManager graphics;
@@ -17,7 +14,6 @@ namespace MathInfection
         private GamePadState oldGamePadState;
         private KeyboardState oldKeyboardState;
 
-        private RandomGenerator rand;
         private HeadsUpDisplay hud;
 
         private Player player1;
@@ -43,24 +39,23 @@ namespace MathInfection
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 700;
+            graphics.IsFullScreen = false;
+            graphics.ApplyChanges();
+            Window.Title = "Math Infection";
+
             oldGamePadState = GamePad.GetState(PlayerIndex.One);
-            rand = new RandomGenerator();
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
             enemyTexList = new List<Texture2D>();
             bossTexList = new List<Texture2D>();
             windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
-            initialPlayerPosition = new Vector2(windowSize.X/2, windowSize.Y-30);
-            playerVelocity = new Vector2(3, 3);
+            initialPlayerPosition = new Vector2(windowSize.X/2, windowSize.Y-60);
+            playerVelocity = new Vector2(6, 6);
             // TODO: determine game mode: single or versus. Use single for now.
             singleMode = true;
             numPlayers = singleMode ? 1 : 2;
@@ -69,13 +64,8 @@ namespace MathInfection
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             hudFont = Content.Load<SpriteFont>("HUDFont");
 
@@ -87,56 +77,46 @@ namespace MathInfection
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
             player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity, playerSize, windowSize);
+
+//            bossTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
+            Texture2D tempTex = Content.Load<Texture2D>(@"CharacterImages/Boss1");
+            bossTexList.Add(tempTex);
+            Vector2 charSize = new Vector2(bossTexList[0].Width, bossTexList[0].Height);
+            bossList.Add(new Boss(RandomGenerator.RandomMoveStrategy(numMoveStrategies), bossTexList[0],
+                                  RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize));
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
             if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
             }
             CheckBoostKeyPress();
 
-            if(player1.IsAlive())
+            player1.update();
+            foreach(Boss b in bossList)
             {
-                player1.update();
-            }
-            else
-            {
-                // TODO: gameover implementation
+                b.update();
             }
 
             base.Update(gameTime);
         }
 
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            if(player1.IsAlive())
+            player1.draw(spriteBatch);
+            foreach(Boss b in bossList)
             {
-                player1.draw(spriteBatch);
+                b.draw(spriteBatch);
             }
             spriteBatch.End();
 
