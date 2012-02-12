@@ -9,10 +9,11 @@ temp.rfx
 *.user
 
 ## Visual Studio Build result files ##
-[Bb]in
+[Bb]in/
 [Dd]ebug/
-[Rr]elease/
 [Oo]bj/
+[Pp]ublish/
+[Rr]elease/
 .builds
 *_i.c
 *_p.c
@@ -22,6 +23,7 @@ temp.rfx
 *.obj
 *.pch
 *.pdb
+*.pfx
 *.pgc
 *.pgd
 *.rsp

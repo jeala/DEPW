@@ -11,8 +11,11 @@ namespace MathInfection
         private Vector2 characterSize;
         private Vector2 windowSize;
         private Vector2 playerPosition;
+        private int health;
+        private bool wasHit;
+        private int damage;
 
-        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize)
+        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize, int hp)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -20,6 +23,8 @@ namespace MathInfection
             characterSize = cSize;
             windowSize = wSize;
             playerPosition = Vector2.Zero;
+            health = hp;
+            wasHit = false;
         }
 
         public Vector2 CharacterSize
@@ -46,10 +51,38 @@ namespace MathInfection
             }
         }
 
+        public bool WasHit
+        {
+            set
+            {
+                wasHit = value;
+            }
+        }
+
+        public int Damage
+        {
+            set
+            {
+                damage = value;
+            }
+        }
+
+        public bool IsAlive()
+        {
+            return health > 0;
+        }
+
         public void update(Vector2 playerPos)
         {
-            playerPosition = playerPos;
-            position = mover.update(position);
+            if(wasHit)
+            {
+                health -= damage;
+            }
+            if (health > 0)
+            {
+                playerPosition = playerPos;
+                position = mover.update(position);
+            }
         }
 
         public void draw(SpriteBatch sb)

@@ -81,7 +81,7 @@ namespace MathInfection
             bossTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
             Vector2 charSize = new Vector2(bossTexList[0].Width, bossTexList[0].Height);
             bossList.Add(new Boss(RandomGenerator.RandomMoveStrategy(numMoveStrategies), bossTexList[0],
-                                  RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize));
+                                  RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize, 1000));
         }
 
         protected override void UnloadContent()
