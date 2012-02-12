@@ -47,9 +47,18 @@ namespace MathInfection
             return RandomFloatLessThanOne();
         }
 
-        public static bool FlipCoin()
+        public static bool RandomChasePlayer(bool isBoss)
         {
-            return PositiveOrNegative();
+            float temp = (float)rand.NextDouble();
+            if(isBoss)
+            {
+                temp *= 2;
+            }
+            if(temp >= .5f)
+            {
+                return true;
+            }
+            return false;
         }
 
 

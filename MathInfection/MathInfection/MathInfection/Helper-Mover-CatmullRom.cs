@@ -30,7 +30,7 @@ namespace MathInfection
             {
                 vec1 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 vec2 = vec3;
-                vec3 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
+                vec3 = TargetPlayer();
                 vec4 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 location = 0;
                 newPosition = Vector2.CatmullRom(vec1, vec2, vec3, vec4, location);
@@ -74,6 +74,15 @@ namespace MathInfection
                 newPos.Y = newPos.Y - over;
             }
             return newPos;
+        }
+
+        private Vector2 TargetPlayer()
+        {
+            if(RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "Boss"))
+            {
+                return parent.PlayerPosition;
+            }
+            return RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
         }
     }
 }

@@ -67,7 +67,7 @@ namespace MathInfection
             }
         }
 
-        public void update()
+        public void update(Vector2 dummy)
         {
             if (wasHit)
             {

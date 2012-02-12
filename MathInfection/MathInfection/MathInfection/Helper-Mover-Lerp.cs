@@ -51,8 +51,7 @@ namespace MathInfection
 
         private Vector2 TargetPlayer()
         {
-            bool chasePlayer = RandomGenerator.FlipCoin();
-            if(chasePlayer)
+            if (RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "Boss"))
             {
                 return parent.PlayerPosition;
             }

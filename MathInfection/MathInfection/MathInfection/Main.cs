@@ -98,10 +98,10 @@ namespace MathInfection
             }
             CheckBoostKeyPress();
 
-            player1.update();
+            player1.update(Vector2.Zero);
             foreach(Boss b in bossList)
             {
-                b.update();
+                b.update(player1.PlayerPosition);
             }
 
             base.Update(gameTime);

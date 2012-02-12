@@ -46,8 +46,9 @@ namespace MathInfection
             }
         }
 
-        public void update()
+        public void update(Vector2 playerPos)
         {
+            playerPosition = playerPos;
             position = mover.update(position);
         }
 
