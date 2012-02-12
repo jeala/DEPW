@@ -32,6 +32,7 @@ namespace MathInfection
         private bool singleMode;
         private int numPlayers;
         private int numMoveStrategies;
+        private int numEnemies;
 
         public Main()
         {
@@ -60,6 +61,7 @@ namespace MathInfection
             singleMode = true;
             numPlayers = singleMode ? 1 : 2;
             numMoveStrategies = 3;
+            numEnemies = 10;
 
             base.Initialize();
         }
@@ -78,10 +80,16 @@ namespace MathInfection
             }
             player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity, playerSize, windowSize);
 
-            bossTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
-            Vector2 charSize = new Vector2(bossTexList[0].Width, bossTexList[0].Height);
-            bossList.Add(new Boss(RandomGenerator.RandomMoveStrategy(numMoveStrategies), bossTexList[0],
-                                  RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize, 1000));
+            enemyTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
+            Vector2 charSize = new Vector2(enemyTexList[0].Width, enemyTexList[0].Height);
+            int numEnemy = numEnemies;
+            while(numEnemy > 0)
+            {
+                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies), enemyTexList[0],
+                                    RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize, 1000,
+                                    RandomGenerator.RandomEnemySize(false)));
+                numEnemy--;
+            }
         }
 
         protected override void UnloadContent()
@@ -97,13 +105,11 @@ namespace MathInfection
                 Exit();
             }
             CheckBoostKeyPress();
-
             player1.update(Vector2.Zero);
-            foreach(Boss b in bossList)
+            foreach(Enemy e in enemyList)
             {
-                b.update(player1.PlayerPosition);
+                e.update(player1.PlayerPosition);
             }
-
             base.Update(gameTime);
         }
 
@@ -112,11 +118,11 @@ namespace MathInfection
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            player1.draw(spriteBatch);
-            foreach(Boss b in bossList)
+            foreach(Enemy e in enemyList)
             {
-                b.draw(spriteBatch);
+                e.draw(spriteBatch);
             }
+            player1.draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -140,6 +146,11 @@ namespace MathInfection
             }
             oldGamePadState = newGamePadState;
             oldKeyboardState = newKeyboardState;
+        }
+
+        private void AddEnemies()
+        {
+            
         }
     }
 }

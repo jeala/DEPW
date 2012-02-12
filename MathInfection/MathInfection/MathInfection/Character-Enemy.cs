@@ -11,8 +11,12 @@ namespace MathInfection
         private Vector2 characterSize;
         private Vector2 windowSize;
         private Vector2 playerPosition;
+        private int health;
+        private bool wasHit;
+        private int damageReceived;
+        private float resizeRatio;
 
-        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize)
+        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -20,6 +24,10 @@ namespace MathInfection
             characterSize = cSize;
             windowSize = wSize;
             playerPosition = Vector2.Zero;
+            health = hp;
+            wasHit = false;
+            damageReceived = 0;
+            resizeRatio = resize;
         }
 
         public Vector2 CharacterSize
@@ -46,15 +54,43 @@ namespace MathInfection
             }
         }
 
+        public bool WasHit
+        {
+            set
+            {
+                wasHit = value;
+            }
+        }
+
+        public int DamageReceived
+        {
+            set
+            {
+                damageReceived = value;
+            }
+        }
+
+        public bool IsAlive()
+        {
+            return health > 0;
+        }
+
         public void update(Vector2 playerPos)
         {
-            playerPosition = playerPos;
-            position = mover.update(position);
+            if(wasHit)
+            {
+                health -= damageReceived;
+            }
+            if (health > 0)
+            {
+                playerPosition = playerPos;
+                position = mover.update(position);
+            }
         }
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(texture, position, Color.White);
+            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
         }
 
         private IMoverStrategy SetMover(int moverId)

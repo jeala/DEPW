@@ -31,8 +31,8 @@ namespace MathInfection
 
         public static Vector2 RandomVelocity()
         {
-            int firstSign = PositiveOrNegative() ? 1 : -1;
-            int secondSign = PositiveOrNegative() ? 1 : -1;
+            int firstSign = PositiveOrNegative();
+            int secondSign = PositiveOrNegative();
             return new Vector2(firstSign * rand.Next(speedLimitMin, speedLimitMax),
                               secondSign * rand.Next(speedLimitMin, speedLimitMax));
         }
@@ -61,10 +61,29 @@ namespace MathInfection
             return false;
         }
 
-
-        private static bool PositiveOrNegative()
+        public static float RandomEnemySize(bool isBoss)
         {
-            return rand.Next() % 2 == 0;
+            int sign = PositiveOrNegative();
+            float temp = (float)rand.NextDouble() * sign;
+            if(temp > .6f)
+            {
+                temp -= .5f;
+            }
+            if(temp < -.6f)
+            {
+                temp += .5f;
+            }
+            if(isBoss)
+            {
+                temp *= 2;
+            }
+            return 1 + temp;
+        }
+
+
+        private static int PositiveOrNegative()
+        {
+            return rand.Next() % 2 == 0 ? 1 : -1;
         }
 
         private static float RandomFloatLessThanOne()

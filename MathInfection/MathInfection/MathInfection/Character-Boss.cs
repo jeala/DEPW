@@ -13,9 +13,10 @@ namespace MathInfection
         private Vector2 playerPosition;
         private int health;
         private bool wasHit;
-        private int damage;
+        private int damageReceived;
+        private float resizeRatio;
 
-        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize, int hp)
+        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -25,6 +26,8 @@ namespace MathInfection
             playerPosition = Vector2.Zero;
             health = hp;
             wasHit = false;
+            damageReceived = 0;
+            resizeRatio = resize;
         }
 
         public Vector2 CharacterSize
@@ -59,11 +62,11 @@ namespace MathInfection
             }
         }
 
-        public int Damage
+        public int DamageReceived
         {
             set
             {
-                damage = value;
+                damageReceived = value;
             }
         }
 
@@ -76,7 +79,7 @@ namespace MathInfection
         {
             if(wasHit)
             {
-                health -= damage;
+                health -= damageReceived;
             }
             if (health > 0)
             {
@@ -87,7 +90,7 @@ namespace MathInfection
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(texture, position, Color.White);
+            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
         }
 
         private IMoverStrategy SetMover(int moverId)
