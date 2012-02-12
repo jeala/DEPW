@@ -78,9 +78,7 @@ namespace MathInfection
             }
             player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity, playerSize, windowSize);
 
-//            bossTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
-            Texture2D tempTex = Content.Load<Texture2D>(@"CharacterImages/Boss1");
-            bossTexList.Add(tempTex);
+            bossTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
             Vector2 charSize = new Vector2(bossTexList[0].Width, bossTexList[0].Height);
             bossList.Add(new Boss(RandomGenerator.RandomMoveStrategy(numMoveStrategies), bossTexList[0],
                                   RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize));
@@ -93,7 +91,8 @@ namespace MathInfection
 
         protected override void Update(GameTime gameTime)
         {
-            if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+               Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 Exit();
             }

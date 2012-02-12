@@ -22,22 +22,41 @@ namespace MathInfection
 
         public Vector2 update(Vector2 dummy)
         {
-            // TODO: implemenet random moves targetting at player
             location += speed;
 
             if (location > 1.0f || location < .0f) location = .0f;
 
             Vector2 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
-            newPosition.X = RoundFloat.Round(newPosition.X);
-            newPosition.Y = RoundFloat.Round(newPosition.Y);
-
-            if(newPosition == initialPosition)
+            if(CheckEqual(newPosition))
             {
                 initialPosition = finalPosition;
-                finalPosition = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
+                finalPosition = TargetPlayer();
                 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
             }
             return newPosition;
+        }
+
+        private bool CheckEqual(Vector2 newPosition)
+        {
+            float tempX = newPosition.X - initialPosition.X;
+            float tempY = newPosition.Y - initialPosition.Y;
+            tempX = tempX > 0 ? tempX : -tempX;
+            tempY = tempY > 0 ? tempY : -tempY;
+            if(tempX <= speed && tempY <= speed)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private Vector2 TargetPlayer()
+        {
+            bool chasePlayer = RandomGenerator.FlipCoin();
+            if(chasePlayer)
+            {
+                return parent.PlayerPosition;
+            }
+            return RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
         }
     }
 }

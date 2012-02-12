@@ -43,6 +43,14 @@ namespace MathInfection
             }
         }
 
+        public Vector2 PlayerPosition
+        {
+            get
+            {
+                return position;
+            }
+        }
+
         public bool WasHit
         {
             set

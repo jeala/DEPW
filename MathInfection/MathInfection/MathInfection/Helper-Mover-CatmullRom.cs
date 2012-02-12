@@ -28,13 +28,14 @@ namespace MathInfection
             Vector2 newPosition = Vector2.CatmullRom(vec1, vec2, vec3, vec4, location);
             if(CheckEqual(newPosition, vec2) || CheckEqual(newPosition, vec3))
             {
-                vec1 = vec2;
+                vec1 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 vec2 = vec3;
-                vec3 = vec4;
+                vec3 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 vec4 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 location = 0;
                 newPosition = Vector2.CatmullRom(vec1, vec2, vec3, vec4, location);
             }
+            newPosition = BounceEdges(newPosition);
             return newPosition;
         }
 
@@ -49,6 +50,30 @@ namespace MathInfection
                 return true;
             }
             return false;
+        }
+
+        private Vector2 BounceEdges(Vector2 newPosition)
+        {
+            Vector2 newPos = newPosition;
+            if(newPos.X < 0)
+            {
+                newPos.X = 0;
+            }
+            if(newPos.Y < 0)
+            {
+                newPos.Y = 0;
+            }
+            if(newPos.X > parent.WindowSize.X - parent.CharacterSize.X)
+            {
+                float over = newPos.X + parent.CharacterSize.X - parent.WindowSize.X;
+                newPos.X = newPos.X - over;
+            }
+            if(newPos.Y > parent.WindowSize.Y - parent.CharacterSize.Y)
+            {
+                float over = newPos.Y + parent.CharacterSize.Y - parent.WindowSize.Y;
+                newPos.Y = newPos.Y - over;
+            }
+            return newPos;
         }
     }
 }

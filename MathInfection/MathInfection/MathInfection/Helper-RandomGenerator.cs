@@ -47,6 +47,11 @@ namespace MathInfection
             return RandomFloatLessThanOne();
         }
 
+        public static bool FlipCoin()
+        {
+            return PositiveOrNegative();
+        }
+
 
         private static bool PositiveOrNegative()
         {
