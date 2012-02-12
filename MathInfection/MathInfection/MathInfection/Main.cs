@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,9 +21,11 @@ namespace MathInfection
         private Player player2;
         private List<Enemy> enemyList;
         private List<Boss> bossList;
+        private List<Bullet> bulletList;
         private Texture2D player1Texture;
         private List<Texture2D> enemyTexList;
         private List<Texture2D> bossTexList;
+        private List<Texture2D> bulletTexList;
 
         private Vector2 playerSize;
         private Vector2 windowSize;
@@ -33,6 +36,8 @@ namespace MathInfection
         private int numPlayers;
         private int numMoveStrategies;
         private int numEnemies;
+        private TimeSpan previousFireTime;
+        private TimeSpan defaultBulletFireRate;
 
         public Main()
         {
@@ -52,8 +57,10 @@ namespace MathInfection
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
+            bulletList = new List<Bullet>();
             enemyTexList = new List<Texture2D>();
             bossTexList = new List<Texture2D>();
+            bulletTexList = new List<Texture2D>();
             windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
             initialPlayerPosition = new Vector2(windowSize.X/2, windowSize.Y-60);
             playerVelocity = new Vector2(6, 6);
@@ -62,6 +69,8 @@ namespace MathInfection
             numPlayers = singleMode ? 1 : 2;
             numMoveStrategies = 3;
             numEnemies = 10;
+            previousFireTime = TimeSpan.Zero;
+            defaultBulletFireRate = TimeSpan.FromSeconds(.2f);
 
             base.Initialize();
         }
@@ -90,6 +99,7 @@ namespace MathInfection
                                     RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
+            bulletTexList.Add(Content.Load<Texture2D>(@"BulletImages/Bullet1"));
         }
 
         protected override void UnloadContent()
@@ -104,11 +114,24 @@ namespace MathInfection
             {
                 Exit();
             }
-            CheckBoostKeyPress();
+            CheckInput(gameTime);
             player1.update(Vector2.Zero);
             foreach(Enemy e in enemyList)
             {
                 e.update(player1.PlayerPosition);
+            }
+            foreach(Bullet b in bulletList)
+            {
+                b.update(player1.PlayerPosition);
+            }
+            int index = 0;
+            while(index < bulletList.Count)
+            {
+                if(!bulletList[index].IsValid)
+                {
+                    bulletList.RemoveAt(index);
+                }
+                index++;
             }
             base.Update(gameTime);
         }
@@ -122,17 +145,22 @@ namespace MathInfection
             {
                 e.draw(spriteBatch);
             }
+            foreach(Bullet b in bulletList)
+            {
+                b.draw(spriteBatch);
+            }
             player1.draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private void CheckBoostKeyPress()
+        private void CheckInput(GameTime gameTime)
         {
+            // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState newKeyboardState = Keyboard.GetState();
-            // NOTE: assume user wouldn't switch between keyboard and gamepad while speeding up
+            // TODO: assume user wouldn't switch between keyboard and gamepad while speeding up for now
             if (newGamePadState.IsButtonDown(Buttons.A) || newKeyboardState.IsKeyDown(Keys.LeftShift))
             {
                 if(!oldGamePadState.IsButtonDown(Buttons.A) || !oldKeyboardState.IsKeyDown(Keys.LeftShift))
@@ -146,11 +174,25 @@ namespace MathInfection
             }
             oldGamePadState = newGamePadState;
             oldKeyboardState = newKeyboardState;
-        }
+            // endof BoostButton pressing
 
-        private void AddEnemies()
-        {
-            
+            // Bullet Generation
+            if (gameTime.TotalGameTime - previousFireTime > defaultBulletFireRate)
+            {
+                if (newGamePadState.Triggers.Right > .25f || newKeyboardState.IsKeyDown(Keys.Space))
+                {
+                    if (!(oldGamePadState.Triggers.Right > .25f) || !oldKeyboardState.IsKeyDown(Keys.Space))
+                    {
+                        Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
+                        Vector2 bPos = new Vector2(player1.PlayerPosition.X + player1.CharacterSize.X / 2,
+                                                   player1.PlayerPosition.Y);
+                        bulletList.Add(new Bullet(bulletTexList[0], bPos, bSize, windowSize, Vector2.Zero, 8, 5,
+                                                  TimeSpan.FromSeconds(.2f)));
+                        previousFireTime = gameTime.TotalGameTime;
+                    }
+                }
+            }
+            // endof Bullet Generation
         }
     }
 }
