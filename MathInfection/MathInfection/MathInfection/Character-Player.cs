@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
-    class Player : ICharacter
+    public class Player : ICharacter
     {
         private readonly Texture2D texture;
         private Vector2 position;

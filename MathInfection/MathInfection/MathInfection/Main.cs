@@ -39,6 +39,14 @@ namespace MathInfection
         private TimeSpan previousFireTime;
         private TimeSpan defaultBulletFireRate;
 
+        public TimeSpan PreviousFireTime
+        {
+            set
+            {
+                previousFireTime = value;
+            }
+        }
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -54,6 +62,7 @@ namespace MathInfection
             Window.Title = "Math Infection";
 
             oldGamePadState = GamePad.GetState(PlayerIndex.One);
+            oldKeyboardState = Keyboard.GetState();
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
@@ -114,7 +123,9 @@ namespace MathInfection
             {
                 Exit();
             }
-            CheckInput(gameTime);
+            GameUpdate.CheckInput(oldGamePadState, oldKeyboardState, gameTime, player1,
+                       defaultBulletList, bulletTexList, previousFireTime, defaultBulletFireRate,
+                       windowSize, this);
             player1.update(Vector2.Zero);
 
             foreach(Enemy e in enemyList)
@@ -125,6 +136,8 @@ namespace MathInfection
             {
                 b.update(player1.PlayerPosition);
             }
+
+            GameUpdate.BulletCollision(defaultBulletList, enemyList);
             int index = 0;
             while(index < enemyList.Count)
             {
@@ -143,8 +156,6 @@ namespace MathInfection
                 }
                 index++;
             }
-            UpdateBulletCollision();
-
             base.Update(gameTime);
         }
 
@@ -166,76 +177,5 @@ namespace MathInfection
 
             base.Draw(gameTime);
         }
-
-        private void CheckInput(GameTime gameTime)
-        {
-            // BoostButton pressing
-            GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
-            KeyboardState newKeyboardState = Keyboard.GetState();
-            // TODO: assume user wouldn't switch between keyboard and gamepad while speeding up for now
-            if (newGamePadState.IsButtonDown(Buttons.A) || newKeyboardState.IsKeyDown(Keys.LeftShift))
-            {
-                if(!oldGamePadState.IsButtonDown(Buttons.A) || !oldKeyboardState.IsKeyDown(Keys.LeftShift))
-                {
-                    player1.StartBoost = true;
-                }
-            }
-            else if(oldGamePadState.IsButtonDown(Buttons.A) || oldKeyboardState.IsKeyDown(Keys.LeftShift))
-            {
-                player1.StartBoost = false;
-            }
-            oldGamePadState = newGamePadState;
-            oldKeyboardState = newKeyboardState;
-            // endof BoostButton pressing
-
-            // Bullet Generation
-            if (gameTime.TotalGameTime - previousFireTime > defaultBulletFireRate)
-            {
-                if (newGamePadState.Triggers.Right > .2f || newKeyboardState.IsKeyDown(Keys.Space))
-                {
-                    if (!(oldGamePadState.Triggers.Right > .25f) || !oldKeyboardState.IsKeyDown(Keys.Space))
-                    {
-                        Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
-                        Vector2 bPos = new Vector2(player1.PlayerPosition.X + player1.CharacterSize.X / 2,
-                                                   player1.PlayerPosition.Y);
-                        defaultBulletList.Add(new Bullet(bulletTexList[0], bPos, bSize, windowSize, Vector2.Zero, 10, 20));
-                        previousFireTime = gameTime.TotalGameTime;
-                    }
-                }
-            }
-            // endof Bullet Generation
-        }
-
-        private void UpdateBulletCollision()
-        {
-            if(defaultBulletList.Count <1)
-            {
-                return;
-            }
-            Rectangle r1 = new Rectangle();
-            Rectangle r2 = new Rectangle();
-            foreach(Bullet b in defaultBulletList)
-            {
-                r1.Width  = (int)Math.Round(b.CharacterSize.X);
-                r1.Height = (int)Math.Round(b.CharacterSize.Y);
-                r1.X = (int)Math.Round(b.Position.X);
-                r1.Y = (int)Math.Round(b.Position.Y);
-                foreach(Enemy e in enemyList)
-                {
-                    r2.Width  = (int)Math.Round(e.CharacterSize.X);
-                    r2.Height = (int)Math.Round(e.CharacterSize.Y);
-                    r2.X = (int)Math.Round(e.Position.X);
-                    r2.Y = (int)Math.Round(e.Position.Y);
-
-                    if(r1.Intersects(r2))
-                    {
-                        e.WasHit = true;
-                        e.DamageReceived = b.Damage;
-                        b.IsValid = false;
-                    }
-                }
-            }
-        }
-        // endof UpdateBulletCollision()
     }
 }

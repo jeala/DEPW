@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="Character-Boss.cs" />
     <Compile Include="Character-Enemy.cs" />
+    <Compile Include="Helper-GameUpdate.cs" />
     <Compile Include="Helper-ICharacter.cs" />
     <Compile Include="Helper-Mover-CatmullRom.cs" />
     <Compile Include="Helper-Mover-Lerp.cs" />

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MathInfection
 {
-    class Bullet : ICharacter
+    public class Bullet : ICharacter
     {
         private readonly Texture2D texture;
         private Vector2 position;
