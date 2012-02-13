@@ -12,6 +12,7 @@ namespace MathInfection
         GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
+        private bool windowMode;
 
         private HeadsUpDisplay hud;
 
@@ -45,6 +46,18 @@ namespace MathInfection
             }
         }
 
+        public bool WindowMode
+        {
+            set
+            {
+                windowMode = value;
+            }
+            get
+            {
+                return windowMode;
+            }
+        }
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -53,11 +66,16 @@ namespace MathInfection
 
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferWidth = 1124;
             graphics.PreferredBackBufferHeight = 700;
             graphics.IsFullScreen = false;
+            //graphics.PreferredBackBufferWidth = 2560;
+            //graphics.PreferredBackBufferHeight = 1440;
+            //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             Window.Title = "Math Infection";
+            Window.AllowUserResizing = true;
+            windowMode = false;
 
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
@@ -122,6 +140,7 @@ namespace MathInfection
             {
                 Exit();
             }
+            // windowMode = GameUpdate.CheckWindowMode(graphics, this);
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
                                   previousFireTime, defaultBulletFireRate, windowSize, this);
             player1.update(Vector2.Zero);
@@ -135,7 +154,7 @@ namespace MathInfection
                 b.update(player1.PlayerPosition);
             }
 
-            GameUpdate.BulletCollision(defaultBulletList, enemyList);
+            GameUpdate.CheckCollision(defaultBulletList, enemyList, player1);
             int index = 0;
             while(index < enemyList.Count)
             {
