@@ -21,7 +21,7 @@ namespace MathInfection
         private Player player2;
         private List<Enemy> enemyList;
         private List<Boss> bossList;
-        private List<Bullet> bulletList;
+        private List<Bullet> defaultBulletList;
         private Texture2D player1Texture;
         private List<Texture2D> enemyTexList;
         private List<Texture2D> bossTexList;
@@ -57,7 +57,7 @@ namespace MathInfection
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
-            bulletList = new List<Bullet>();
+            defaultBulletList = new List<Bullet>();
             enemyTexList = new List<Texture2D>();
             bossTexList = new List<Texture2D>();
             bulletTexList = new List<Texture2D>();
@@ -70,7 +70,7 @@ namespace MathInfection
             numMoveStrategies = 3;
             numEnemies = 10;
             previousFireTime = TimeSpan.Zero;
-            defaultBulletFireRate = TimeSpan.FromSeconds(.2f);
+            defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
 
             base.Initialize();
         }
@@ -95,7 +95,7 @@ namespace MathInfection
             while(numEnemy > 0)
             {
                 enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies), enemyTexList[0],
-                                    RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize, 1000,
+                                    RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize, 100,
                                     RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
@@ -116,23 +116,35 @@ namespace MathInfection
             }
             CheckInput(gameTime);
             player1.update(Vector2.Zero);
+
             foreach(Enemy e in enemyList)
             {
                 e.update(player1.PlayerPosition);
             }
-            foreach(Bullet b in bulletList)
+            foreach(Bullet b in defaultBulletList)
             {
                 b.update(player1.PlayerPosition);
             }
             int index = 0;
-            while(index < bulletList.Count)
+            while(index < enemyList.Count)
             {
-                if(!bulletList[index].IsValid)
+                if(!enemyList[index].IsAlive())
                 {
-                    bulletList.RemoveAt(index);
+                    enemyList.RemoveAt(index);
                 }
                 index++;
             }
+            index = 0;
+            while(index < defaultBulletList.Count)
+            {
+                if(!defaultBulletList[index].IsValid)
+                {
+                    defaultBulletList.RemoveAt(index);
+                }
+                index++;
+            }
+            UpdateBulletCollision();
+
             base.Update(gameTime);
         }
 
@@ -145,7 +157,7 @@ namespace MathInfection
             {
                 e.draw(spriteBatch);
             }
-            foreach(Bullet b in bulletList)
+            foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);
             }
@@ -179,20 +191,51 @@ namespace MathInfection
             // Bullet Generation
             if (gameTime.TotalGameTime - previousFireTime > defaultBulletFireRate)
             {
-                if (newGamePadState.Triggers.Right > .25f || newKeyboardState.IsKeyDown(Keys.Space))
+                if (newGamePadState.Triggers.Right > .2f || newKeyboardState.IsKeyDown(Keys.Space))
                 {
                     if (!(oldGamePadState.Triggers.Right > .25f) || !oldKeyboardState.IsKeyDown(Keys.Space))
                     {
                         Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
                         Vector2 bPos = new Vector2(player1.PlayerPosition.X + player1.CharacterSize.X / 2,
                                                    player1.PlayerPosition.Y);
-                        bulletList.Add(new Bullet(bulletTexList[0], bPos, bSize, windowSize, Vector2.Zero, 8, 5,
-                                                  TimeSpan.FromSeconds(.2f)));
+                        defaultBulletList.Add(new Bullet(bulletTexList[0], bPos, bSize, windowSize, Vector2.Zero, 10, 20));
                         previousFireTime = gameTime.TotalGameTime;
                     }
                 }
             }
             // endof Bullet Generation
         }
+
+        private void UpdateBulletCollision()
+        {
+            if(defaultBulletList.Count <1)
+            {
+                return;
+            }
+            Rectangle r1 = new Rectangle();
+            Rectangle r2 = new Rectangle();
+            foreach(Bullet b in defaultBulletList)
+            {
+                r1.Width  = (int)Math.Round(b.CharacterSize.X);
+                r1.Height = (int)Math.Round(b.CharacterSize.Y);
+                r1.X = (int)Math.Round(b.Position.X);
+                r1.Y = (int)Math.Round(b.Position.Y);
+                foreach(Enemy e in enemyList)
+                {
+                    r2.Width  = (int)Math.Round(e.CharacterSize.X);
+                    r2.Height = (int)Math.Round(e.CharacterSize.Y);
+                    r2.X = (int)Math.Round(e.Position.X);
+                    r2.Y = (int)Math.Round(e.Position.Y);
+
+                    if(r1.Intersects(r2))
+                    {
+                        e.WasHit = true;
+                        e.DamageReceived = b.Damage;
+                        b.IsValid = false;
+                    }
+                }
+            }
+        }
+        // endof UpdateBulletCollision()
     }
 }

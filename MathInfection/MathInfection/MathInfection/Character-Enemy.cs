@@ -16,7 +16,8 @@ namespace MathInfection
         private int damageReceived;
         private float resizeRatio;
 
-        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize, int hp, float resize)
+        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize,
+                    int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -28,6 +29,14 @@ namespace MathInfection
             wasHit = false;
             damageReceived = 0;
             resizeRatio = resize;
+        }
+
+        public  Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
         }
 
         public Vector2 CharacterSize

@@ -14,10 +14,9 @@ namespace MathInfection
         private readonly int bulletSpeed;
         private readonly int bulletDamage;
         private bool isValid;
-        private TimeSpan fireRate;
 
         public Bullet(Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize,
-                      Vector2 playerPos, int bSpeed, int bDamage, TimeSpan fRate)
+                      Vector2 playerPos, int bSpeed, int bDamage)
         {
             texture = tex;
             position = pos;
@@ -26,8 +25,15 @@ namespace MathInfection
             playerPosition = playerPos;
             bulletSpeed = bSpeed;
             bulletDamage = bDamage;
-            fireRate = fRate;
             isValid = true;
+        }
+
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
         }
 
         public Vector2 CharacterSize
@@ -54,16 +60,20 @@ namespace MathInfection
             }
         }
 
-        public TimeSpan FireRate
+        public int Damage
         {
             get
             {
-                return fireRate;
+                return bulletDamage;
             }
         }
 
         public bool IsValid
         {
+            set
+            {
+                isValid = value;
+            }
             get
             {
                 return isValid;
