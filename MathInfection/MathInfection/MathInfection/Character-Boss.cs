@@ -12,11 +12,10 @@ namespace MathInfection
         private Vector2 windowSize;
         private Vector2 playerPosition;
         private int health;
-        private bool wasHit;
-        private int damageReceived;
         private float resizeRatio;
 
-        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize, int hp, float resize)
+        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
+                    Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -25,9 +24,15 @@ namespace MathInfection
             windowSize = wSize;
             playerPosition = Vector2.Zero;
             health = hp;
-            wasHit = false;
-            damageReceived = 0;
             resizeRatio = resize;
+        }
+
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
         }
 
         public Vector2 CharacterSize
@@ -54,33 +59,18 @@ namespace MathInfection
             }
         }
 
-        public bool WasHit
-        {
-            set
-            {
-                wasHit = value;
-            }
-        }
-
-        public int DamageReceived
-        {
-            set
-            {
-                damageReceived = value;
-            }
-        }
-
         public bool IsAlive()
         {
             return health > 0;
         }
 
+        public void GetHit(int damage)
+        {
+            health -= damage;
+        }
+
         public void update(Vector2 playerPos)
         {
-            if(wasHit)
-            {
-                health -= damageReceived;
-            }
             if (health > 0)
             {
                 playerPosition = playerPos;
@@ -90,7 +80,8 @@ namespace MathInfection
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
+            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero,
+                    resizeRatio, SpriteEffects.None, 0);
         }
 
         private IMoverStrategy SetMover(int moverId)
@@ -100,18 +91,22 @@ namespace MathInfection
                 case 0:
                     return new VelocityMover(this, RandomGenerator.RandomVelocity());
                 case 1:
-                    return new LerpMover(this, RandomGenerator.RandomPosition(windowSize, characterSize),
-                                               RandomGenerator.RandomPosition(windowSize, characterSize),
+                    return new LerpMover(this, RandomGenerator.RandomPosition(windowSize,
+                                                               characterSize),
+                                               RandomGenerator.RandomPosition(windowSize,
+                                                               characterSize),
                                                RandomGenerator.RandomLerpSpeed());
                 case 2:
-                    return new CatmullRomMover(this, RandomGenerator.RandomPosition(windowSize, characterSize),
-                                                     RandomGenerator.RandomPosition(windowSize, characterSize),
-                                                     RandomGenerator.RandomPosition(windowSize, characterSize),
-                                                     RandomGenerator.RandomPosition(windowSize, characterSize),
-                                                     RandomGenerator.RandomCatSpeed());
+                    return new CatmullRomMover(this,
+                               RandomGenerator.RandomPosition(windowSize, characterSize),
+                               RandomGenerator.RandomPosition(windowSize, characterSize),
+                               RandomGenerator.RandomPosition(windowSize, characterSize),
+                               RandomGenerator.RandomPosition(windowSize, characterSize),
+                               RandomGenerator.RandomCatSpeed());
                 default:
                     return new VelocityMover(this, RandomGenerator.RandomVelocity());
             }
         }
+        // endof SetMover()
     }
 }

@@ -8,25 +8,21 @@ namespace MathInfection
 {
     public static class GameUpdate
     {
-        public static void CheckInput(GamePadState oldGamePadState, KeyboardState oldKeyboardState, GameTime gameTime,
-                                      Player player1, List<Bullet> defaultBulletList, List<Texture2D> bulletTexList,
-                                      TimeSpan previousFireTime, TimeSpan defaultBulletFireRate, Vector2 windowSize,
-                                      Main caller)
+        public static void CheckInput(GameTime gameTime, Player player1, List<Bullet> defaultBulletList,
+                                      List<Texture2D> bulletTexList, TimeSpan previousFireTime,
+                                      TimeSpan defaultBulletFireRate, Vector2 windowSize, Main caller)
         {
             // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState newKeyboardState = Keyboard.GetState();
-            // TODO: assume user wouldn't switch between keyboard and gamepad while speeding up for now
             if (newGamePadState.IsButtonDown(Buttons.A) || newKeyboardState.IsKeyDown(Keys.LeftShift))
             {
                 player1.StartBoost = true;
             }
-            else if(oldGamePadState.IsButtonUp(Buttons.A) || oldKeyboardState.IsKeyUp(Keys.LeftShift))
+            else
             {
                 player1.StartBoost = false;
             }
-            oldGamePadState = newGamePadState;
-            oldKeyboardState = newKeyboardState;
             // endof BoostButton pressing
 
             // Bullet Generation
@@ -34,14 +30,12 @@ namespace MathInfection
             {
                 if (newGamePadState.Triggers.Right > .2f || newKeyboardState.IsKeyDown(Keys.Space))
                 {
-                    if (!(oldGamePadState.Triggers.Right > .25f) || !oldKeyboardState.IsKeyDown(Keys.Space))
-                    {
-                        Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
-                        Vector2 bPos = new Vector2(player1.PlayerPosition.X + player1.CharacterSize.X / 2,
-                                                   player1.PlayerPosition.Y);
-                        defaultBulletList.Add(new Bullet(bulletTexList[0], bPos, bSize, windowSize, Vector2.Zero, 10, 20));
-                        caller.PreviousFireTime = gameTime.TotalGameTime;
-                    }
+                    Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
+                    Vector2 bPos = new Vector2(player1.PlayerPosition.X + player1.CharacterSize.X / 2,
+                                               player1.PlayerPosition.Y);
+                    defaultBulletList.Add(new Bullet(bulletTexList[0], bPos, bSize, windowSize,
+                                                     Vector2.Zero, 10, 20));
+                    caller.PreviousFireTime = gameTime.TotalGameTime;
                 }
             }
             // endof Bullet Generation

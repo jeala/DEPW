@@ -12,8 +12,6 @@ namespace MathInfection
         GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
-        private GamePadState oldGamePadState;
-        private KeyboardState oldKeyboardState;
 
         private HeadsUpDisplay hud;
 
@@ -61,8 +59,6 @@ namespace MathInfection
             graphics.ApplyChanges();
             Window.Title = "Math Infection";
 
-            oldGamePadState = GamePad.GetState(PlayerIndex.One);
-            oldKeyboardState = Keyboard.GetState();
             hud = new HeadsUpDisplay();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
@@ -93,19 +89,22 @@ namespace MathInfection
             playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
             if(!singleMode)
             {
-                // TODO: use player1's texture for now, might make a different tex for player2 later.
+                // TODO: use player1's texture for now, might make another for player2 later.
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
-            player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity, playerSize, windowSize);
+            player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity,
+                                 playerSize, windowSize);
 
             enemyTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
             Vector2 charSize = new Vector2(enemyTexList[0].Width, enemyTexList[0].Height);
             int numEnemy = numEnemies;
             while(numEnemy > 0)
             {
-                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies), enemyTexList[0],
-                                    RandomGenerator.RandomPosition(windowSize, charSize), charSize, windowSize, 100,
-                                    RandomGenerator.RandomEnemySize(false)));
+                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
+                                                                              enemyTexList[0],
+                                        RandomGenerator.RandomPosition(windowSize, charSize),
+                                                                   charSize, windowSize, 100,
+                                        RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
             bulletTexList.Add(Content.Load<Texture2D>(@"BulletImages/Bullet1"));
@@ -123,9 +122,8 @@ namespace MathInfection
             {
                 Exit();
             }
-            GameUpdate.CheckInput(oldGamePadState, oldKeyboardState, gameTime, player1,
-                       defaultBulletList, bulletTexList, previousFireTime, defaultBulletFireRate,
-                       windowSize, this);
+            GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
+                                  previousFireTime, defaultBulletFireRate, windowSize, this);
             player1.update(Vector2.Zero);
 
             foreach(Enemy e in enemyList)
@@ -164,13 +162,13 @@ namespace MathInfection
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            foreach(Enemy e in enemyList)
-            {
-                e.draw(spriteBatch);
-            }
             foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);
+            }
+            foreach(Enemy e in enemyList)
+            {
+                e.draw(spriteBatch);
             }
             player1.draw(spriteBatch);
             spriteBatch.End();

@@ -14,8 +14,8 @@ namespace MathInfection
         private int health;
         private float resizeRatio;
 
-        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize,
-                    int hp, float resize)
+        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
+                     Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -80,8 +80,8 @@ namespace MathInfection
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero, resizeRatio,
-                    SpriteEffects.None, 0);
+            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero,
+                    resizeRatio, SpriteEffects.None, 0);
         }
 
         private IMoverStrategy SetMover(int moverId)

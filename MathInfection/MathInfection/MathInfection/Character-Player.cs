@@ -15,7 +15,8 @@ namespace MathInfection
         private bool wasHit;
         private bool startBoost;
 
-        public Player(Texture2D tex, Vector2 pos, Vector2 vel, Vector2 cSize, Vector2 wSize)
+        public Player(Texture2D tex, Vector2 pos, Vector2 vel,
+                      Vector2 cSize, Vector2 wSize)
         {
             texture = tex;
             position = pos;
@@ -81,19 +82,23 @@ namespace MathInfection
                 speed = velocity * 2;
             }
 
-            if(Keyboard.GetState().IsKeyDown(Keys.W) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
+            if(Keyboard.GetState().IsKeyDown(Keys.W) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
             {
                 position.Y -= speed.Y;
             }
-            if(Keyboard.GetState().IsKeyDown(Keys.S) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
+            if(Keyboard.GetState().IsKeyDown(Keys.S) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
             {
                 position.Y += speed.Y;
             }
-            if(Keyboard.GetState().IsKeyDown(Keys.A) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
+            if(Keyboard.GetState().IsKeyDown(Keys.A) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
             {
                 position.X -= speed.X;
             }
-            if(Keyboard.GetState().IsKeyDown(Keys.D) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
+            if(Keyboard.GetState().IsKeyDown(Keys.D) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
             {
                 position.X += speed.X;
             }
