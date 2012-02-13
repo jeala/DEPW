@@ -9,8 +9,9 @@ namespace MathInfection
     {
         Vector2 CharacterSize { get; }
         Vector2 WindowSize { get; }
+        Vector2 PlayerPosition { get; }
 
-        void update();
+        void update(Vector2 playerPosition);
         void draw(SpriteBatch spriteBatch);
     }
 }
