@@ -12,6 +12,7 @@ namespace MathInfection
         GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
+        private bool windowMode;
 
         private HeadsUpDisplay hud;
 
@@ -45,6 +46,18 @@ namespace MathInfection
             }
         }
 
+        public bool WindowMode
+        {
+            set
+            {
+                windowMode = value;
+            }
+            get
+            {
+                return windowMode;
+            }
+        }
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -53,13 +66,18 @@ namespace MathInfection
 
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferWidth = 1124;
             graphics.PreferredBackBufferHeight = 700;
             graphics.IsFullScreen = false;
+            //graphics.PreferredBackBufferWidth = 2560;
+            //graphics.PreferredBackBufferHeight = 1440;
+            //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             Window.Title = "Math Infection";
+            Window.AllowUserResizing = true;
+            windowMode = false;
 
-            hud = new HeadsUpDisplay();
+
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
             defaultBulletList = new List<Bullet>();
@@ -76,7 +94,7 @@ namespace MathInfection
             numEnemies = 10;
             previousFireTime = TimeSpan.Zero;
             defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
-
+            hud = new HeadsUpDisplay(new Vector2(windowSize.X/2-200, 20));
             base.Initialize();
         }
 
@@ -122,9 +140,14 @@ namespace MathInfection
             {
                 Exit();
             }
+            // windowMode = GameUpdate.CheckWindowMode(graphics, this);
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
                                   previousFireTime, defaultBulletFireRate, windowSize, this);
             player1.update(Vector2.Zero);
+            if(!player1.IsAlive())
+            {
+                //TODO: gameover
+            }
 
             foreach(Enemy e in enemyList)
             {
@@ -135,25 +158,11 @@ namespace MathInfection
                 b.update(player1.PlayerPosition);
             }
 
-            GameUpdate.BulletCollision(defaultBulletList, enemyList);
-            int index = 0;
-            while(index < enemyList.Count)
-            {
-                if(!enemyList[index].IsAlive())
-                {
-                    enemyList.RemoveAt(index);
-                }
-                index++;
-            }
-            index = 0;
-            while(index < defaultBulletList.Count)
-            {
-                if(!defaultBulletList[index].IsValid)
-                {
-                    defaultBulletList.RemoveAt(index);
-                }
-                index++;
-            }
+            GameUpdate.CheckCollision(defaultBulletList, enemyList, player1);
+            GameUpdate.UpdateEnemyList(enemyList);
+            GameUpdate.UpdateBulletList(defaultBulletList);
+            hud.update(player1, enemyList.Count);
+
             base.Update(gameTime);
         }
 
@@ -162,6 +171,7 @@ namespace MathInfection
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+            hud.draw(hudFont, spriteBatch);
             foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);

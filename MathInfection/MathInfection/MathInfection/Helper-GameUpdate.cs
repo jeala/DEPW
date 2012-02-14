@@ -8,6 +8,54 @@ namespace MathInfection
 {
     public static class GameUpdate
     {
+        public static void UpdateEnemyList(List<Enemy> eList)
+        {
+            int index = 0;
+            while(index < eList.Count)
+            {
+                if(!eList[index].IsAlive())
+                {
+                    eList.RemoveAt(index);
+                }
+                index++;
+            }
+        }
+
+        public static void UpdateBulletList(List<Bullet> bList)
+        {
+            int index = 0;
+            while(index < bList.Count)
+            {
+                if(!bList[index].IsValid)
+                {
+                    bList.RemoveAt(index);
+                }
+                index++;
+            }
+        }
+
+        public static bool CheckWindowMode(GraphicsDeviceManager gdm, Main caller)
+        {
+            // TODO: fullscreen mode doesn't get correct desktop resolution
+            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.F))
+            {
+                if (caller.WindowMode)
+                {
+                    gdm.PreferredBackBufferWidth = 2560;
+                    gdm.PreferredBackBufferHeight = 1440;
+                    gdm.ToggleFullScreen();
+                    gdm.ApplyChanges();
+                    return false;
+                }
+                gdm.PreferredBackBufferWidth = 1124;
+                gdm.PreferredBackBufferHeight = 700;
+                gdm.ToggleFullScreen();
+                gdm.ApplyChanges();
+                return true;
+            }
+            return caller.WindowMode;
+        }
+
         public static void CheckInput(GameTime gameTime, Player player1, List<Bullet> defaultBulletList,
                                       List<Texture2D> bulletTexList, TimeSpan previousFireTime,
                                       TimeSpan defaultBulletFireRate, Vector2 windowSize, Main caller)
@@ -41,35 +89,61 @@ namespace MathInfection
             // endof Bullet Generation
         }
 
-        public static void BulletCollision(List<Bullet> defaultBulletList, List<Enemy> enemyList)
+        public static void CheckCollision(List<Bullet> defaultBulletList, List<Enemy> enemyList, Player p1)
         {
-            if(defaultBulletList.Count <1)
-            {
-                return;
-            }
             Rectangle r1 = new Rectangle();
             Rectangle r2 = new Rectangle();
-            foreach(Bullet b in defaultBulletList)
-            {
-                r1.Width  = (int)Math.Round(b.CharacterSize.X);
-                r1.Height = (int)Math.Round(b.CharacterSize.Y);
-                r1.X = (int)Math.Round(b.Position.X);
-                r1.Y = (int)Math.Round(b.Position.Y);
-                foreach(Enemy e in enemyList)
-                {
-                    r2.Width  = (int)Math.Round(e.CharacterSize.X);
-                    r2.Height = (int)Math.Round(e.CharacterSize.Y);
-                    r2.X = (int)Math.Round(e.Position.X);
-                    r2.Y = (int)Math.Round(e.Position.Y);
 
-                    if(r1.Intersects(r2))
+            // Bullet Collision Detection
+            if(defaultBulletList.Count > 0)
+            {
+                foreach(Bullet b in defaultBulletList)
+                {
+                    r1.Width = (int)Math.Round(b.CharacterSize.X);
+                    r1.Height = (int)Math.Round(b.CharacterSize.Y);
+                    r1.X = (int)Math.Round(b.Position.X);
+                    r1.Y = (int)Math.Round(b.Position.Y);
+                    foreach(Enemy e in enemyList)
                     {
-                        e.GetHit(b.Damage);
-                        b.IsValid = false;
+                        r2.Width = (int)Math.Round(e.CharacterSize.X);
+                        r2.Height = (int)Math.Round(e.CharacterSize.Y);
+                        r2.X = (int)Math.Round(e.Position.X);
+                        r2.Y = (int)Math.Round(e.Position.Y);
+
+                        if(r1.Intersects(r2))
+                        {
+                            e.GetHit(b.Damage);
+                            if(!e.IsAlive())
+                            {
+                                p1.GetPoints(e.GetType().ToString() == "MathInfection.Boss");
+                            }
+                            b.IsValid = false;
+                        }
                     }
                 }
             }
+            // endof Bullet Collision Detection
+
+            // Player Collision Detection
+            r1.Width = (int)Math.Round(p1.CharacterSize.X);
+            r1.Height = (int)Math.Round(p1.CharacterSize.Y);
+            r1.X = (int)Math.Round(p1.PlayerPosition.X);
+            r1.Y = (int)Math.Round(p1.PlayerPosition.Y);
+            foreach (Enemy e in enemyList)
+            {
+                r2.Width = (int)Math.Round(e.CharacterSize.X);
+                r2.Height = (int)Math.Round(e.CharacterSize.Y);
+                r2.X = (int)Math.Round(e.Position.X);
+                r2.Y = (int)Math.Round(e.Position.Y);
+
+                if (r1.Intersects(r2))
+                {
+                    p1.GetHit(e.GetType().ToString() == "MathInfection.Enemy" ? 20 : 50);
+                    e.Health = 0;
+                }
+            }
+            // endof Player Collision Detection
         }
-        // endof BulletCollision()
+        // endof CheckCollision()
     }
 }

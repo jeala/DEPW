@@ -59,6 +59,14 @@ namespace MathInfection
             }
         }
 
+        public int Health
+        {
+            set
+            {
+                health = value;
+            }
+        }
+
         public bool IsAlive()
         {
             return health > 0;
