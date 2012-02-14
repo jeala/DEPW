@@ -77,7 +77,7 @@ namespace MathInfection
             Window.AllowUserResizing = true;
             windowMode = false;
 
-            hud = new HeadsUpDisplay();
+
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
             defaultBulletList = new List<Bullet>();
@@ -94,7 +94,7 @@ namespace MathInfection
             numEnemies = 10;
             previousFireTime = TimeSpan.Zero;
             defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
-
+            hud = new HeadsUpDisplay(new Vector2(windowSize.X/2-200, 20));
             base.Initialize();
         }
 
@@ -144,6 +144,10 @@ namespace MathInfection
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
                                   previousFireTime, defaultBulletFireRate, windowSize, this);
             player1.update(Vector2.Zero);
+            if(!player1.IsAlive())
+            {
+                //TODO: gameover
+            }
 
             foreach(Enemy e in enemyList)
             {
@@ -155,24 +159,10 @@ namespace MathInfection
             }
 
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1);
-            int index = 0;
-            while(index < enemyList.Count)
-            {
-                if(!enemyList[index].IsAlive())
-                {
-                    enemyList.RemoveAt(index);
-                }
-                index++;
-            }
-            index = 0;
-            while(index < defaultBulletList.Count)
-            {
-                if(!defaultBulletList[index].IsValid)
-                {
-                    defaultBulletList.RemoveAt(index);
-                }
-                index++;
-            }
+            GameUpdate.UpdateEnemyList(enemyList);
+            GameUpdate.UpdateBulletList(defaultBulletList);
+            hud.update(player1, enemyList.Count);
+
             base.Update(gameTime);
         }
 
@@ -181,6 +171,7 @@ namespace MathInfection
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+            hud.draw(hudFont, spriteBatch);
             foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);

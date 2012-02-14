@@ -8,6 +8,32 @@ namespace MathInfection
 {
     public static class GameUpdate
     {
+        public static void UpdateEnemyList(List<Enemy> eList)
+        {
+            int index = 0;
+            while(index < eList.Count)
+            {
+                if(!eList[index].IsAlive())
+                {
+                    eList.RemoveAt(index);
+                }
+                index++;
+            }
+        }
+
+        public static void UpdateBulletList(List<Bullet> bList)
+        {
+            int index = 0;
+            while(index < bList.Count)
+            {
+                if(!bList[index].IsValid)
+                {
+                    bList.RemoveAt(index);
+                }
+                index++;
+            }
+        }
+
         public static bool CheckWindowMode(GraphicsDeviceManager gdm, Main caller)
         {
             // TODO: fullscreen mode doesn't get correct desktop resolution
@@ -68,7 +94,7 @@ namespace MathInfection
             Rectangle r1 = new Rectangle();
             Rectangle r2 = new Rectangle();
 
-            // Bullet Collision checks
+            // Bullet Collision Detection
             if(defaultBulletList.Count > 0)
             {
                 foreach(Bullet b in defaultBulletList)
@@ -87,30 +113,36 @@ namespace MathInfection
                         if(r1.Intersects(r2))
                         {
                             e.GetHit(b.Damage);
+                            if(!e.IsAlive())
+                            {
+                                p1.GetPoints(e.GetType().ToString() == "MathInfection.Boss");
+                            }
                             b.IsValid = false;
                         }
                     }
                 }
             }
-            // endof Bullet Collision checks
+            // endof Bullet Collision Detection
 
-
+            // Player Collision Detection
             r1.Width = (int)Math.Round(p1.CharacterSize.X);
             r1.Height = (int)Math.Round(p1.CharacterSize.Y);
             r1.X = (int)Math.Round(p1.PlayerPosition.X);
             r1.Y = (int)Math.Round(p1.PlayerPosition.Y);
-            foreach (Enemy e2 in enemyList)
+            foreach (Enemy e in enemyList)
             {
-                r2.Width = (int)Math.Round(e2.CharacterSize.X);
-                r2.Height = (int)Math.Round(e2.CharacterSize.Y);
-                r2.X = (int)Math.Round(e2.Position.X);
-                r2.Y = (int)Math.Round(e2.Position.Y);
+                r2.Width = (int)Math.Round(e.CharacterSize.X);
+                r2.Height = (int)Math.Round(e.CharacterSize.Y);
+                r2.X = (int)Math.Round(e.Position.X);
+                r2.Y = (int)Math.Round(e.Position.Y);
 
                 if (r1.Intersects(r2))
                 {
-                    p1.WasHit = true;
+                    p1.GetHit(e.GetType().ToString() == "MathInfection.Enemy" ? 20 : 50);
+                    e.Health = 0;
                 }
             }
+            // endof Player Collision Detection
         }
         // endof CheckCollision()
     }

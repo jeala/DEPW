@@ -51,7 +51,7 @@ namespace MathInfection
 
         private Vector2 TargetPlayer()
         {
-            if (RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "Boss"))
+            if (RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "MathInfection.Boss"))
             {
                 return parent.PlayerPosition;
             }
