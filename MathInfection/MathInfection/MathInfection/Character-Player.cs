@@ -8,7 +8,7 @@ namespace MathInfection
     {
         private readonly Texture2D texture;
         private Vector2 position;
-        private Vector2 velocity;
+        private readonly Vector2 velocity;
         private Vector2 characterSize;
         private Vector2 windowSize;
         private int score;
@@ -41,6 +41,14 @@ namespace MathInfection
             get
             {
                 return windowSize;
+            }
+        }
+
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
             }
         }
 
