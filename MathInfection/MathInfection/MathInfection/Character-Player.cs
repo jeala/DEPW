@@ -12,8 +12,8 @@ namespace MathInfection
         private Vector2 characterSize;
         private Vector2 windowSize;
         private int score;
-        private bool wasHit;
         private bool startBoost;
+        private int health;
 
         public Player(Texture2D tex, Vector2 pos, Vector2 vel,
                       Vector2 cSize, Vector2 wSize)
@@ -23,9 +23,9 @@ namespace MathInfection
             velocity = vel;
             characterSize = cSize;
             windowSize = wSize;
-            score = 1000;
-            wasHit = false;
+            score = 0;
             startBoost = false;
+            health = 100;
         }
 
         public Vector2 CharacterSize
@@ -52,11 +52,11 @@ namespace MathInfection
             }
         }
 
-        public bool WasHit
+        public int Score
         {
-            set
+            get
             {
-                wasHit = value;
+                return score;
             }
         }
 
@@ -68,14 +68,38 @@ namespace MathInfection
             }
         }
 
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+        }
+
+        public bool IsAlive()
+        {
+            return health > 0;
+        }
+
+        public void GetHit(int damage)
+        {
+            health -= damage;
+        }
+
+        public void GetPoints(bool isBoss)
+        {
+            if(isBoss)
+            {
+                score += 100;
+            }
+            else
+            {
+                score += 20;
+            }
+        }
+
         public void update(Vector2 dummy)
         {
-            if (wasHit)
-            {
-                score--;
-                wasHit = false;
-            }
-
             Vector2 speed = velocity;
             if(startBoost)
             {
