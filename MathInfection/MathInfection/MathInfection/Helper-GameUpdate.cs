@@ -63,7 +63,7 @@ namespace MathInfection
             // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState newKeyboardState = Keyboard.GetState();
-            if (newGamePadState.IsButtonDown(Buttons.A) || newKeyboardState.IsKeyDown(Keys.LeftShift))
+            if (newGamePadState.IsButtonDown(Buttons.LeftTrigger) || newKeyboardState.IsKeyDown(Keys.RightShift))
             {
                 player1.StartBoost = true;
             }
