@@ -20,8 +20,8 @@ namespace MathInfection
 
         public static Vector2 RandomPosition(Vector2 winSize, Vector2 objSize)
         {
-            return new Vector2(rand.Next((int)(winSize.X - objSize.X)),
-                               rand.Next((int)(winSize.Y - objSize.Y)));
+            return new Vector2(rand.Next((int)Math.Round(winSize.X - objSize.X)),
+                               rand.Next((int)Math.Round(winSize.Y - objSize.Y)));
         }
 
         public static int RandomMoveStrategy(int numStrategies)
