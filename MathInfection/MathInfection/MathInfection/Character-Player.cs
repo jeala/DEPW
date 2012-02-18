@@ -16,7 +16,7 @@ namespace MathInfection
         private int health;
 
         public Player(Texture2D tex, Vector2 pos, Vector2 vel,
-                      Vector2 cSize, Vector2 wSize)
+                                 Vector2 cSize, Vector2 wSize)
         {
             texture = tex;
             position = pos;

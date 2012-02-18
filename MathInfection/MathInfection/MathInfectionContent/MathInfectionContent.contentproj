@@ -56,13 +56,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharacterImages\Boss1.png">
-      <Name>Boss1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="BulletImages\Default-Bullet-temp.png">
       <Name>Bullet</Name>
       <Importer>TextureImporter</Importer>
@@ -84,6 +77,13 @@
   <ItemGroup>
     <Compile Include="Background.png">
       <Name>Background</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CharacterImages\Boss1.png">
+      <Name>Boss1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
