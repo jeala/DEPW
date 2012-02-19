@@ -5,8 +5,8 @@ namespace MathInfection
 {
     class HeadsUpDisplay
     {
-        private Vector2 hudPosition;
-        private Vector2 msgPosition;
+        private readonly Vector2 hudPosition;
+        private readonly Vector2 msgPosition;
         private string hudContent;
         private string msgContent;
         private bool gameOver;

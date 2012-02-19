@@ -63,7 +63,7 @@ namespace MathInfection
             // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState newKeyboardState = Keyboard.GetState();
-            if (newGamePadState.IsButtonDown(Buttons.A) || newKeyboardState.IsKeyDown(Keys.LeftShift))
+            if (newGamePadState.IsButtonDown(Buttons.LeftTrigger) || newKeyboardState.IsKeyDown(Keys.RightShift))
             {
                 player1.StartBoost = true;
             }
@@ -93,23 +93,25 @@ namespace MathInfection
         {
             Rectangle r1 = new Rectangle();
             Rectangle r2 = new Rectangle();
+//            List<Enemy> eList;
 
             // Bullet Collision Detection
             if(defaultBulletList.Count > 0)
             {
                 foreach(Bullet b in defaultBulletList)
                 {
+//                    eList = NarrowCollisionDetection(enemyList, b);
                     r1.Width = (int)Math.Round(b.CharacterSize.X);
                     r1.Height = (int)Math.Round(b.CharacterSize.Y);
                     r1.X = (int)Math.Round(b.Position.X);
                     r1.Y = (int)Math.Round(b.Position.Y);
-                    foreach(Enemy e in enemyList)
+//                    foreach(Enemy e in eList)
+                    foreach(var e in enemyList)
                     {
                         r2.Width = (int)Math.Round(e.CharacterSize.X);
                         r2.Height = (int)Math.Round(e.CharacterSize.Y);
                         r2.X = (int)Math.Round(e.Position.X);
                         r2.Y = (int)Math.Round(e.Position.Y);
-
                         if(r1.Intersects(r2))
                         {
                             e.GetHit(b.Damage);
@@ -120,6 +122,7 @@ namespace MathInfection
                             b.IsValid = false;
                         }
                     }
+//                    eList.Clear();
                 }
             }
             // endof Bullet Collision Detection
@@ -129,6 +132,8 @@ namespace MathInfection
             r1.Height = (int)Math.Round(p1.CharacterSize.Y);
             r1.X = (int)Math.Round(p1.PlayerPosition.X);
             r1.Y = (int)Math.Round(p1.PlayerPosition.Y);
+//            eList = NarrowCollisionDetection(enemyList, p1);
+//            foreach (Enemy e in eList)
             foreach (Enemy e in enemyList)
             {
                 r2.Width = (int)Math.Round(e.CharacterSize.X);
@@ -145,5 +150,17 @@ namespace MathInfection
             // endof Player Collision Detection
         }
         // endof CheckCollision()
+
+        // NarrowCollisionDetection()
+        private static List<Enemy> NarrowCollisionDetection(List<Enemy> enemyList, ICharacter center)
+        {
+            List<Enemy> eList = new List<Enemy>();
+            foreach(Enemy e in enemyList)
+            {
+
+            }
+            return eList;
+        }
+        // endof NarrowCollisionDetection()
     }
 }

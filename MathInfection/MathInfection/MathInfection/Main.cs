@@ -38,6 +38,8 @@ namespace MathInfection
         private TimeSpan previousFireTime;
         private TimeSpan defaultBulletFireRate;
 
+        private Background background;
+
         public TimeSpan PreviousFireTime
         {
             set
@@ -66,8 +68,8 @@ namespace MathInfection
 
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = 1124;
-            graphics.PreferredBackBufferHeight = 700;
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 660;
             graphics.IsFullScreen = false;
             //graphics.PreferredBackBufferWidth = 2560;
             //graphics.PreferredBackBufferHeight = 1440;
@@ -102,6 +104,10 @@ namespace MathInfection
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             hudFont = Content.Load<SpriteFont>("HUDFont");
+
+            Texture2D backgroundTex = Content.Load<Texture2D>("Background");
+            background = new Background();
+            background.Load(GraphicsDevice, backgroundTex);
 
             player1Texture = Content.Load<Texture2D>(@"CharacterImages/Player1");
             playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
@@ -140,9 +146,10 @@ namespace MathInfection
             {
                 Exit();
             }
-            // windowMode = GameUpdate.CheckWindowMode(graphics, this);
+
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
                                   previousFireTime, defaultBulletFireRate, windowSize, this);
+
             player1.update(Vector2.Zero);
             if(!player1.IsAlive())
             {
@@ -153,6 +160,7 @@ namespace MathInfection
             {
                 e.update(player1.PlayerPosition);
             }
+
             foreach(Bullet b in defaultBulletList)
             {
                 b.update(player1.PlayerPosition);
@@ -163,6 +171,10 @@ namespace MathInfection
             GameUpdate.UpdateBulletList(defaultBulletList);
             hud.update(player1, enemyList.Count);
 
+            // windowMode = GameUpdate.CheckWindowMode(graphics, this);
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            background.Update(elapsed * 100);
+
             base.Update(gameTime);
         }
 
@@ -171,6 +183,7 @@ namespace MathInfection
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+            background.Draw(spriteBatch);
             hud.draw(hudFont, spriteBatch);
             foreach(Bullet b in defaultBulletList)
             {

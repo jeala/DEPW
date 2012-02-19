@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MathInfection
@@ -9,7 +8,7 @@ namespace MathInfection
         private readonly Texture2D texture;
         private Vector2 position;
         private Vector2 characterSize;
-        private Vector2 windowSize;
+        private readonly Vector2 windowSize;
         private Vector2 playerPosition;
         private readonly int bulletSpeed;
         private readonly int bulletDamage;
@@ -82,8 +81,9 @@ namespace MathInfection
 
         public void update(Vector2 playerPos)
         {
+            playerPosition = playerPos;
             position.Y -= bulletSpeed;
-            if(position.Y + characterSize.Y/2 < 0)
+            if(position.Y + characterSize.Y <= 0)
             {
                 isValid = false;
             }

@@ -66,12 +66,12 @@ namespace MathInfection
             if(newPos.X > parent.WindowSize.X - parent.CharacterSize.X)
             {
                 float over = newPos.X + parent.CharacterSize.X - parent.WindowSize.X;
-                newPos.X = newPos.X - over;
+                newPos.X -= over;
             }
             if(newPos.Y > parent.WindowSize.Y - parent.CharacterSize.Y)
             {
                 float over = newPos.Y + parent.CharacterSize.Y - parent.WindowSize.Y;
-                newPos.Y = newPos.Y - over;
+                newPos.Y -= over;
             }
             return newPos;
         }

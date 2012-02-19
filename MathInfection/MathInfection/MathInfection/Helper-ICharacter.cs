@@ -7,6 +7,7 @@ namespace MathInfection
 
     interface ICharacter
     {
+        Vector2 Position { get; }
         Vector2 CharacterSize { get; }
         Vector2 WindowSize { get; }
         Vector2 PlayerPosition { get; }

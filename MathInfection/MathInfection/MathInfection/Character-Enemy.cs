@@ -5,14 +5,14 @@ namespace MathInfection
 {
     public class Enemy : ICharacter
     {
-        private IMoverStrategy mover;
+        private readonly IMoverStrategy mover;
         private readonly Texture2D texture;
         private Vector2 position;
-        private Vector2 characterSize;
-        private Vector2 windowSize;
+        private readonly Vector2 characterSize;
+        private readonly Vector2 windowSize;
         private Vector2 playerPosition;
         private int health;
-        private float resizeRatio;
+        private readonly float resizeRatio;
 
         public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
                      Vector2 wSize, int hp, float resize)
