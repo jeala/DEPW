@@ -18,6 +18,7 @@
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,10 +29,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -58,6 +59,25 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>50397313FDBB781E5475A360B1A7BD58A8A7EF80</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>MathInfection_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
@@ -109,14 +129,19 @@
   <ItemGroup>
     <Compile Include="Character-Boss.cs" />
     <Compile Include="Character-Enemy.cs" />
+<<<<<<< HEAD
     <Compile Include="Character-Enhancement.cs" />
     <Compile Include="Helper-RoundFloat.cs" />
+=======
+    <Compile Include="Helper-GameUpdate.cs" />
+>>>>>>> 36d0c3cdf80c55c5610441a3a0b74198678b4577
     <Compile Include="Helper-ICharacter.cs" />
     <Compile Include="Helper-Mover-CatmullRom.cs" />
     <Compile Include="Helper-Mover-Lerp.cs" />
     <Compile Include="Helper-Mover-Velocity.cs" />
     <Compile Include="PowerUp-Shield.cs" />
     <Compile Include="Scene-Background.cs" />
+    <Compile Include="Scene-Bullet.cs" />
     <Compile Include="Scene-HeadsUpDisplay.cs" />
     <Compile Include="Helper-IMoverStrategy.cs" />
     <Compile Include="Character-Player.cs" />

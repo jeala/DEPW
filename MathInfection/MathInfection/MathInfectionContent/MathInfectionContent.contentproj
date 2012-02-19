@@ -56,8 +56,39 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="PowerUps\Temp-Shield.png">
       <Name>Temp-Shield</Name>
+=======
+    <Compile Include="CharacterImages\Boss1.png">
+      <Name>Boss1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BulletImages\Default-Bullet-temp.png">
+      <Name>Bullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BulletImages\Bullet1.png">
+      <Name>Bullet1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="BulletImages\Bullet2.png">
+      <Name>Bullet2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Background.png">
+      <Name>Background</Name>
+>>>>>>> 36d0c3cdf80c55c5610441a3a0b74198678b4577
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

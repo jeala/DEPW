@@ -16,7 +16,6 @@ namespace MathInfection
         public Vector2 update(Vector2 position)
         {
             position += velocity;
-            // TODO: decide enemies bounce or dispear. Dispear wastes resources used for creating this enemy.
             return BounceEdges(position);
         }
 

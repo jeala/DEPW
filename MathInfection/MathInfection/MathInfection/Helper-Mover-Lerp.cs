@@ -6,16 +6,14 @@ namespace MathInfection
     class LerpMover : IMoverStrategy
     {
         private ICharacter parent;
-        private RandomGenerator rand;
         private Vector2 initialPosition;
         private Vector2 finalPosition;
         private float speed;
         private float location;
 
-        public LerpMover(ICharacter caller, RandomGenerator random, Vector2 init, Vector2 fin, float spd)
+        public LerpMover(ICharacter caller, Vector2 init, Vector2 fin, float spd)
         {
             parent = caller;
-            rand = random;
             initialPosition = init;
             finalPosition = fin;
             speed = spd;
@@ -24,22 +22,40 @@ namespace MathInfection
 
         public Vector2 update(Vector2 dummy)
         {
-            // TODO: implemenet random moves targetting at player
             location += speed;
 
             if (location > 1.0f || location < .0f) location = .0f;
 
             Vector2 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
-            newPosition.X = RoundFloat.Round(newPosition.X);
-            newPosition.Y = RoundFloat.Round(newPosition.Y);
-
-            if(newPosition == initialPosition)
+            if(CheckEqual(newPosition))
             {
                 initialPosition = finalPosition;
-                finalPosition = rand.RandomPosition(parent.WindowSize, parent.CharacterSize);
+                finalPosition = TargetPlayer();
                 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
             }
             return newPosition;
+        }
+
+        private bool CheckEqual(Vector2 newPosition)
+        {
+            float tempX = newPosition.X - initialPosition.X;
+            float tempY = newPosition.Y - initialPosition.Y;
+            tempX = tempX > 0 ? tempX : -tempX;
+            tempY = tempY > 0 ? tempY : -tempY;
+            if(tempX <= speed && tempY <= speed)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private Vector2 TargetPlayer()
+        {
+            if (RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "MathInfection.Boss"))
+            {
+                return parent.PlayerPosition;
+            }
+            return RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
         }
     }
 }
