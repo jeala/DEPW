@@ -74,19 +74,82 @@ namespace MathInfection
             GameplayInit(isNewGame);
         }
 
-        protected override void Initialize()
+        public override void LoadContent()
         {
-            graphics.PreferredBackBufferWidth = 1000;
-            graphics.PreferredBackBufferHeight = 660;
-            graphics.IsFullScreen = false;
-            //graphics.PreferredBackBufferWidth = 2560;
-            //graphics.PreferredBackBufferHeight = 1440;
-            //graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
-            Window.Title = "Math Infection";
-            Window.AllowUserResizing = true;
-            windowMode = false;
+            if (content == null)
+            {
+                content = new ContentManager(ScreenManager.Game.Services, "Content");
+            }
+            gameFont = content.Load<SpriteFont>("gamefont");
+            GameplayLoad();
+            Thread.Sleep(1000);
+            ScreenManager.Game.ResetElapsedTime();
+        }
 
+        public override void UnloadContent()
+        {
+            content.Unload();
+        }
+
+        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
+                                                       bool coveredByOtherScreen)
+        {
+            base.Update(gameTime, otherScreenHasFocus, false);
+
+            if (coveredByOtherScreen)
+                pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
+            else
+                pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
+
+            if(IsActive)
+            {
+                GameplayUpdate(gameTime);
+            }
+        }
+
+        public override void HandleInput(InputState input)
+        {
+            if(input == null)
+                throw new ArgumentNullException("input");
+
+            int playerIndex = 0;
+            if(ControllingPlayer.HasValue)
+            {
+                playerIndex = (int)ControllingPlayer.Value;
+            }
+
+            KeyboardState keyboardState = input.CurrentKeyboardStates[playerIndex];
+            GamePadState gamePadState = input.CurrentGamePadStates[playerIndex];
+
+            bool gamePadDisconnected = !gamePadState.IsConnected &&
+                                       input.GamePadWasConnected[playerIndex];
+
+            if(input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
+            {
+                ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
+            }
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
+                                               Color.Black, 0, 0);
+            SpriteBatch spriteBacth = ScreenManager.SpriteBatch;
+
+            spriteBacth.Begin();
+            GameplayDraw(gameTime);
+            spriteBacth.End();
+
+            if(TransitionPosition > 0 || pauseAlpha > 0)
+            {
+                float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
+                ScreenManager.FadeBackBufferToBlack(alpha);
+            }
+        }
+
+        private void GameplayInit(bool isNewGame)
+        {
+            GameWindow window = ScreenManager.Game.Window;
 
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
@@ -94,7 +157,7 @@ namespace MathInfection
             enemyTexList = new List<Texture2D>();
             bossTexList = new List<Texture2D>();
             bulletTexList = new List<Texture2D>();
-            windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            windowSize = new Vector2(window.ClientBounds.Width, window.ClientBounds.Height);
             initialPlayerPosition = new Vector2(windowSize.X / 2, windowSize.Y - 60);
             playerVelocity = new Vector2(6, 6);
             // TODO: determine game mode: single or versus. Use single for now.
@@ -105,19 +168,16 @@ namespace MathInfection
             previousFireTime = TimeSpan.Zero;
             defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
-            base.Initialize();
         }
 
-        protected override void LoadContent()
+        private void GameplayLoad()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            hudFont = Content.Load<SpriteFont>("HUDFont");
-
-            Texture2D backgroundTex = Content.Load<Texture2D>("Background");
+            spriteBatch = ScreenManager.SpriteBatch;
+            hudFont = content.Load<SpriteFont>("HUDFont");
             background = new Background();
-            background.Load(GraphicsDevice, backgroundTex);
+            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"));
 
-            player1Texture = Content.Load<Texture2D>(@"CharacterImages/Player1");
+            player1Texture = content.Load<Texture2D>(@"CharacterImages/Player1");
             playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
             if(!singleMode)
             {
@@ -127,7 +187,7 @@ namespace MathInfection
             player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity,
                                  playerSize, windowSize);
 
-            enemyTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss1"));
             Vector2 charSize = new Vector2(enemyTexList[0].Width, enemyTexList[0].Height);
             int numEnemy = numEnemies;
             while(numEnemy > 0)
@@ -139,24 +199,14 @@ namespace MathInfection
                                         RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
-            bulletTexList.Add(Content.Load<Texture2D>(@"BulletImages/Bullet1"));
+            bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullet1"));
         }
 
-        public override void UnloadContent()
+        private void GameplayUpdate(GameTime gameTime)
         {
-            content.Unload();
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-               Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
-            GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
-                                  previousFireTime, defaultBulletFireRate, windowSize, this);
+            GameUpdate.CheckInput(gameTime, player1, defaultBulletList,
+                                  bulletTexList, previousFireTime,
+                                  defaultBulletFireRate, windowSize, this);
 
             player1.update(Vector2.Zero);
             if(!player1.IsAlive())
@@ -182,15 +232,10 @@ namespace MathInfection
             // windowMode = GameUpdate.CheckWindowMode(graphics, this);
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             background.Update(elapsed * 100);
-
-            base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+        private void GameplayDraw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
-            spriteBatch.Begin();
             background.Draw(spriteBatch);
             hud.draw(hudFont, spriteBatch);
             foreach(Bullet b in defaultBulletList)
@@ -202,21 +247,17 @@ namespace MathInfection
                 e.draw(spriteBatch);
             }
             player1.draw(spriteBatch);
-            spriteBatch.End();
-
-            base.Draw(gameTime);
         }
 
-        private void GameplayInit(bool isNewGame)
-        {}
 
-        private void GameplayLoad()
-        {}
+        private void BackgroundUpdate()
+        {
+            
+        }
 
-        private void GameplayUpdate(GameTime gameTime)
-        {}
-
-        private void GameplayDraw(GameTime gameTime)
-        {}
+        private void BackgroundDraw()
+        {
+            
+        }
     }
 }

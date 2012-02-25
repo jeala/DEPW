@@ -126,7 +126,7 @@ namespace MathInfection
 
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 160);
+            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2f, 160);
             Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;

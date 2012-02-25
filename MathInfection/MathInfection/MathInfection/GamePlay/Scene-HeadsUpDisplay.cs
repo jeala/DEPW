@@ -16,6 +16,7 @@ namespace MathInfection
             hudPosition = pos;
             msgPosition.X = hudPosition.X + 120;
             msgPosition.Y = hudPosition.Y + 300;
+            hudContent = "";
             gameOver = false;
         }
 

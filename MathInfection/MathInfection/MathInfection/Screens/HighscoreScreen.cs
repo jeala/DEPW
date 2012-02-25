@@ -23,7 +23,7 @@ namespace MathInfection
         public override void LoadContent()
         {
             ContentManager content = ScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("background");
+            backgroundTexture = content.Load<Texture2D>("TitleScreen");
         }
 
         public override void HandleInput(InputState input)

@@ -7,7 +7,7 @@ namespace MathInfection
         private GraphicsDeviceManager graphics;
         private ScreenManager screenManager;
 
-        private static readonly string[] preloadAssets = {"gradient"};
+        private static readonly string[] preloadAssets = { "gradient" };
 
         public Main()
         {

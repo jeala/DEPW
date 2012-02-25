@@ -16,7 +16,7 @@ namespace MathInfection
         {
             this.loadingIsSlow = loadingIsSlow;
             this.screensToLoad = screensToLoad;
-            this.loadingNewGame = isNewGame;
+            loadingNewGame = isNewGame;
             TransitionOnTime = TimeSpan.FromSeconds(.5);
         }
 

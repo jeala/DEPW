@@ -15,7 +15,7 @@ namespace MathInfection
 
         static Rating currentRating = Rating.Perfect;
 
-        static string[] todoList = { "We", "need", "options." };
+        static string[] todoList = { "We", "need", "options!" };
         static int currentTodoList = 0;
 
         public OptionsMenuScreen() : base("Options")
