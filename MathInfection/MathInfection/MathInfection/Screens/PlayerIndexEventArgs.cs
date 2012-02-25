@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace ChainRxN
+namespace MathInfection
 {
     class PlayerIndexEventArgs : EventArgs
     {

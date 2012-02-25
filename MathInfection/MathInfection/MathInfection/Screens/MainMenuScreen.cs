@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ChainRxN
+namespace MathInfection
 {
     class MainMenuScreen : MenuScreen
     {
-        public MainMenuScreen() : base("ChainRxN Remix")
+        public MainMenuScreen() : base("Math Infection")
         {
             MenuEntry newGameMenuEntry = new MenuEntry("New Game");
             MenuEntry loadGameMenuEntry = new MenuEntry("Load Game");

@@ -6,84 +6,140 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace ChainRxN
+namespace MathInfection
 {
     public class GameplayScreen : GameScreen
     {
-        ContentManager content;
-        SpriteFont gameFont;
-        float pauseAlpha;
+        private ContentManager content;
+        private SpriteFont gameFont;
+        private float pauseAlpha;
 
-        GraphicsDeviceManager graphics;
+        private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
+        private bool windowMode;
 
-        private int numStrategies;
-        private int numBombs;
-        private Texture2D bombTexture;
-        private Texture2D fuseTexture;
-        private List<Bomb> bombList;
-        private Fuse fuse;
-        private Vector2 bombSize;
-        private Vector2 fuseSize;
+        private HeadsUpDisplay hud;
+
+        private Player player1;
+        private Player player2;
+        private List<Enemy> enemyList;
+        private List<Boss> bossList;
+        private List<Bullet> defaultBulletList;
+        private Texture2D player1Texture;
+        private List<Texture2D> enemyTexList;
+        private List<Texture2D> bossTexList;
+        private List<Texture2D> bulletTexList;
+
+        private Vector2 playerSize;
         private Vector2 windowSize;
-        private int lifeSpan;
-        private float scaleRatio;
-        private int bombsToDetonate;
-        private HUD hud;
-        private bool gameOver;
-        private bool gameStarted;
+        private Vector2 initialPlayerPosition;
+        private Vector2 playerVelocity;
 
-        private GameData gameData;
-        private int totalScore;
-        private int currentLevel;
-        private int currentScore;
-        private int totalLevel;
+        private bool singleMode;
+        private int numPlayers;
+        private int numMoveStrategies;
+        private int numEnemies;
+        private TimeSpan previousFireTime;
+        private TimeSpan defaultBulletFireRate;
 
-        public bool GameOver
+        private Background background;
+
+        public TimeSpan PreviousFireTime
         {
             set
             {
-                gameOver = value;
+                previousFireTime = value;
             }
         }
 
-        public int CurrentScore
+        public bool WindowMode
         {
             set
             {
-                currentScore = value;
+                windowMode = value;
             }
-        }
-
-        public int TotalLevel
-        {
             get
             {
-                return totalLevel;
+                return windowMode;
             }
         }
 
         public GameplayScreen(ScreenManager sMgr, bool isNewGame)
         {
-            TransitionOnTime = TimeSpan.FromSeconds(1.5);
-            TransitionOffTime = TimeSpan.FromSeconds(0.5);
+            TransitionOnTime  = TimeSpan.FromSeconds(1.5);
+            TransitionOffTime = TimeSpan.FromSeconds(.5);
 
             ScreenManager = sMgr;
             GameplayInit(isNewGame);
         }
 
-        public override void LoadContent()
+        protected override void Initialize()
         {
-            if (content == null)
-                content = new ContentManager(ScreenManager.Game.Services, "Content");
+            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferHeight = 660;
+            graphics.IsFullScreen = false;
+            //graphics.PreferredBackBufferWidth = 2560;
+            //graphics.PreferredBackBufferHeight = 1440;
+            //graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
+            Window.Title = "Math Infection";
+            Window.AllowUserResizing = true;
+            windowMode = false;
 
-            gameFont = content.Load<SpriteFont>("gamefont");
 
-            GameplayLoad();
+            enemyList = new List<Enemy>();
+            bossList = new List<Boss>();
+            defaultBulletList = new List<Bullet>();
+            enemyTexList = new List<Texture2D>();
+            bossTexList = new List<Texture2D>();
+            bulletTexList = new List<Texture2D>();
+            windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            initialPlayerPosition = new Vector2(windowSize.X / 2, windowSize.Y - 60);
+            playerVelocity = new Vector2(6, 6);
+            // TODO: determine game mode: single or versus. Use single for now.
+            singleMode = true;
+            numPlayers = singleMode ? 1 : 2;
+            numMoveStrategies = 3;
+            numEnemies = 10;
+            previousFireTime = TimeSpan.Zero;
+            defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
+            hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
+            base.Initialize();
+        }
 
-            Thread.Sleep(1000);
-            ScreenManager.Game.ResetElapsedTime();
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            hudFont = Content.Load<SpriteFont>("HUDFont");
+
+            Texture2D backgroundTex = Content.Load<Texture2D>("Background");
+            background = new Background();
+            background.Load(GraphicsDevice, backgroundTex);
+
+            player1Texture = Content.Load<Texture2D>(@"CharacterImages/Player1");
+            playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
+            if(!singleMode)
+            {
+                // TODO: use player1's texture for now, might make another for player2 later.
+                // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
+            }
+            player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity,
+                                 playerSize, windowSize);
+
+            enemyTexList.Add(Content.Load<Texture2D>(@"CharacterImages/Boss1"));
+            Vector2 charSize = new Vector2(enemyTexList[0].Width, enemyTexList[0].Height);
+            int numEnemy = numEnemies;
+            while(numEnemy > 0)
+            {
+                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
+                                        enemyTexList[0],
+                                        RandomGenerator.RandomPosition(windowSize, charSize),
+                                        charSize, windowSize, 100,
+                                        RandomGenerator.RandomEnemySize(false)));
+                numEnemy--;
+            }
+            bulletTexList.Add(Content.Load<Texture2D>(@"BulletImages/Bullet1"));
         }
 
         public override void UnloadContent()
@@ -91,183 +147,76 @@ namespace ChainRxN
             content.Unload();
         }
 
-        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+        protected override void Update(GameTime gameTime)
         {
-            base.Update(gameTime, otherScreenHasFocus, false);
-
-            if (coveredByOtherScreen)
-                pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
-            else
-                pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
-
-            if (IsActive)
+            if(GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+               Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                GameplayUpdate(gameTime);
+                Exit();
             }
+
+            GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
+                                  previousFireTime, defaultBulletFireRate, windowSize, this);
+
+            player1.update(Vector2.Zero);
+            if(!player1.IsAlive())
+            {
+                //TODO: gameover
+            }
+
+            foreach(Enemy e in enemyList)
+            {
+                e.update(player1.PlayerPosition);
+            }
+
+            foreach(Bullet b in defaultBulletList)
+            {
+                b.update(player1.PlayerPosition);
+            }
+
+            GameUpdate.CheckCollision(defaultBulletList, enemyList, player1);
+            GameUpdate.UpdateEnemyList(enemyList);
+            GameUpdate.UpdateBulletList(defaultBulletList);
+            hud.update(player1, enemyList.Count);
+
+            // windowMode = GameUpdate.CheckWindowMode(graphics, this);
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            background.Update(elapsed * 100);
+
+            base.Update(gameTime);
         }
 
-        public override void HandleInput(InputState input)
+        protected override void Draw(GameTime gameTime)
         {
-            if (input == null)
-                throw new ArgumentNullException("input");
-
-            int playerIndex = 0;
-            if (ControllingPlayer.HasValue)
-            {
-                playerIndex = (int)ControllingPlayer.Value;
-            }
-
-            KeyboardState keyboardState = input.CurrentKeyboardStates[playerIndex];
-            GamePadState gamePadState = input.CurrentGamePadStates[playerIndex];
-
-            bool gamePadDisconnected = !gamePadState.IsConnected &&
-                                       input.GamePadWasConnected[playerIndex];
-
-            if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
-            {
-                ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
-            }
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
-                                               Color.Black, 0, 0);
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            GameplayDraw(gameTime);
+            background.Draw(spriteBatch);
+            hud.draw(hudFont, spriteBatch);
+            foreach(Bullet b in defaultBulletList)
+            {
+                b.draw(spriteBatch);
+            }
+            foreach(Enemy e in enemyList)
+            {
+                e.draw(spriteBatch);
+            }
+            player1.draw(spriteBatch);
             spriteBatch.End();
 
-            if (TransitionPosition > 0 || pauseAlpha > 0)
-            {
-                float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
-
-                ScreenManager.FadeBackBufferToBlack(alpha);
-            }
+            base.Draw(gameTime);
         }
 
         private void GameplayInit(bool isNewGame)
-        {
-            GameWindow window = ScreenManager.Game.Window;
-            numStrategies = 3;
-            bombList = new List<Bomb>();
-            windowSize = new Vector2(window.ClientBounds.Width, window.ClientBounds.Height);
-            lifeSpan = 200;
-            scaleRatio = .04f;
-            totalLevel = 7;
-            gameOver = false;
-            gameStarted = false;
-            gameData = FileIO.DeserializeFromXML();
-            if(gameData == null)
-            {
-                string uname = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                if(uname.Contains(@"\"))
-                {
-                    string[] nameAry = uname.Split('\\');
-                    uname = nameAry[nameAry.Length - 1];
-                }
-                gameData = new GameData(uname, totalLevel);
-                FileIO.SerializeToXML(gameData);
-                totalScore = 0;
-                currentLevel = 1;
-            }
-            else
-            {
-                if(isNewGame)
-                {
-                    gameData.TotalScore   = 0;
-                    gameData.LastTotal    = 0;
-                    gameData.CurrentLevel = 1;
-                    gameData.LastGameWon  = false;
-                    gameData.MiddleUpdate = false;
-                    FileIO.SerializeToXML(gameData);
-                    totalScore   = 0;
-                    currentLevel = 1;
-                }
-                else
-                {
-                    totalScore   = gameData.TotalScore;
-                    currentLevel = gameData.CurrentLevel;
-                }
-            }
-            RandomGenerator.RandomBombNumber(isNewGame, out numBombs, out bombsToDetonate);
-            hud = new HUD(ScreenManager ,windowSize, bombsToDetonate, numBombs, totalLevel);
-        }
+        {}
 
         private void GameplayLoad()
-        {
-            spriteBatch = ScreenManager.SpriteBatch;
-            hudFont = content.Load<SpriteFont>("HUDFont");
-            bombTexture = content.Load<Texture2D>("Bomb");
-            fuseTexture = content.Load<Texture2D>("Explosion");
-            bombSize = new Vector2(bombTexture.Width, bombTexture.Height);
-            fuseSize = new Vector2(fuseTexture.Width, fuseTexture.Height);
-
-            int bombNumber = numBombs;
-            while(bombNumber > 0)
-            {
-                bombList.Add(new Bomb(bombTexture, fuseTexture,
-                                      RandomGenerator.RandomPosition(windowSize, bombSize),
-                                      bombSize, windowSize, lifeSpan, scaleRatio,
-                                      RandomGenerator.RandomMoverStrategy(numStrategies)));
-                bombNumber--;
-            }
-            fuse = new Fuse(fuseTexture, new Vector2(8, 8), fuseSize, windowSize, lifeSpan,
-                         RandomGenerator.RandomPosition(windowSize, fuseSize), scaleRatio);
-        }
+        {}
 
         private void GameplayUpdate(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.A == ButtonState.Pressed ||
-                                           Keyboard.GetState().IsKeyDown(Keys.Enter))
-            {
-                fuse.Triggered = true;
-                gameStarted = true;
-            }
-
-            foreach(Bomb b in bombList)
-            {
-                if(b.Show)
-                {
-                    b.update();
-                }
-            }
-            if(fuse.Show)
-            {
-                fuse.update(gameTime);
-            }
-            GameUpdate.UpdateCollisionStatus(fuse, bombList);
-            int timeLeft = GameUpdate.HubGetTimeLeft(this, fuse, bombList, gameStarted);
-            int bombTriggered = GameUpdate.HubGetBombTriggered(bombList);
-            hud.update(this, timeLeft, bombTriggered, totalScore, currentLevel);
-            if(gameOver)
-            {
-                bool win = bombTriggered >= bombsToDetonate;
-                gameData.LastGameWon = win;
-                GameUpdate.UpdateGameData(gameData, currentLevel, currentScore);
-                FileIO.SerializeToXML(gameData);
-                string greed = win ? "You Win." : "You Loose!";
-                ScreenManager.AddScreen(new SummaryScreen(greed, win), null);
-                IsExiting = true;
-            }
-        }
+        {}
 
         private void GameplayDraw(GameTime gameTime)
-        {
-            foreach(Bomb b in bombList)
-            {
-                if(b.Show)
-                {
-                    b.draw(spriteBatch);
-                }
-            }
-            if (fuse.Show)
-            {
-                fuse.draw(spriteBatch, gameTime);
-            }
-            hud.draw(hudFont, spriteBatch);
-        }
+        {}
     }
 }

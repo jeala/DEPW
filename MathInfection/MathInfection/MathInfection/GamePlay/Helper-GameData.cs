@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ChainRxN
+namespace MathInfection
 {
     public class GameData
     {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ChainRxN
+namespace MathInfection
 {
     class BackgroundScreen : GameScreen
     {
@@ -22,7 +22,7 @@ namespace ChainRxN
             {
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
-            backgroundTexture = content.Load<Texture2D>("background");
+            backgroundTexture = content.Load<Texture2D>("TitleScreen");
         }
 
         public override void UnloadContent()

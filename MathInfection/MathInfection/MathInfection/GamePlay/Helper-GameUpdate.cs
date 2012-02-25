@@ -34,7 +34,7 @@ namespace MathInfection
             }
         }
 
-        public static bool CheckWindowMode(GraphicsDeviceManager gdm, Main caller)
+        public static bool CheckWindowMode(GraphicsDeviceManager gdm, GameplayScreen caller)
         {
             // TODO: fullscreen mode doesn't get correct desktop resolution
             if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.F))
@@ -58,7 +58,7 @@ namespace MathInfection
 
         public static void CheckInput(GameTime gameTime, Player player1, List<Bullet> defaultBulletList,
                                       List<Texture2D> bulletTexList, TimeSpan previousFireTime,
-                                      TimeSpan defaultBulletFireRate, Vector2 windowSize, Main caller)
+                                      TimeSpan defaultBulletFireRate, Vector2 windowSize, GameplayScreen caller)
         {
             // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
@@ -149,9 +149,7 @@ namespace MathInfection
             }
             // endof Player Collision Detection
         }
-        // endof CheckCollision()
 
-        // NarrowCollisionDetection()
         private static List<Enemy> NarrowCollisionDetection(List<Enemy> enemyList, ICharacter center)
         {
             List<Enemy> eList = new List<Enemy>();
@@ -161,6 +159,32 @@ namespace MathInfection
             }
             return eList;
         }
-        // endof NarrowCollisionDetection()
+
+        public static void UpdateGameData(GameData data, int currentLevel,
+                                                         int currentScore)
+        {
+            
+        }
+
+        public static string GetHighScores(bool fromMainMenu)
+        {
+            string highScores = "";
+            return highScores;
+        }
+
+        public static string GetTotalScore()
+        {
+            string totalScore = "";
+            return totalScore;
+
+        }
+
+        public static int GetCurrentLevel()
+        {
+            int currentLevel = 0;
+            return currentLevel;
+        }
+
+        // endof public static class GameUpdate
     }
 }

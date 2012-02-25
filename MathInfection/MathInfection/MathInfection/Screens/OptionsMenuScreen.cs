@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ChainRxN
+namespace MathInfection
 {
     class OptionsMenuScreen : MenuScreen
     {
@@ -9,15 +9,14 @@ namespace ChainRxN
 
         enum Rating
         {
-            Great,
             Perfect,
             Superb,
         }
 
-        static Rating currentRating = Rating.Great;
+        static Rating currentRating = Rating.Perfect;
 
-        static string[] languages = { "C#", "C# again", "C# only :D" };
-        static int currentLanguage = 0;
+        static string[] todoList = { "We", "need", "options." };
+        static int currentTodoList = 0;
 
         public OptionsMenuScreen() : base("Options")
         {
@@ -41,7 +40,7 @@ namespace ChainRxN
         void SetMenuEntryText()
         {
             rateGameMenuEntry.Text = "Rate this Game: " + currentRating;
-            languageMenuEntry.Text = "Language Used: " + languages[currentLanguage];
+            languageMenuEntry.Text = "What's Next? : " + todoList[currentTodoList];
         }
 
         void RateGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
@@ -56,7 +55,7 @@ namespace ChainRxN
 
         void LanguageMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            currentLanguage = (currentLanguage + 1) % languages.Length;
+            currentTodoList = (currentTodoList + 1) % todoList.Length;
 
             SetMenuEntryText();
         }

@@ -85,10 +85,18 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="CharacterImages\Boss1.png">
       <Name>Boss1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="CharacterImages\Boss2.png">
+      <Name>Boss2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="CharacterImages\Enemy1.png">
+      <Name>Enemy1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -106,11 +114,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharacterImages\Enemy.png">
-      <Name>Enemy</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="CharacterImages\RedBloodCell.png">
       <Name>RedBloodCell</Name>
       <Importer>TextureImporter</Importer>

@@ -1,4 +1,4 @@
-﻿namespace ChainRxN
+﻿namespace MathInfection
 {
     class PauseMenuScreen : MenuScreen
     {
