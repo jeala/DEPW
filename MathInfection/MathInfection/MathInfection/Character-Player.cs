@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,43 +17,17 @@ namespace MathInfection
         private bool startBoost;
 
         public Player(Texture2D tex, Vector2 pos, Vector2 vel, Vector2 cSize, Vector2 wSize)
-=======
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-namespace MathInfection
-{
-    public class Player : ICharacter
-    {
-        private readonly Texture2D texture;
-        private Vector2 position;
-        private readonly Vector2 velocity;
-        private Vector2 characterSize;
-        private Vector2 windowSize;
-        private int score;
-        private bool startBoost;
-        private int health;
-
-        public Player(Texture2D tex, Vector2 pos, Vector2 vel,
-                      Vector2 cSize, Vector2 wSize)
->>>>>>> 36d0c3cdf80c55c5610441a3a0b74198678b4577
         {
             texture = tex;
             position = pos;
             velocity = vel;
             characterSize = cSize;
             windowSize = wSize;
-            score = 0;
-            startBoost = false;
-<<<<<<< HEAD
-        }
-
-=======
             health = 100;
+            wasHit = false;
+            startBoost = false;
         }
 
->>>>>>> 36d0c3cdf80c55c5610441a3a0b74198678b4577
         public Vector2 CharacterSize
         {
             get
@@ -71,30 +44,6 @@ namespace MathInfection
             }
         }
 
-        public Vector2 Position
-        {
-            get
-            {
-                return position;
-            }
-        }
-
-        public Vector2 PlayerPosition
-        {
-            get
-            {
-                return position;
-            }
-        }
-
-        public int Score
-        {
-            get
-            {
-                return score;
-            }
-        }
-
         public bool StartBoost
         {
             set
@@ -103,72 +52,47 @@ namespace MathInfection
             }
         }
 
-        public int Health
-        {
-            get
-            {
-                return health;
-            }
-        }
-
         public bool IsAlive()
         {
             return health > 0;
         }
 
-        public void GetHit(int damage)
+        public void update()
         {
-            health -= damage;
+            if (wasHit)
+            {
+                health--;
+                wasHit = false;
+            }
+
+            if(IsAlive())
+            {
+                Vector2 speed = velocity;
+                if(startBoost)
+                {
+                    speed = velocity * 2;
+                }
+
+                if(Keyboard.GetState().IsKeyDown(Keys.W) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
+                {
+                    position.Y -= speed.Y;
+                }
+                if(Keyboard.GetState().IsKeyDown(Keys.S) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
+                {
+                    position.Y += speed.Y;
+                }
+                if(Keyboard.GetState().IsKeyDown(Keys.A) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
+                {
+                    position.X -= speed.X;
+                }
+                if(Keyboard.GetState().IsKeyDown(Keys.D) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
+                {
+                    position.X += speed.X;
+                }
+                StopEdge();
+            }
         }
 
-        public void GetPoints(bool isBoss)
-        {
-            if(isBoss)
-            {
-                score += 100;
-            }
-            else
-            {
-                score += 20;
-            }
-        }
-
-        public void update(Vector2 dummy)
-        {
-            Vector2 speed = velocity;
-            if(startBoost)
-            {
-                speed = velocity * 2;
-            }
-
-            if(Keyboard.GetState().IsKeyDown(Keys.W) ||
-               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
-            {
-                position.Y -= speed.Y;
-            }
-            if(Keyboard.GetState().IsKeyDown(Keys.S) ||
-               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
-            {
-                position.Y += speed.Y;
-            }
-            if(Keyboard.GetState().IsKeyDown(Keys.A) ||
-               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
-            {
-                position.X -= speed.X;
-            }
-            if(Keyboard.GetState().IsKeyDown(Keys.D) ||
-               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
-            {
-                position.X += speed.X;
-            }
-<<<<<<< HEAD
-        }
-
-=======
-            StopEdge();
-        }
-
->>>>>>> 36d0c3cdf80c55c5610441a3a0b74198678b4577
         public void draw(SpriteBatch sb)
         {
             sb.Draw(texture, position, Color.White);
