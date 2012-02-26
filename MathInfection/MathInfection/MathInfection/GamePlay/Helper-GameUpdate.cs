@@ -34,28 +34,6 @@ namespace MathInfection
             }
         }
 
-        public static bool CheckWindowMode(GraphicsDeviceManager gdm, GameplayScreen caller)
-        {
-            // TODO: fullscreen mode doesn't get correct desktop resolution
-            if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.Y) || Keyboard.GetState().IsKeyDown(Keys.F))
-            {
-                if (caller.WindowMode)
-                {
-                    gdm.PreferredBackBufferWidth = 2560;
-                    gdm.PreferredBackBufferHeight = 1440;
-                    gdm.ToggleFullScreen();
-                    gdm.ApplyChanges();
-                    return false;
-                }
-                gdm.PreferredBackBufferWidth = 1124;
-                gdm.PreferredBackBufferHeight = 700;
-                gdm.ToggleFullScreen();
-                gdm.ApplyChanges();
-                return true;
-            }
-            return caller.WindowMode;
-        }
-
         public static void CheckInput(GameTime gameTime, Player player1, List<Bullet> defaultBulletList,
                                       List<Texture2D> bulletTexList, TimeSpan previousFireTime,
                                       TimeSpan defaultBulletFireRate, Vector2 windowSize, GameplayScreen caller)
@@ -93,19 +71,15 @@ namespace MathInfection
         {
             Rectangle r1 = new Rectangle();
             Rectangle r2 = new Rectangle();
-//            List<Enemy> eList;
 
-            // Bullet Collision Detection
             if(defaultBulletList.Count > 0)
             {
                 foreach(Bullet b in defaultBulletList)
                 {
-//                    eList = NarrowCollisionDetection(enemyList, b);
                     r1.Width = (int)Math.Round(b.CharacterSize.X);
                     r1.Height = (int)Math.Round(b.CharacterSize.Y);
                     r1.X = (int)Math.Round(b.Position.X);
                     r1.Y = (int)Math.Round(b.Position.Y);
-//                    foreach(Enemy e in eList)
                     foreach(var e in enemyList)
                     {
                         r2.Width = (int)Math.Round(e.CharacterSize.X);
@@ -122,7 +96,6 @@ namespace MathInfection
                             b.IsValid = false;
                         }
                     }
-//                    eList.Clear();
                 }
             }
             // endof Bullet Collision Detection
@@ -132,8 +105,6 @@ namespace MathInfection
             r1.Height = (int)Math.Round(p1.CharacterSize.Y);
             r1.X = (int)Math.Round(p1.PlayerPosition.X);
             r1.Y = (int)Math.Round(p1.PlayerPosition.Y);
-//            eList = NarrowCollisionDetection(enemyList, p1);
-//            foreach (Enemy e in eList)
             foreach (Enemy e in enemyList)
             {
                 r2.Width = (int)Math.Round(e.CharacterSize.X);
@@ -144,20 +115,10 @@ namespace MathInfection
                 if (r1.Intersects(r2))
                 {
                     p1.GetHit(e.GetType().ToString() == "MathInfection.Enemy" ? 20 : 50);
+                    p1.WasHit = true;
                     e.Health = 0;
                 }
             }
-            // endof Player Collision Detection
-        }
-
-        private static List<Enemy> NarrowCollisionDetection(List<Enemy> enemyList, ICharacter center)
-        {
-            List<Enemy> eList = new List<Enemy>();
-            foreach(Enemy e in enemyList)
-            {
-
-            }
-            return eList;
         }
 
         public static void UpdateGameData(GameData data, int currentLevel,

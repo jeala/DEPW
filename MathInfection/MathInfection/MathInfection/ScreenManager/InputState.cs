@@ -97,7 +97,7 @@ namespace MathInfection
             PlayerIndex playerIndex;
             return IsNewKeyPress(Keys.Up, controllingPlayer, out playerIndex) ||
                    IsNewButtonPress(Buttons.DPadUp, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.LeftThumbstickUp, controllingPlayer, out playerIndex);
+                   IsNewButtonPress(Buttons.RightThumbstickUp, controllingPlayer, out playerIndex);
         }
 
         public bool IsMenuDown(PlayerIndex? controllingPlayer)
@@ -105,7 +105,23 @@ namespace MathInfection
             PlayerIndex playerIndex;
             return IsNewKeyPress(Keys.Down, controllingPlayer, out playerIndex) ||
                    IsNewButtonPress(Buttons.DPadDown, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.LeftThumbstickDown, controllingPlayer, out playerIndex);
+                   IsNewButtonPress(Buttons.RightThumbstickDown, controllingPlayer, out playerIndex);
+        }
+
+        public bool IsMenuLeft(PlayerIndex? controllingPlayer)
+        {
+            PlayerIndex playerIndex;
+            return IsNewKeyPress(Keys.Left, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.DPadLeft, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.RightThumbstickLeft, controllingPlayer, out playerIndex);
+        }
+
+        public bool IsMenuRight(PlayerIndex? controllingPlayer)
+        {
+            PlayerIndex playerIndex;
+            return IsNewKeyPress(Keys.Right, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.DPadRight, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.RightThumbstickRight, controllingPlayer, out playerIndex);
         }
 
         public bool IsPauseGame(PlayerIndex? controllingPlayer)

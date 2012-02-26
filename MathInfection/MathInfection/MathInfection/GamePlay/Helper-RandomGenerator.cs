@@ -33,8 +33,10 @@ namespace MathInfection
         {
             int firstSign = PositiveOrNegative();
             int secondSign = PositiveOrNegative();
-            return new Vector2(firstSign * rand.Next(speedLimitMin, speedLimitMax),
-                              secondSign * rand.Next(speedLimitMin, speedLimitMax));
+            return new Vector2(firstSign * rand.Next(speedLimitMin,
+                                                    speedLimitMax),
+                              secondSign * rand.Next(speedLimitMin,
+                                                   speedLimitMax));
         }
 
         public static float RandomLerpSpeed()
@@ -78,6 +80,22 @@ namespace MathInfection
                 temp *= 2;
             }
             return 1 + temp;
+        }
+
+        public static string RandomQuestion(int currentScore, out int answer,
+                                                           out int[] answers)
+        {
+            string question = "";
+
+            answer = 1;
+            for(int i = 0; i < 4; i++)
+            {
+                if(i == answer - 1)
+                {
+                    answers[i] = answers;
+                }
+            }
+            return question;
         }
 
 

@@ -14,6 +14,7 @@ namespace MathInfection
         private int score;
         private bool startBoost;
         private int health;
+        private bool wasHit;
 
         public Player(Texture2D tex, Vector2 pos, Vector2 vel,
                                  Vector2 cSize, Vector2 wSize)
@@ -26,6 +27,7 @@ namespace MathInfection
             score = 0;
             startBoost = false;
             health = 100;
+            wasHit = false;
         }
 
         public Vector2 CharacterSize
@@ -81,6 +83,18 @@ namespace MathInfection
             get
             {
                 return health;
+            }
+        }
+
+        public bool WasHit
+        {
+            get
+            {
+                return wasHit;
+            }
+            set
+            {
+                wasHit = value;
             }
         }
 
@@ -160,6 +174,11 @@ namespace MathInfection
             {
                 position.Y = windowSize.Y - characterSize.Y;
             }
+        }
+
+        public void QuestionResult(bool answerCorrect, int answerTimeUsed)
+        {
+
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace MathInfection
 {
@@ -16,7 +15,6 @@ namespace MathInfection
         private int topScoreCapacity;
         private List<int> topScores;
         private List<DateTime> topScoresDateTime;
-
 
         public string PlayerName
         {
@@ -143,10 +141,10 @@ namespace MathInfection
             
         }
 
-        public GameData(string pName, int levels)
+        public GameData(string pName)
         {
             playerName        = pName;
-            totalLevel        = levels;
+            totalLevel        = 10;
             totalScore        = 0;
             lastTotal         = 0;
             currentLevel      = 1;

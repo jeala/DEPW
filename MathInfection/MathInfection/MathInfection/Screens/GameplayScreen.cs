@@ -44,6 +44,10 @@ namespace MathInfection
         private TimeSpan defaultBulletFireRate;
 
         private Background background;
+        private GameData gameData;
+        private int currentScore;
+        private bool answerCorrect;
+        private int answerTimeLeft;
 
         public TimeSpan PreviousFireTime
         {
@@ -53,15 +57,39 @@ namespace MathInfection
             }
         }
 
-        public bool WindowMode
+        public int CurrentScore
+        {
+            get
+            {
+                return currentScore;
+            }
+            set
+            {
+                currentScore = value;
+            }
+        }
+
+        public bool AnswerCorrect
         {
             set
             {
-                windowMode = value;
+                answerCorrect = value;
             }
             get
             {
-                return windowMode;
+                return answerCorrect;
+            }
+        }
+
+        public int AnswerTimeLeft
+        {
+            get
+            {
+                return answerTimeLeft;
+            }
+            set
+            {
+                answerTimeLeft = value;
             }
         }
 
@@ -167,6 +195,31 @@ namespace MathInfection
             numEnemies = 10;
             previousFireTime = TimeSpan.Zero;
             defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
+
+            gameData = FileIO.DeserializeFromXML();
+            if(gameData == null)
+            {
+                string uname = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                if(uname.Contains(@"\"))
+                {
+                    string[] nameArry = uname.Split('\\');
+                    uname = nameArry[nameArry.Length - 1];
+                }
+                gameData = new GameData(uname);
+                FileIO.SerializeToXML(gameData);
+            }
+            else
+            {
+                if(isNewGame)
+                {
+                    gameData.TotalScore = 0;
+                    gameData.LastTotal = 0;
+                    gameData.CurrentLevel = 1;
+                    gameData.LastGameWon = false;
+                    gameData.MiddleUpdate = false;
+                    FileIO.SerializeToXML(gameData);
+                }
+            }
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
         }
 
@@ -209,10 +262,20 @@ namespace MathInfection
                                   defaultBulletFireRate, windowSize, this);
 
             player1.update(Vector2.Zero);
-            if(!player1.IsAlive())
+            bool playAlive = player1.IsAlive();
+            if(!playAlive)
             {
-                //TODO: gameover
+
+                ScreenManager.AddScreen(new SummaryScreen("You loose", playAlive),
+                                                               ControllingPlayer);
+                IsExiting = true;
             }
+            if(player1.WasHit)
+            {
+                ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
+                                                               ControllingPlayer);
+            }
+            player1.QuestionResult(answerCorrect, answerTimeLeft);
 
             foreach(Enemy e in enemyList)
             {
@@ -229,7 +292,6 @@ namespace MathInfection
             GameUpdate.UpdateBulletList(defaultBulletList);
             hud.update(player1, enemyList.Count);
 
-            // windowMode = GameUpdate.CheckWindowMode(graphics, this);
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             background.Update(elapsed * 100);
         }
@@ -247,17 +309,6 @@ namespace MathInfection
                 e.draw(spriteBatch);
             }
             player1.draw(spriteBatch);
-        }
-
-
-        private void BackgroundUpdate()
-        {
-            
-        }
-
-        private void BackgroundDraw()
-        {
-            
         }
     }
 }

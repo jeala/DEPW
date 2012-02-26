@@ -57,7 +57,7 @@ namespace MathInfection
             Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
             Vector2 textSize = scoreFont.MeasureString(highScores);
             Vector2 textPosition = (viewportSize - textSize) / 2;
-            Vector2 usagePosition = new Vector2(textPosition.X+50, viewport.Height-260);
+            Vector2 usagePosition = new Vector2(textPosition.X+50, viewport.Height-220);
             if(highScores.Length == 0)
             {
                 usagePosition.X = 300;
