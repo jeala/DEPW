@@ -129,12 +129,8 @@
   <ItemGroup>
     <Compile Include="Character-Boss.cs" />
     <Compile Include="Character-Enemy.cs" />
-<<<<<<< HEAD
     <Compile Include="Character-Enhancement.cs" />
-    <Compile Include="Helper-RoundFloat.cs" />
-=======
     <Compile Include="Helper-GameUpdate.cs" />
->>>>>>> 36d0c3cdf80c55c5610441a3a0b74198678b4577
     <Compile Include="Helper-ICharacter.cs" />
     <Compile Include="Helper-Mover-CatmullRom.cs" />
     <Compile Include="Helper-Mover-Lerp.cs" />
