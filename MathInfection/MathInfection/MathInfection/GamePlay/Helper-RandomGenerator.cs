@@ -5,10 +5,10 @@ namespace MathInfection
 {
     public static class RandomGenerator
     {
-        static private readonly Random rand;
-        static private readonly int speedLimitMin;
-        static private readonly int speedLimitMax;
-        static private readonly float weight;
+        private static readonly Random rand;
+        private static readonly int speedLimitMin;
+        private static readonly int speedLimitMax;
+        private static readonly float weight;
 
         static RandomGenerator()
         {
@@ -34,9 +34,9 @@ namespace MathInfection
             int firstSign = PositiveOrNegative();
             int secondSign = PositiveOrNegative();
             return new Vector2(firstSign * rand.Next(speedLimitMin,
-                                                    speedLimitMax),
-                              secondSign * rand.Next(speedLimitMin,
-                                                   speedLimitMax));
+                                                     speedLimitMax),
+                               secondSign * rand.Next(speedLimitMin,
+                                                      speedLimitMax));
         }
 
         public static float RandomLerpSpeed()
@@ -56,7 +56,7 @@ namespace MathInfection
             {
                 temp *= 2;
             }
-            if(temp >= .5f)
+            if(temp >= .7f)
             {
                 return true;
             }
@@ -86,7 +86,7 @@ namespace MathInfection
                                                          out float[] answers)
         {
             answer = rand.Next(1, 5);
-            answers = new float[]{0, 0, 0, 0};
+            answers = new float[] {0, 0, 0, 0};
 
             string question = "";
             float firstVal = rand.Next(10);
@@ -114,6 +114,7 @@ namespace MathInfection
                     break;
                 default:
                     correctAnswer = firstVal / SecondVal;
+                    correctAnswer = (float)Math.Round(correctAnswer, 1);
                     question = firstVal + " / " + SecondVal + " = ?";
                     break;
             }
@@ -122,11 +123,11 @@ namespace MathInfection
             {
                 if(i == answer)
                 {
-                    answers[i-1] = correctAnswer;
+                    answers[i - 1] = correctAnswer;
                 }
                 else
                 {
-                    answers[i-1] = WrongAnswer(correctAnswer);
+                    answers[i - 1] = WrongAnswer(correctAnswer);
                 }
             }
             return question;
@@ -201,3 +202,4 @@ namespace MathInfection
         }
     }
 }
+        ;
