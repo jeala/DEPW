@@ -8,46 +8,30 @@ namespace MathInfection
     class QuestionScreen : GameScreen
     {
         private GameplayScreen parent;
-        private string message;
-        private string answerMessage;
-        private int[] answers;
         private int correctAnswer;
+        private int[] answers;
         private int lifeSpan;
+        private string questionMessage;
+        private string answerMessage;
+        private string timeMessage;
+        private const string usageText = "\n\n\nUse keyboard's Up/Down/Left/Right" +
+                                                           " to enter your answer";
+        private string message;
         private Texture2D questionFrameTex;
-        private bool answered;
-        private int answer;
-
-        public event EventHandler<PlayerIndexEventArgs> Accepted;
-        public event EventHandler<PlayerIndexEventArgs> Cancelled;
 
         public QuestionScreen(string msg, GameplayScreen caller)
-                                       : this(msg, true, caller)
-        { }
-
-        public QuestionScreen(string msg, bool includeUsageText,
-                                              GameplayScreen caller)
         {
             parent = caller;
-            string usageText = "\n\n\nUse keyboard's Up/Down/Left/" +
-                                        "Right to enter your answer";
-
             string question = RandomGenerator.RandomQuestion( parent.CurrentScore,
                                                   out correctAnswer, out answers);
-            lifeSpan = 120;
-            if (includeUsageText)
-                message = msg + "\n" + question + usageText;
-            else
-                message = msg;
-
-            answerMessage = "\n        " + answers[0] + "\n" + "    " +
-                              answers[1] + "    " + answers[2] + "\n" +
-                              "        " + answers[3];
-
-            answered = false;
-            answer = -1;
-
+            lifeSpan = 240;
+            questionMessage = msg + "\n" + question;
+            answerMessage = "\n" + answers[0].ToString().PadLeft(8) + "\n" +
+                      answers[1] + answers[2].ToString().PadLeft(12) + "\n" +
+                                   answers[3].ToString().PadLeft(8);
+            timeMessage = "\nTime Left: " + lifeSpan;
+            message = questionMessage + answerMessage + timeMessage + usageText;
             IsPopup = true;
-
             TransitionOnTime = TimeSpan.FromSeconds(0.1);
             TransitionOffTime = TimeSpan.FromSeconds(0.1);
         }
@@ -63,23 +47,51 @@ namespace MathInfection
         {
             if (input.IsMenuUp(ControllingPlayer))
             {
-                answer = 1;
-                answered = true;
+                if(correctAnswer == 1)
+                {
+                    parent.ProcessAnswer(true, lifeSpan);
+                }
+                else
+                {
+                    parent.ProcessAnswer(false, 0);
+                }
+                ExitScreen();
             }
             else if (input.IsMenuDown(ControllingPlayer))
             {
-                answer = 2;
-                answered = true;
+                if(correctAnswer == 2)
+                {
+                    parent.ProcessAnswer(true, lifeSpan);
+                }
+                else
+                {
+                    parent.ProcessAnswer(false, 0);
+                }
+                ExitScreen();
             }
             else if(input.IsMenuLeft(ControllingPlayer))
             {
-                answer = 3;
-                answered = true;
+                if(correctAnswer == 3)
+                {
+                    parent.ProcessAnswer(true, lifeSpan);
+                }
+                else
+                {
+                    parent.ProcessAnswer(false, 0);
+                }
+                ExitScreen();
             }
             else if(input.IsMenuRight(ControllingPlayer))
             {
-                answer = 4;
-                answered = true;
+                if(correctAnswer == 4)
+                {
+                    parent.ProcessAnswer(true, lifeSpan);
+                }
+                else
+                {
+                    parent.ProcessAnswer(false, 0);
+                }
+                ExitScreen();
             }
         }
 
@@ -88,24 +100,13 @@ namespace MathInfection
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
             lifeSpan--;
-            if(answered)
+            if(lifeSpan < 0)
             {
-                if(answer == correctAnswer)
-                {
-                    parent.AnswerCorrect = true;
-                    parent.AnswerTimeLeft = lifeSpan;
-                }
-                else
-                {
-                    parent.AnswerCorrect = false;
-                }
+                parent.ProcessAnswer(false, 0);
                 ExitScreen();
             }
-            else if(lifeSpan < 0)
-            {
-                parent.AnswerCorrect = false;
-                ExitScreen();
-            }
+            timeMessage = "\nTime Left: " + lifeSpan;
+            message = questionMessage + answerMessage + timeMessage + usageText;
         }
 
         public override void Draw(GameTime gameTime)
@@ -117,26 +118,21 @@ namespace MathInfection
 
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
-            Vector2 textSize = font.MeasureString(message);
-            Vector2 textPosition = (viewportSize - textSize) / 2;
-
-            Vector2 answerSize = font.MeasureString(answerMessage);
-            Vector2 answerPosition = (viewportSize - answerSize) / 2;
+            Vector2 messageSize = font.MeasureString(message);
+            Vector2 messagePosition = (viewportSize - messageSize) / 2;
 
             const int hPad = 32;
             const int vPad = 16;
-
-            Rectangle backgroundRectangle = new Rectangle((int)textPosition.X - hPad,
-                                                          (int)textPosition.Y - vPad,
-                                                          (int)textSize.X + hPad * 2,
-                                                          (int)textSize.Y + vPad * 2);
+            Rectangle backgroundRectangle = new Rectangle((int)messagePosition.X - hPad,
+                                                          (int)messagePosition.Y - vPad,
+                                                          (int)messageSize.X + hPad * 2,
+                                                          (int)messageSize.Y + vPad * 2);
 
             Color color = Color.White * TransitionAlpha;
 
             spriteBatch.Begin();
             spriteBatch.Draw(questionFrameTex, backgroundRectangle, color);
-            spriteBatch.DrawString(font, message, textPosition, color);
-            spriteBatch.DrawString(font, answerMessage, answerPosition, color);
+            spriteBatch.DrawString(font, message, messagePosition, color);
             spriteBatch.End();
         }
     }

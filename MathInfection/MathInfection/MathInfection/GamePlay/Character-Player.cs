@@ -65,6 +65,10 @@ namespace MathInfection
 
         public int Score
         {
+            set
+            {
+                score = value;
+            }
             get
             {
                 return score;
@@ -81,6 +85,10 @@ namespace MathInfection
 
         public int Health
         {
+            set
+            {
+                health = value;
+            }
             get
             {
                 return health;
@@ -114,25 +122,6 @@ namespace MathInfection
         public bool IsAlive()
         {
             return health > 0;
-        }
-
-        public void GetHit(int damage)
-        {
-            health -= damage;
-        }
-
-        public void GetPoints(int answerTimeLeft)
-        {
-            bool isBoss = enemyType == "MathInfection.Boss";
-            int bonus = answerTimeLeft * 2;
-            if(isBoss)
-            {
-                score += (100 + bonus);
-            }
-            else
-            {
-                score += (20 + bonus);
-            }
         }
 
         public void update(Vector2 dummy)
@@ -189,11 +178,6 @@ namespace MathInfection
             {
                 position.Y = windowSize.Y - characterSize.Y;
             }
-        }
-
-        public void QuestionResult(bool answerCorrect, int answerTimeUsed)
-        {
-
         }
     }
 }

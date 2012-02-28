@@ -220,6 +220,7 @@ namespace MathInfection
                     FileIO.SerializeToXML(gameData);
                 }
             }
+            currentScore = 0;
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
         }
 
@@ -265,12 +266,10 @@ namespace MathInfection
             bool playAlive = player1.IsAlive();
             if(!playAlive)
             {
-
                 ScreenManager.AddScreen(new SummaryScreen("You loose", playAlive),
                                                                ControllingPlayer);
-                IsExiting = true;
+                ExitScreen();
             }
-            player1.QuestionResult(answerCorrect, answerTimeLeft);
 
             foreach(Enemy e in enemyList)
             {
@@ -282,7 +281,8 @@ namespace MathInfection
                 b.update(player1.PlayerPosition);
             }
 
-            GameUpdate.CheckCollision(defaultBulletList, enemyList, player1);
+            GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
+                                                          out currentScore);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(player1.WasHit)
@@ -290,14 +290,6 @@ namespace MathInfection
                 ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
                                                                ControllingPlayer);
                 player1.WasHit = false;
-                if(!answerCorrect)
-                {
-                    player1.GetHit(player1.EnemyType == "MathInfection.Enemy" ? 20 : 50);
-                }
-                else
-                {
-                    player1.GetPoints(answerTimeLeft);
-                }
             }
             hud.update(player1, enemyList.Count);
 
@@ -319,5 +311,36 @@ namespace MathInfection
             }
             player1.draw(spriteBatch);
         }
+
+        public void ProcessAnswer(bool correct, int timeLeft)
+        {
+            bool isBoss = player1.EnemyType == "MathInfection.Boss";
+            if(correct)
+            {
+                int bonus = timeLeft * 2;
+                if (isBoss)
+                {
+                    currentScore = (100 + bonus);
+                }
+                else
+                {
+                    currentScore = (20 + bonus);
+                }
+            }
+            else
+            {
+                if (isBoss)
+                {
+                    player1.Health -= 25;
+                }
+                else
+                {
+                    player1.Health -= 10;
+                }
+            }
+            player1.Score += currentScore;
+            currentScore = 0;
+        }
+        // endof class GameplayScreen
     }
 }
