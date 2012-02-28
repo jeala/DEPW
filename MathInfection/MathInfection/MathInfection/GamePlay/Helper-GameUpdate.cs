@@ -147,7 +147,6 @@ namespace MathInfection
         {
             string totalScore = "";
             return totalScore;
-
         }
 
         public static int GetCurrentLevel()

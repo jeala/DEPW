@@ -67,32 +67,36 @@ namespace MathInfection
         {
             int sign = PositiveOrNegative();
             float temp = (float)rand.NextDouble() * sign;
-            if(temp > .6f)
+            if(temp > .5f)
             {
-                temp -= .5f;
+                temp -= .4f;
             }
-            if(temp < -.6f)
+            if(temp < -.5f)
             {
-                temp += .5f;
+                temp += .4f;
             }
-            if(isBoss)
+            if(isBoss && temp > 0)
             {
-                temp *= 2;
+                temp *= -1;
             }
             return 1 + temp;
         }
 
         public static string RandomQuestion(int currentScore, out int answer,
-                                                           out int[] answers)
+                                                         out float[] answers)
         {
             answer = rand.Next(1, 5);
-            answers = new int[4]{0, 0, 0, 0};
+            answers = new float[]{0, 0, 0, 0};
 
             string question = "";
-            int firstVal = rand.Next(10);
-            int SecondVal = rand.Next(10);
-            int myOperator = RandomOperator(currentScore);
-            int correctAnswer;
+            float firstVal = rand.Next(10);
+            float SecondVal = rand.Next(10);
+            while(SecondVal == 0)
+            {
+                SecondVal = rand.Next(10);
+            }
+            int myOperator = Random4Choice1(currentScore);
+            float correctAnswer;
 
             switch(myOperator)
             {
@@ -108,38 +112,57 @@ namespace MathInfection
                     question = firstVal + " * " + SecondVal + " = ?";
                     correctAnswer = firstVal * SecondVal;
                     break;
-                case 4:
-                    question = firstVal + " / " + SecondVal + " = ?";
-                    correctAnswer = firstVal / SecondVal;
-                    break;
                 default:
-                    question = firstVal + " + " + SecondVal + " = ?";
-                    correctAnswer = firstVal + SecondVal;
+                    correctAnswer = firstVal / SecondVal;
+                    question = firstVal + " / " + SecondVal + " = ?";
                     break;
             }
 
-            for(int i = 0; i < 4; i++)
+            for(int i = 1; i < 5; i++)
             {
-                if(i == answer - 1)
+                if(i == answer)
                 {
-                    answers[i] = correctAnswer;
+                    answers[i-1] = correctAnswer;
                 }
                 else
                 {
-                    answers[i] = RandomAnswer(correctAnswer);
+                    answers[i-1] = WrongAnswer(correctAnswer);
                 }
             }
             return question;
         }
 
-        private static int RandomOperator(int cScore)
+        private static int Random4Choice1(int cScore)
         {
-            return 1;
+            int choice = rand.Next();
+            if(choice % 2 == 0)
+            {
+                return 1;
+            }
+            if(choice % 3 == 0)
+            {
+                return 2;
+            }
+            if(choice % 5 == 0)
+            {
+                return 3;
+            }
+            return 4;
         }
 
-        private static int RandomAnswer(int cAnswer)
+        private static float WrongAnswer(float cAnswer)
         {
-            return cAnswer + 2;
+            switch(Random4Choice1(0))
+            {
+                case 1:
+                    return cAnswer + 1;
+                case 2:
+                    return cAnswer + 2;
+                case 3:
+                    return cAnswer * 2;
+                default:
+                    return cAnswer - 3;
+            }
         }
 
         private static int PositiveOrNegative()
