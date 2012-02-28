@@ -9,10 +9,13 @@ namespace MathInfection
     {
         private GameplayScreen parent;
         private string message;
+        private string answerMessage;
         private int[] answers;
         private int correctAnswer;
         private int lifeSpan;
         private Texture2D questionFrameTex;
+        private bool answered;
+        private int answer;
 
         public event EventHandler<PlayerIndexEventArgs> Accepted;
         public event EventHandler<PlayerIndexEventArgs> Cancelled;
@@ -26,14 +29,22 @@ namespace MathInfection
         {
             parent = caller;
             string usageText = "\n\n\nUse keyboard's Up/Down/Left/" +
-                                       "Right to choose your answer";
+                                        "Right to enter your answer";
+
             string question = RandomGenerator.RandomQuestion( parent.CurrentScore,
                                                   out correctAnswer, out answers);
-            lifeSpan = 60;
+            lifeSpan = 120;
             if (includeUsageText)
-                message = msg + question + usageText;
+                message = msg + "\n" + question + usageText;
             else
                 message = msg;
+
+            answerMessage = "\n        " + answers[0] + "\n" + "    " +
+                              answers[1] + "    " + answers[2] + "\n" +
+                              "        " + answers[3];
+
+            answered = false;
+            answer = -1;
 
             IsPopup = true;
 
@@ -50,41 +61,25 @@ namespace MathInfection
 
         public override void HandleInput(InputState input)
         {
-            parent.AnswerTimeLeft = lifeSpan;
-            parent.AnswerCorrect = false;
-            PlayerIndex playerIndex;
             if (input.IsMenuUp(ControllingPlayer))
             {
-                if(correctAnswer == 1)
-                {
-                    parent.AnswerCorrect = true;
-
-                }
-                ExitScreen();
+                answer = 1;
+                answered = true;
             }
             else if (input.IsMenuDown(ControllingPlayer))
             {
-                if(correctAnswer == 2)
-                {
-                    parent.AnswerCorrect = true;
-                }
-                ExitScreen();
+                answer = 2;
+                answered = true;
             }
             else if(input.IsMenuLeft(ControllingPlayer))
             {
-                if(correctAnswer == 3)
-                {
-                    parent.AnswerCorrect = true;
-                }
-                ExitScreen();
+                answer = 3;
+                answered = true;
             }
             else if(input.IsMenuRight(ControllingPlayer))
             {
-                if(correctAnswer == 4)
-                {
-                    parent.AnswerCorrect = true;
-                }
-                ExitScreen();
+                answer = 4;
+                answered = true;
             }
         }
 
@@ -93,9 +88,23 @@ namespace MathInfection
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
             lifeSpan--;
-            if(lifeSpan < 0)
+            if(answered)
+            {
+                if(answer == correctAnswer)
+                {
+                    parent.AnswerCorrect = true;
+                    parent.AnswerTimeLeft = lifeSpan;
+                }
+                else
+                {
+                    parent.AnswerCorrect = false;
+                }
+                ExitScreen();
+            }
+            else if(lifeSpan < 0)
             {
                 parent.AnswerCorrect = false;
+                ExitScreen();
             }
         }
 
@@ -111,6 +120,9 @@ namespace MathInfection
             Vector2 textSize = font.MeasureString(message);
             Vector2 textPosition = (viewportSize - textSize) / 2;
 
+            Vector2 answerSize = font.MeasureString(answerMessage);
+            Vector2 answerPosition = (viewportSize - answerSize) / 2;
+
             const int hPad = 32;
             const int vPad = 16;
 
@@ -124,6 +136,7 @@ namespace MathInfection
             spriteBatch.Begin();
             spriteBatch.Draw(questionFrameTex, backgroundRectangle, color);
             spriteBatch.DrawString(font, message, textPosition, color);
+            spriteBatch.DrawString(font, answerMessage, answerPosition, color);
             spriteBatch.End();
         }
     }

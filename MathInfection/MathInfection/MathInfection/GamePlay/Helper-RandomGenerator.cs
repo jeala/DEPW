@@ -85,19 +85,62 @@ namespace MathInfection
         public static string RandomQuestion(int currentScore, out int answer,
                                                            out int[] answers)
         {
-            string question = "";
+            answer = rand.Next(1, 5);
+            answers = new int[4]{0, 0, 0, 0};
 
-            answer = 1;
+            string question = "";
+            int firstVal = rand.Next(10);
+            int SecondVal = rand.Next(10);
+            int myOperator = RandomOperator(currentScore);
+            int correctAnswer;
+
+            switch(myOperator)
+            {
+                case 1:
+                    question = firstVal + " + " + SecondVal + " = ?";
+                    correctAnswer = firstVal + SecondVal;
+                    break;
+                case 2:
+                    question = firstVal + " - " + SecondVal + " = ?";
+                    correctAnswer = firstVal - SecondVal;
+                    break;
+                case 3:
+                    question = firstVal + " * " + SecondVal + " = ?";
+                    correctAnswer = firstVal * SecondVal;
+                    break;
+                case 4:
+                    question = firstVal + " / " + SecondVal + " = ?";
+                    correctAnswer = firstVal / SecondVal;
+                    break;
+                default:
+                    question = firstVal + " + " + SecondVal + " = ?";
+                    correctAnswer = firstVal + SecondVal;
+                    break;
+            }
+
             for(int i = 0; i < 4; i++)
             {
                 if(i == answer - 1)
                 {
-                    answers[i] = answers;
+                    answers[i] = correctAnswer;
+                }
+                else
+                {
+                    answers[i] = RandomAnswer(correctAnswer);
                 }
             }
             return question;
         }
 
+        private static int RandomOperator(int cScore)
+        {
+            return 1;
+        }
+
+        private static int RandomAnswer(int cAnswer)
+        {
+            return cAnswer + 2;
+        }
 
         private static int PositiveOrNegative()
         {

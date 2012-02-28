@@ -91,7 +91,7 @@ namespace MathInfection
                             e.GetHit(b.Damage);
                             if(!e.IsAlive())
                             {
-                                p1.GetPoints(e.GetType().ToString() == "MathInfection.Boss");
+                                p1.GetPoints(0);
                             }
                             b.IsValid = false;
                         }
@@ -114,8 +114,8 @@ namespace MathInfection
 
                 if (r1.Intersects(r2))
                 {
-                    p1.GetHit(e.GetType().ToString() == "MathInfection.Enemy" ? 20 : 50);
                     p1.WasHit = true;
+                    p1.EnemyType = e.GetType().ToString();
                     e.Health = 0;
                 }
             }

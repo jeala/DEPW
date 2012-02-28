@@ -270,11 +270,6 @@ namespace MathInfection
                                                                ControllingPlayer);
                 IsExiting = true;
             }
-            if(player1.WasHit)
-            {
-                ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
-                                                               ControllingPlayer);
-            }
             player1.QuestionResult(answerCorrect, answerTimeLeft);
 
             foreach(Enemy e in enemyList)
@@ -290,6 +285,20 @@ namespace MathInfection
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
+            if(player1.WasHit)
+            {
+                ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
+                                                               ControllingPlayer);
+                player1.WasHit = false;
+                if(!answerCorrect)
+                {
+                    player1.GetHit(player1.EnemyType == "MathInfection.Enemy" ? 20 : 50);
+                }
+                else
+                {
+                    player1.GetPoints(answerTimeLeft);
+                }
+            }
             hud.update(player1, enemyList.Count);
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;

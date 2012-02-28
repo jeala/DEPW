@@ -15,6 +15,7 @@ namespace MathInfection
         private bool startBoost;
         private int health;
         private bool wasHit;
+        private string enemyType;
 
         public Player(Texture2D tex, Vector2 pos, Vector2 vel,
                                  Vector2 cSize, Vector2 wSize)
@@ -98,6 +99,18 @@ namespace MathInfection
             }
         }
 
+        public string EnemyType
+        {
+            get
+            {
+                return enemyType;
+            }
+            set
+            {
+                enemyType = value;
+            }
+        }
+
         public bool IsAlive()
         {
             return health > 0;
@@ -108,15 +121,17 @@ namespace MathInfection
             health -= damage;
         }
 
-        public void GetPoints(bool isBoss)
+        public void GetPoints(int answerTimeLeft)
         {
+            bool isBoss = enemyType == "MathInfection.Boss";
+            int bonus = answerTimeLeft * 2;
             if(isBoss)
             {
-                score += 100;
+                score += (100 + bonus);
             }
             else
             {
-                score += 20;
+                score += (20 + bonus);
             }
         }
 
