@@ -285,6 +285,12 @@ namespace MathInfection
                                                           out currentScore);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
+            if(enemyList.Count == 0)
+            {
+                ScreenManager.AddScreen(new SummaryScreen("You win", playerAlive),
+                                                               ControllingPlayer);
+                ExitScreen();
+            }
             if(player1.WasHit)
             {
                 ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
