@@ -67,6 +67,14 @@ namespace MathInfection
             }
         }
 
+        public float ResizeRation
+        {
+            get
+            {
+                return resizeRatio;
+            }
+        }
+
         public bool IsAlive()
         {
             return health > 0;

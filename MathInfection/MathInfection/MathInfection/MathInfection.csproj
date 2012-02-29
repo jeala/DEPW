@@ -127,23 +127,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Character-Boss.cs" />
-    <Compile Include="Character-Enemy.cs" />
-    <Compile Include="Helper-GameUpdate.cs" />
-    <Compile Include="Helper-ICharacter.cs" />
-    <Compile Include="Helper-Mover-CatmullRom.cs" />
-    <Compile Include="Helper-Mover-Lerp.cs" />
-    <Compile Include="Helper-Mover-Velocity.cs" />
-    <Compile Include="PowerUp-Shield.cs" />
-    <Compile Include="Scene-Background.cs" />
-    <Compile Include="Scene-Bullet.cs" />
-    <Compile Include="Scene-HeadsUpDisplay.cs" />
-    <Compile Include="Helper-IMoverStrategy.cs" />
-    <Compile Include="Character-Player.cs" />
+    <Compile Include="GamePlay\Character-Boss.cs" />
+    <Compile Include="GamePlay\Character-Enemy.cs" />
+    <Compile Include="GamePlay\Helper-FileIO.cs" />
+    <Compile Include="GamePlay\Helper-GameData.cs" />
+    <Compile Include="GamePlay\Helper-GameUpdate.cs" />
+    <Compile Include="GamePlay\Helper-ICharacter.cs" />
+    <Compile Include="GamePlay\Helper-Mover-CatmullRom.cs" />
+    <Compile Include="GamePlay\Helper-Mover-Lerp.cs" />
+    <Compile Include="GamePlay\Helper-Mover-Velocity.cs" />
+    <Compile Include="GamePlay\PowerUp-Shield.cs" />
+    <Compile Include="GamePlay\Scene-Background.cs" />
+    <Compile Include="GamePlay\Scene-Bullet.cs" />
+    <Compile Include="GamePlay\Scene-HeadsUpDisplay.cs" />
+    <Compile Include="GamePlay\Helper-IMoverStrategy.cs" />
+    <Compile Include="GamePlay\Character-Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Helper-RandomGenerator.cs" />
+    <Compile Include="GamePlay\Helper-RandomGenerator.cs" />
+    <Compile Include="ScreenManager\GameScreen.cs" />
+    <Compile Include="ScreenManager\InputState.cs" />
+    <Compile Include="ScreenManager\ScreenManager.cs" />
+    <Compile Include="Screens\BackgroundScreen.cs" />
+    <Compile Include="Screens\GameplayScreen.cs" />
+    <Compile Include="Screens\HighscoreScreen.cs" />
+    <Compile Include="Screens\LoadingScreen.cs" />
+    <Compile Include="Screens\MainMenuScreen.cs" />
+    <Compile Include="Screens\MenuEntry.cs" />
+    <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="Screens\MessageBoxScreen.cs" />
+    <Compile Include="Screens\OptionsMenuScreen.cs" />
+    <Compile Include="Screens\PauseMenuScreen.cs" />
+    <Compile Include="Screens\PlayerIndexEventArgs.cs" />
+    <Compile Include="Screens\QuestionScreen.cs" />
+    <Compile Include="Screens\SummaryScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
