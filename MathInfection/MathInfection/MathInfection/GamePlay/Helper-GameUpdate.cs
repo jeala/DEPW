@@ -86,8 +86,9 @@ namespace MathInfection
                     r1.Y = (int)Math.Round(b.Position.Y);
                     foreach(var e in enemyList)
                     {
-                        r2.Width = (int)Math.Round(e.CharacterSize.X * e.ResizeRation);
-                        r2.Height = (int)Math.Round(e.CharacterSize.Y * e.ResizeRation);
+                        double ratio = Math.Sqrt(e.ResizeRation);
+                        r2.Width = (int)Math.Round(e.CharacterSize.X * ratio);
+                        r2.Height = (int)Math.Round(e.CharacterSize.Y * ratio);
                         r2.X = (int)Math.Round(e.Position.X);
                         r2.Y = (int)Math.Round(e.Position.Y);
                         if(r1.Intersects(r2))
@@ -116,8 +117,9 @@ namespace MathInfection
             r1.Y = (int)Math.Round(p1.PlayerPosition.Y);
             foreach (Enemy e in enemyList)
             {
-                r2.Width = (int)Math.Round(e.CharacterSize.X * e.ResizeRation);
-                r2.Height = (int)Math.Round(e.CharacterSize.Y * e.ResizeRation);
+                double ratio = Math.Sqrt(e.ResizeRation);
+                r2.Width = (int)Math.Round(e.CharacterSize.X * ratio);
+                r2.Height = (int)Math.Round(e.CharacterSize.Y * ratio);
                 r2.X = (int)Math.Round(e.Position.X);
                 r2.Y = (int)Math.Round(e.Position.Y);
 
@@ -154,7 +156,6 @@ namespace MathInfection
             int currentLevel = 0;
             return currentLevel;
         }
-
         // endof public static class GameUpdate
     }
 }

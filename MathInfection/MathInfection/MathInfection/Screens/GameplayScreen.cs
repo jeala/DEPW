@@ -253,7 +253,7 @@ namespace MathInfection
                                         RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
-            bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullet1"));
+            bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullet3"));
         }
 
         private void GameplayUpdate(GameTime gameTime)
@@ -263,11 +263,11 @@ namespace MathInfection
                                   defaultBulletFireRate, windowSize, this);
 
             player1.update(Vector2.Zero);
-            bool playAlive = player1.IsAlive();
-            if(!playAlive)
+            bool playerAlive = player1.IsAlive();
+            if(!playerAlive)
             {
-                ScreenManager.AddScreen(new SummaryScreen("You loose", playAlive),
-                                                               ControllingPlayer);
+                ScreenManager.AddScreen(new SummaryScreen("You loose", playerAlive),
+                                                                 ControllingPlayer);
                 ExitScreen();
             }
 
