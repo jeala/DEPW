@@ -27,6 +27,8 @@ namespace MathInfection
         private List<Boss> bossList;
         private List<Bullet> defaultBulletList;
         private Texture2D player1Texture;
+        private Texture2D jettexture;
+        private Texture2D jettexture2;
         private List<Texture2D> enemyTexList;
         private List<Texture2D> bossTexList;
         private List<Texture2D> bulletTexList;
@@ -232,13 +234,15 @@ namespace MathInfection
             background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"));
 
             player1Texture = content.Load<Texture2D>(@"CharacterImages/Player1");
+            jettexture = content.Load<Texture2D>(@"CharacterImages/Character Jets");
+            jettexture2 = content.Load<Texture2D>(@"CharacterImages/Character Jets2");
             playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
             if(!singleMode)
             {
                 // TODO: use player1's texture for now, might make another for player2 later.
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
-            player1 = new Player(player1Texture, initialPlayerPosition, playerVelocity,
+            player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition, playerVelocity,
                                  playerSize, windowSize);
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss1"));
@@ -262,7 +266,7 @@ namespace MathInfection
                                   bulletTexList, previousFireTime,
                                   defaultBulletFireRate, windowSize, this);
 
-            player1.update(Vector2.Zero);
+            player1.update(Vector2.Zero, gameTime);
             bool playAlive = player1.IsAlive();
             if(!playAlive)
             {
@@ -273,12 +277,12 @@ namespace MathInfection
 
             foreach(Enemy e in enemyList)
             {
-                e.update(player1.PlayerPosition);
+                e.update(player1.PlayerPosition, gameTime);
             }
 
             foreach(Bullet b in defaultBulletList)
             {
-                b.update(player1.PlayerPosition);
+                b.update(player1.PlayerPosition, gameTime);
             }
 
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,

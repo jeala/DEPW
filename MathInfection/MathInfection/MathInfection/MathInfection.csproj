@@ -129,6 +129,7 @@
   <ItemGroup>
     <Compile Include="GamePlay\Character-Boss.cs" />
     <Compile Include="GamePlay\Character-Enemy.cs" />
+    <Compile Include="GamePlay\Helper-Animation.cs" />
     <Compile Include="GamePlay\Helper-FileIO.cs" />
     <Compile Include="GamePlay\Helper-GameData.cs" />
     <Compile Include="GamePlay\Helper-GameUpdate.cs" />

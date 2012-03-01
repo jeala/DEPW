@@ -85,7 +85,7 @@ namespace MathInfection
             health -= damage;
         }
 
-        public void update(Vector2 playerPos)
+        public void update(Vector2 playerPos, GameTime gametime)
         {
             if (health > 0)
             {
