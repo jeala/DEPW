@@ -27,7 +27,7 @@ namespace MathInfection
             resizeRatio = resize;
         }
 
-        public  Vector2 Position
+        public Vector2 Position
         {
             get
             {
@@ -85,7 +85,7 @@ namespace MathInfection
             health -= damage;
         }
 
-        public void update(Vector2 playerPos)
+        public void update(Vector2 playerPos, GameTime gametime)
         {
             if (health > 0)
             {
@@ -102,7 +102,7 @@ namespace MathInfection
 
         private IMoverStrategy SetMover(int moverId)
         {
-            switch(moverId)
+            switch (moverId)
             {
                 case 0:
                     return new VelocityMover(this, RandomGenerator.RandomVelocity());

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MathInfection
@@ -12,7 +12,7 @@ namespace MathInfection
         Vector2 WindowSize { get; }
         Vector2 PlayerPosition { get; }
 
-        void update(Vector2 playerPosition);
+        void update(Vector2 playerPosition, GameTime gametime);
         void draw(SpriteBatch spriteBatch);
     }
 }

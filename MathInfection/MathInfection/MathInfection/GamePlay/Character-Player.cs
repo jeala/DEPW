@@ -1,42 +1,38 @@
-﻿using Microsoft.Xna.Framework;
+﻿﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
-    class Player : ICharacter
+    public class Player : ICharacter
     {
         private readonly Texture2D texture;
-        //Changed to public for testing purposes
-        public Vector2 position;
-        private Vector2 velocity;
+        private Vector2 position;
+        private Helper_Animation jet1;
+        private Helper_Animation jet2;
+        private readonly Vector2 velocity;
         private Vector2 characterSize;
         private Vector2 windowSize;
-        private int health;
-        private bool wasHit;
+        private int score;
         private bool startBoost;
-<<<<<<< HEAD:MathInfection/MathInfection/MathInfection/Character-Player.cs
-
-        public Player(Texture2D tex, Vector2 pos, Vector2 vel, Vector2 cSize, Vector2 wSize)
-=======
         private int health;
         private bool wasHit;
         private string enemyType;
 
-        public Player(Texture2D tex, Vector2 pos, Vector2 vel,
+        public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos, Vector2 vel,
                                  Vector2 cSize, Vector2 wSize)
->>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703:MathInfection/MathInfection/MathInfection/GamePlay/Character-Player.cs
         {
             texture = tex;
             position = pos;
             velocity = vel;
             characterSize = cSize;
             windowSize = wSize;
+            score = 0;
+            startBoost = false;
             health = 100;
             wasHit = false;
-<<<<<<< HEAD:MathInfection/MathInfection/MathInfection/Character-Player.cs
-            startBoost = false;
-=======
+            jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 25, 6);
+            jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 25, 9);
         }
 
         public Vector2 CharacterSize
@@ -61,18 +57,17 @@ namespace MathInfection
             {
                 return position;
             }
->>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703:MathInfection/MathInfection/MathInfection/GamePlay/Character-Player.cs
         }
 
-        public Vector2 CharacterSize
+        public Vector2 PlayerPosition
         {
             get
             {
-                return characterSize;
+                return position;
             }
         }
 
-        public Vector2 WindowSize
+        public int Score
         {
             set
             {
@@ -80,7 +75,7 @@ namespace MathInfection
             }
             get
             {
-                return windowSize;
+                return score;
             }
         }
 
@@ -92,19 +87,6 @@ namespace MathInfection
             }
         }
 
-<<<<<<< HEAD:MathInfection/MathInfection/MathInfection/Character-Player.cs
-        public bool IsAlive()
-        {
-            return health > 0;
-        }
-
-        public void update()
-        {
-            if (wasHit)
-            {
-                health--;
-                wasHit = false;
-=======
         public int Health
         {
             set
@@ -138,77 +120,73 @@ namespace MathInfection
             set
             {
                 enemyType = value;
->>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703:MathInfection/MathInfection/MathInfection/GamePlay/Character-Player.cs
             }
+        }
 
-<<<<<<< HEAD:MathInfection/MathInfection/MathInfection/Character-Player.cs
-            if(IsAlive())
-=======
         public bool IsAlive()
         {
             return health > 0;
         }
 
-        public void update(Vector2 dummy)
+        public void update(Vector2 dummy, GameTime gametime)
         {
             Vector2 speed = velocity;
-            if(startBoost)
->>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703:MathInfection/MathInfection/MathInfection/GamePlay/Character-Player.cs
+            if (startBoost)
             {
-                Vector2 speed = velocity;
-                if(startBoost)
-                {
-                    speed = velocity * 2;
-                }
-
-                if(Keyboard.GetState().IsKeyDown(Keys.W) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
-                {
-                    position.Y -= speed.Y;
-                }
-                if(Keyboard.GetState().IsKeyDown(Keys.S) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
-                {
-                    position.Y += speed.Y;
-                }
-                if(Keyboard.GetState().IsKeyDown(Keys.A) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
-                {
-                    position.X -= speed.X;
-                }
-                if(Keyboard.GetState().IsKeyDown(Keys.D) || GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
-                {
-                    position.X += speed.X;
-                }
-                StopEdge();
+                speed = velocity * 2;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
+            {
+                position.Y -= speed.Y;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.S) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
+            {
+                position.Y += speed.Y;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.A) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
+            {
+                position.X -= speed.X;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.D) ||
+               GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
+            {
+                position.X += speed.X;
+            }
+            StopEdge();
+
+            if (startBoost) jet2.Update(gametime, new Vector2(position.X + 5, position.Y + 43));
+            else jet1.Update(gametime, new Vector2(position.X + 5, position.Y + 44));
         }
 
         public void draw(SpriteBatch sb)
         {
             sb.Draw(texture, position, Color.White);
+            if (startBoost) jet2.Draw(sb);
+            else jet1.Draw(sb);
         }
 
         private void StopEdge()
         {
-            if(position.X < 0)
+            if (position.X < 0)
             {
                 position.X = 0;
             }
-            if(position.Y < 0)
+            if (position.Y < 0)
             {
                 position.Y = 0;
             }
-            if(position.X + characterSize.X > windowSize.X)
+            if (position.X + characterSize.X > windowSize.X)
             {
                 position.X = windowSize.X - characterSize.X;
             }
-            if(position.Y + characterSize.Y > windowSize.Y)
+            if (position.Y + characterSize.Y > windowSize.Y)
             {
                 position.Y = windowSize.Y - characterSize.Y;
             }
         }
-<<<<<<< HEAD:MathInfection/MathInfection/MathInfection/Character-Player.cs
     }
 }
-=======
-    }
-}
->>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703:MathInfection/MathInfection/MathInfection/GamePlay/Character-Player.cs
