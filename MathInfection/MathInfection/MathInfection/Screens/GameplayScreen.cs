@@ -266,15 +266,9 @@ namespace MathInfection
                                   bulletTexList, previousFireTime,
                                   defaultBulletFireRate, windowSize, this);
 
-<<<<<<< HEAD
-            player1.update(Vector2.Zero);
+            player1.update(Vector2.Zero, gameTime);
             bool playerAlive = player1.IsAlive();
             if(!playerAlive)
-=======
-            player1.update(Vector2.Zero, gameTime);
-            bool playAlive = player1.IsAlive();
-            if(!playAlive)
->>>>>>> a3c2b5e917154cf8ec5e867f669f9a5a707919e0
             {
                 ScreenManager.AddScreen(new SummaryScreen("You loose", playerAlive),
                                                                  ControllingPlayer);

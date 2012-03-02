@@ -12,7 +12,6 @@ namespace MathInfection
         Texture2D backgroundTexture;
 
         public event EventHandler<PlayerIndexEventArgs> Accepted;
-        public event EventHandler<PlayerIndexEventArgs> Cancelled;
 
         public HighscoreScreen() : base("High Scores")
         {
