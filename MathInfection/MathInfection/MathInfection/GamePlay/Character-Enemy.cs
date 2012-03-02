@@ -21,8 +21,7 @@ namespace MathInfection
             texture = tex;
             position = pos;
             characterSize = cSize;
-            windowSize.X = wSize.X - 210;
-            windowSize.Y = wSize.Y;
+            windowSize = wSize;
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
@@ -65,6 +64,14 @@ namespace MathInfection
             set
             {
                 health = value;
+            }
+        }
+
+        public float ResizeRation
+        {
+            get
+            {
+                return resizeRatio;
             }
         }
 

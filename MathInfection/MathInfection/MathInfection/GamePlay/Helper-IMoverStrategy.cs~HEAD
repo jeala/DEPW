@@ -2,7 +2,8 @@
 
 namespace MathInfection
 {
-    class Shield
+    interface IMoverStrategy
     {
+        Vector2 update(Vector2 position);
     }
 }

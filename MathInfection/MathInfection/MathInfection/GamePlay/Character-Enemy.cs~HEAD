@@ -3,31 +3,32 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MathInfection
 {
-    class Boss : ICharacter
+    public class Enemy : ICharacter
     {
-        private IMoverStrategy mover;
+        private readonly IMoverStrategy mover;
         private readonly Texture2D texture;
         private Vector2 position;
-        private Vector2 characterSize;
-        private Vector2 windowSize;
+        private readonly Vector2 characterSize;
+        private readonly Vector2 windowSize;
         private Vector2 playerPosition;
         private int health;
-        private float resizeRatio;
+        private readonly float resizeRatio;
 
-        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
-                    Vector2 wSize, int hp, float resize)
+        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
+                     Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
             position = pos;
             characterSize = cSize;
-            windowSize = wSize;
+            windowSize.X = wSize.X - 210;
+            windowSize.Y = wSize.Y;
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
         }
 
-        public Vector2 Position
+        public  Vector2 Position
         {
             get
             {
@@ -56,6 +57,14 @@ namespace MathInfection
             get
             {
                 return playerPosition;
+            }
+        }
+
+        public int Health
+        {
+            set
+            {
+                health = value;
             }
         }
 

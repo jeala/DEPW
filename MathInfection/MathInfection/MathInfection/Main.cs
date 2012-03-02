@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -19,24 +20,28 @@ namespace MathInfection
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
         private bool windowMode;
+=======
+using Microsoft.Xna.Framework;
 
-        private HeadsUpDisplay hud;
+namespace MathInfection
+{
+    public class Main : Game
+    {
+        private GraphicsDeviceManager graphics;
+        private ScreenManager screenManager;
+>>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703
 
-        private Player player1;
-        private Player player2;
-        private List<Enemy> enemyList;
-        private List<Boss> bossList;
-        private List<Bullet> defaultBulletList;
-        private Texture2D player1Texture;
-        private List<Texture2D> enemyTexList;
-        private List<Texture2D> bossTexList;
-        private List<Texture2D> bulletTexList;
+        private static readonly string[] preloadAssets = { "gradient" };
 
-        private Vector2 playerSize;
-        private Vector2 windowSize;
-        private Vector2 initialPlayerPosition;
-        private Vector2 playerVelocity;
+        public Main()
+        {
+            Content.RootDirectory = "Content";
 
+            graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth  = 1000;
+            graphics.PreferredBackBufferHeight = 660;
+
+<<<<<<< HEAD
         private bool singleMode;
         private int numPlayers;
         private int numMoveStrategies;
@@ -60,16 +65,23 @@ namespace MathInfection
         private int numEnemies;
         private TimeSpan previousFireTime;
         private TimeSpan defaultBulletFireRate;
+=======
+            screenManager = new ScreenManager(this);
+            Components.Add(screenManager);
+>>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703
 
-        private Background background;
+            screenManager.AddScreen(new BackgroundScreen(), null);
+            screenManager.AddScreen(new MainMenuScreen(), null);
+        }
 
-        public TimeSpan PreviousFireTime
+        protected override void LoadContent()
         {
-            set
+            foreach(string asset in preloadAssets)
             {
-                previousFireTime = value;
+                Content.Load<object>(asset);
             }
         }
+<<<<<<< HEAD
 
         public bool WindowMode
         {
@@ -96,26 +108,15 @@ namespace MathInfection
             Window.AllowUserResizing = true;
             windowMode = false;
 
+=======
+>>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703
 
-            enemyList = new List<Enemy>();
-            bossList = new List<Boss>();
-            defaultBulletList = new List<Bullet>();
-            enemyTexList = new List<Texture2D>();
-            bossTexList = new List<Texture2D>();
-            bulletTexList = new List<Texture2D>();
-            windowSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
-            initialPlayerPosition = new Vector2(windowSize.X/2, windowSize.Y-60);
-            playerVelocity = new Vector2(6, 6);
-            // TODO: determine game mode: single or versus. Use single for now.
-            singleMode = true;
-            numPlayers = singleMode ? 1 : 2;
-            numMoveStrategies = 3;
-            numEnemies = 10;
-            previousFireTime = TimeSpan.Zero;
-            defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
-            hud = new HeadsUpDisplay(new Vector2(windowSize.X/2-200, 20));
-            base.Initialize();
+        protected override void Draw(GameTime gameTime)
+        {
+            graphics.GraphicsDevice.Clear(Color.Black);
+            base.Draw(gameTime);
         }
+<<<<<<< HEAD
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -218,4 +219,7 @@ namespace MathInfection
             base.Draw(gameTime);
         }
     }
+=======
+    }
+>>>>>>> 2b6ae63cf727e98dd6fcaf91ff4d7e699c286703
 }
