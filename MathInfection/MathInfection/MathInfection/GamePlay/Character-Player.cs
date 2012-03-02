@@ -8,6 +8,8 @@ namespace MathInfection
     {
         private readonly Texture2D texture;
         private Vector2 position;
+        private Helper_Animation jet1;
+        private Helper_Animation jet2;
         private readonly Vector2 velocity;
         private Vector2 characterSize;
         private Vector2 windowSize;
@@ -17,7 +19,7 @@ namespace MathInfection
         private bool wasHit;
         private string enemyType;
 
-        public Player(Texture2D tex, Vector2 pos, Vector2 vel,
+        public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos, Vector2 vel,
                                  Vector2 cSize, Vector2 wSize)
         {
             texture = tex;
@@ -29,6 +31,8 @@ namespace MathInfection
             startBoost = false;
             health = 100;
             wasHit = false;
+            jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 25, 6);
+            jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 25, 9);
         }
 
         public Vector2 CharacterSize
@@ -124,7 +128,7 @@ namespace MathInfection
             return health > 0;
         }
 
-        public void update(Vector2 dummy)
+        public void update(Vector2 dummy, GameTime gametime)
         {
             Vector2 speed = velocity;
             if(startBoost)
@@ -153,11 +157,16 @@ namespace MathInfection
                 position.X += speed.X;
             }
             StopEdge();
+
+            if (startBoost) jet2.Update(gametime, new Vector2(position.X + 5, position.Y + 43));
+            else jet1.Update(gametime, new Vector2(position.X + 5, position.Y + 44));
         }
 
         public void draw(SpriteBatch sb)
         {
             sb.Draw(texture, position, Color.White);
+            if (startBoost) jet2.Draw(sb);
+            else jet1.Draw(sb);
         }
 
         private void StopEdge()
