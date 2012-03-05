@@ -270,7 +270,7 @@ namespace MathInfection
             player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition, playerVelocity,
                                  playerSize, windowSize);
 
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss1"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss"));
 
             Vector2 charSize = new Vector2(enemyTexList[0].Width, enemyTexList[0].Height);
             int numEnemy = numEnemies;
@@ -283,7 +283,7 @@ namespace MathInfection
                                         RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
-            bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullet3"));
+            bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
         }
 

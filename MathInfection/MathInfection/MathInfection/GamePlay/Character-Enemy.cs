@@ -6,7 +6,7 @@ namespace MathInfection
     public class Enemy : ICharacter
     {
         private readonly IMoverStrategy mover;
-        private readonly Texture2D texture;
+        private readonly Helper_Animation anim;
         private Vector2 position;
         private readonly Vector2 characterSize;
         private readonly Vector2 windowSize;
@@ -18,13 +18,13 @@ namespace MathInfection
                      Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
-            texture = tex;
             position = pos;
             characterSize = cSize;
             windowSize = wSize;
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
+            anim = new Helper_Animation(tex, pos, 2, 400, 0, 0, 64, 64);
         }
 
         public  Vector2 Position
@@ -91,13 +91,13 @@ namespace MathInfection
             {
                 playerPosition = playerPos;
                 position = mover.update(position);
+                anim.Update(gametime, position);
             }
         }
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero,
-                    resizeRatio, SpriteEffects.None, 0);
+            anim.Draw(sb, resizeRatio);
         }
 
         private IMoverStrategy SetMover(int moverId)

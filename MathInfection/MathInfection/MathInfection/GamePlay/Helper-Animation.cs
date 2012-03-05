@@ -39,7 +39,7 @@ namespace MathInfection
                 if (i == 0) {
                     r = new Rectangle(left, top, width, height);
                 }
-                else r = new Rectangle(left + width, top, width, height);
+                else r = new Rectangle(left + (width * i), top, width, height);
                 rects.Add(r);
             }
         }
@@ -66,10 +66,24 @@ namespace MathInfection
             }
         }
 
+        /// <summary>
+        /// Draw an animation without a scale
+        /// </summary>
+        /// <param name="sprite"></param>
         public void Draw(SpriteBatch sprite)
         {
-            //Draw out sprite
             sprite.Draw(texture, Position, rects[currentframe], Color.White);
         }
+
+        /// <summary>
+        /// Draw an animation with a scale
+        /// </summary>
+        /// <param name="sprite"></param>
+        /// <param name="resizeRatio"></param>
+        public void Draw(SpriteBatch sprite, float resizeRatio)
+        {
+            sprite.Draw(texture, Position, rects[currentframe], Color.White, 0, Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
+        }
+
     }
 }

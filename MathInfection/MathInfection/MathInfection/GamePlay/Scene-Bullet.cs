@@ -5,7 +5,7 @@ namespace MathInfection
 {
     public class Bullet : ICharacter
     {
-        private readonly Texture2D texture;
+        private readonly Helper_Animation anim;
         private Vector2 position;
         private Vector2 characterSize;
         private readonly Vector2 windowSize;
@@ -17,7 +17,6 @@ namespace MathInfection
         public Bullet(Texture2D tex, Vector2 pos, Vector2 cSize, Vector2 wSize,
                       Vector2 playerPos, int bSpeed, int bDamage)
         {
-            texture = tex;
             position = pos;
             characterSize = cSize;
             windowSize = wSize;
@@ -25,6 +24,7 @@ namespace MathInfection
             bulletSpeed = bSpeed;
             bulletDamage = bDamage;
             isValid = true;
+            anim = new Helper_Animation(tex, pos, 2, 100, 0, 0, 10, 10);
         }
 
         public Vector2 Position
@@ -87,11 +87,12 @@ namespace MathInfection
             {
                 isValid = false;
             }
+            anim.Update(gametime, position);
         }
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(texture, position, Color.White);
+            anim.Draw(sb);
         }
     }
 }
