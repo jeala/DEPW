@@ -49,6 +49,20 @@ namespace MathInfection
             index++;
         }
 
+        public static void UpdateShieldList(ref List<Shield> sList, Player p1)
+        {
+            int index = 0;
+            while (index < sList.Count)
+            {
+                if (!sList[index].drawShieldF)
+                {
+                    sList.RemoveAt(index);
+                    index--;
+                }
+                index++;
+            }
+        }
+
         public static void ModifyShield(ref Shield shield, SpriteBatch sb, Player player1, Texture2D player_shield)
         {
             Color color = new Color(0, 155, 155, 75);
@@ -107,7 +121,7 @@ namespace MathInfection
 
         public static void CheckCollision(List<Bullet> defaultBulletList, List<Enemy> enemyList,
                                                                 Player p1, out int currentScore, ref bool shield_active,
-                                                                List<Health> hlist, SpriteBatch sb, Texture2D heart, ref Shield shield)
+                                                                List<Health> hlist, SpriteBatch sb, Texture2D heart, List<Shield> sList)
         {
             Vector2 vec = new Vector2();
             Rectangle r1 = new Rectangle();
@@ -155,7 +169,10 @@ namespace MathInfection
                                         }
                                     case 2:
                                         {
-                                            
+                                            vec = e.Position;
+                                            sList.Add(new Shield(vec));
+                                            sList[index].drawShieldF = true;
+                                            index++;
                                             break;
                                         }
                                     default: break;
@@ -167,7 +184,7 @@ namespace MathInfection
                 }
             }
             // endof Bullet Collision Detection
-
+            index = 0;
             // Player Collision Detection
             r1.Width = (int)Math.Round(p1.CharacterSize.X);
             r1.Height = (int)Math.Round(p1.CharacterSize.Y);
@@ -188,6 +205,7 @@ namespace MathInfection
                         shield_active = false;
                         p1.EnemyType = e.GetType().ToString();
                         e.Health = 0;
+                        index++;
                     }
                     else
                     {
@@ -216,14 +234,24 @@ namespace MathInfection
                 }
                 index++;
             }
-            r2.Width = (int)shield.shield_sizeF.X;
-            r2.Width = (int)shield.shield_sizeF.Y;
-            r2.X = (int)shield.location.X;
-            r2.Y = (int)shield.location.Y;
-
-            if (r1.Intersects(r2))
+            index = 0;
+            while (index < sList.Count)
             {
-                shield_active = true;
+                if (sList[index].drawShieldF)
+                {
+                    r2.Width = (int)sList[index].shield_sizeF.X;
+                    r2.Width = (int)sList[index].shield_sizeF.Y;
+                    r2.X = (int)sList[index].shield_positionF.X;
+                    r2.Y = (int)sList[index].shield_positionF.Y;
+
+                    if (r1.Intersects(r2))
+                    {
+                        sList[index].drawShieldF = false;
+                        shield_active = true;
+                        
+                    }
+                }
+                index++;
             }
         }
 

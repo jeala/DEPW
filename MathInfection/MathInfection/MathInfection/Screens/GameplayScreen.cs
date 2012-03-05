@@ -60,6 +60,7 @@ namespace MathInfection
         Shield shield;
         Health heart;
         private List<Health> healthList;
+        private List<Shield> shieldList;
         private Vector2 vec;
 
         public TimeSpan PreviousFireTime
@@ -150,7 +151,6 @@ namespace MathInfection
                 GameplayUpdate(gameTime);
             }
             
-            //shield.PickUpShield(player1);
         }
 
         public override void HandleInput(InputState input)
@@ -185,8 +185,6 @@ namespace MathInfection
             spriteBacth.Begin();
             GameplayDraw(gameTime);
 
-            if (shield.shield_active)
-                GameUpdate.ModifyShield(ref shield, spriteBacth, player1, shieldIconP);
             spriteBacth.End();
 
             if(TransitionPosition > 0 || pauseAlpha > 0)
@@ -201,6 +199,7 @@ namespace MathInfection
             GameWindow window = ScreenManager.Game.Window;
 
             healthList = new List<Health>();
+            shieldList = new List<Shield>();
             enemyList = new List<Enemy>();
             bossList = new List<Boss>();
             defaultBulletList = new List<Bullet>();
@@ -285,7 +284,7 @@ namespace MathInfection
                 numEnemy--;
             }
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullet3"));
-            shield = new Shield(shieldIconP, playerSize);
+            shield = new Shield(new Vector2(0, 0));
         }
 
         private void GameplayUpdate(GameTime gameTime)
@@ -312,15 +311,20 @@ namespace MathInfection
             {
                 h.update();
             }
+            foreach (Shield s in shieldList)
+            {
+                s.update();
+            }
 
             foreach(Bullet b in defaultBulletList)
             {
                 b.update(player1.PlayerPosition, gameTime);
             }
             GameUpdate.UpdateHealthList(ref healthList, player1);
+            GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
                                                           out currentScore, ref shield.shield_active, healthList,
-                                                          spriteBatch, healthIconF, ref shield);
+                                                          spriteBatch, healthIconF, shieldList);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)
@@ -364,6 +368,18 @@ namespace MathInfection
             }
           
             player1.draw(spriteBatch);
+            
+            foreach (Shield s in shieldList)
+            {
+                if (s.drawShieldF)
+                {
+                    s.draw(shieldIconF, spriteBatch);
+                }                
+            }
+            if (shield.shield_active)
+            {
+                GameUpdate.ModifyShield(ref shield, spriteBatch, player1, shieldIconP);
+            }
         }
 
         public void ProcessAnswer(bool correct, int timeLeft)
