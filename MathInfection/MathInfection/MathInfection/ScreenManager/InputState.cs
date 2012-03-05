@@ -29,14 +29,14 @@ namespace MathInfection
 
         public void Update()
         {
-            for (int i = 0; i < MaxInputs; i++)
+            for(int i = 0; i < MaxInputs; i++)
             {
                 LastKeyboardStates[i] = CurrentKeyboardStates[i];
                 LastGamePadStates[i] = CurrentGamePadStates[i];
                 CurrentKeyboardStates[i] = Keyboard.GetState((PlayerIndex)i);
                 CurrentGamePadStates[i] = GamePad.GetState((PlayerIndex)i);
 
-                if (CurrentGamePadStates[i].IsConnected)
+                if(CurrentGamePadStates[i].IsConnected)
                 {
                     GamePadWasConnected[i] = true;
                 }
@@ -46,7 +46,7 @@ namespace MathInfection
         public bool IsNewKeyPress(Keys key, PlayerIndex? controllingPlayer,
                                   out PlayerIndex playerIndex)
         {
-            if (controllingPlayer.HasValue)
+            if(controllingPlayer.HasValue)
             {
                 playerIndex = controllingPlayer.Value;
                 int i = (int)playerIndex;
@@ -62,7 +62,7 @@ namespace MathInfection
         public bool IsNewButtonPress(Buttons button, PlayerIndex? controllingPlayer,
                                      out PlayerIndex playerIndex)
         {
-            if (controllingPlayer.HasValue)
+            if(controllingPlayer.HasValue)
             {
                 playerIndex = controllingPlayer.Value;
                 int i = (int)playerIndex;

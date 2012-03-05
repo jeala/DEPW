@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace MathInfection
 {
@@ -18,8 +18,7 @@ namespace MathInfection
         static string[] todoList = { "We", "need", "options!" };
         static int currentTodoList = 0;
 
-        public OptionsMenuScreen()
-            : base("Options")
+        public OptionsMenuScreen() : base("Options")
         {
             rateGameMenuEntry = new MenuEntry(string.Empty);
             languageMenuEntry = new MenuEntry(string.Empty);
@@ -31,7 +30,7 @@ namespace MathInfection
             rateGameMenuEntry.Selected += RateGameMenuEntrySelected;
             languageMenuEntry.Selected += LanguageMenuEntrySelected;
             back.Selected += OnCancel;
-
+            
             MenuEntries.Add(rateGameMenuEntry);
             MenuEntries.Add(languageMenuEntry);
             MenuEntries.Add(back);

@@ -42,8 +42,7 @@ namespace MathInfection
             }
         }
 
-        public ScreenManager(Game game)
-            : base(game)
+        public ScreenManager(Game game) : base(game)
         {
         }
 
@@ -62,7 +61,7 @@ namespace MathInfection
             topScoresFont = content.Load<SpriteFont>("HUDFont");
             blankTexture = content.Load<Texture2D>("blank");
 
-            foreach (GameScreen screen in screens)
+            foreach(GameScreen screen in screens)
             {
                 screen.LoadContent();
             }
@@ -70,7 +69,7 @@ namespace MathInfection
 
         protected override void UnloadContent()
         {
-            foreach (GameScreen screen in screens)
+            foreach(GameScreen screen in screens)
             {
                 screen.UnloadContent();
             }
@@ -81,7 +80,7 @@ namespace MathInfection
             input.Update();
 
             screensToUpdate.Clear();
-            foreach (GameScreen screen in screens)
+            foreach(GameScreen screen in screens)
             {
                 screensToUpdate.Add(screen);
             }
@@ -89,7 +88,7 @@ namespace MathInfection
             bool otherScreenHasFocus = !Game.IsActive;
             bool coveredByOtherScreen = false;
 
-            while (screensToUpdate.Count > 0)
+            while(screensToUpdate.Count > 0)
             {
                 GameScreen screen = screensToUpdate[screensToUpdate.Count - 1];
 
@@ -97,15 +96,15 @@ namespace MathInfection
 
                 screen.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
-                if (screen.ScreenState == ScreenState.TransitionOn ||
+                if(screen.ScreenState == ScreenState.TransitionOn ||
                    screen.ScreenState == ScreenState.Active)
                 {
-                    if (!otherScreenHasFocus)
+                    if(!otherScreenHasFocus)
                     {
                         screen.HandleInput(input);
                         otherScreenHasFocus = true;
                     }
-                    if (!screen.IsPopup)
+                    if(!screen.IsPopup)
                     {
                         coveredByOtherScreen = true;
                     }
@@ -115,9 +114,9 @@ namespace MathInfection
 
         public override void Draw(GameTime gameTime)
         {
-            foreach (GameScreen screen in screens)
+            foreach(GameScreen screen in screens)
             {
-                if (screen.ScreenState == ScreenState.Hidden)
+                if(screen.ScreenState == ScreenState.Hidden)
                 {
                     continue;
                 }
@@ -131,7 +130,7 @@ namespace MathInfection
             screen.ScreenManager = this;
             screen.IsExiting = false;
 
-            if (isInitialized)
+            if(isInitialized)
             {
                 screen.LoadContent();
             }
@@ -141,7 +140,7 @@ namespace MathInfection
 
         public void RemoveScreen(GameScreen screen)
         {
-            if (isInitialized)
+            if(isInitialized)
             {
                 screen.UnloadContent();
             }
@@ -161,7 +160,7 @@ namespace MathInfection
 
             spriteBatch.Begin();
             spriteBatch.Draw(blankTexture,
-                             new Rectangle(0, 0, viewport.Width, viewport.Height),
+                             new Rectangle(0,0,viewport.Width, viewport.Height),
                              Color.Black * alpha);
             spriteBatch.End();
         }

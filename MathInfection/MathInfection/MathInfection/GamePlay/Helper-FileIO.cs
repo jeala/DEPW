@@ -9,7 +9,7 @@ namespace MathInfection
         {
             string path = Directory.GetCurrentDirectory();
             string fileName = @"\GameData.xml";
-            if (!File.Exists(path + fileName))
+            if(!File.Exists(path+fileName))
             {
                 FileStream fs = File.Create(path + fileName);
                 fs.Close();
@@ -24,7 +24,7 @@ namespace MathInfection
         {
             string path = Directory.GetCurrentDirectory();
             string fileName = @"\GameData.xml";
-            if (!File.Exists(path + fileName))
+            if(!File.Exists(path+fileName))
             {
                 return null;
             }
@@ -37,7 +37,7 @@ namespace MathInfection
             XmlSerializer deserializer =
                                  new XmlSerializer(typeof(GameData));
             TextReader textReader = new StreamReader(path + fileName);
-            GameData gameData =
+            GameData gameData = 
                       (GameData)deserializer.Deserialize(textReader);
             textReader.Close();
             return gameData;

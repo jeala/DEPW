@@ -138,20 +138,20 @@ namespace MathInfection
 
         public GameData()
         {
-
+            
         }
 
         public GameData(string pName)
         {
-            playerName = pName;
-            totalLevel = 10;
-            totalScore = 0;
-            lastTotal = 0;
-            currentLevel = 1;
-            lastGameWon = false;
-            middleUpdate = false;
-            topScoreCapacity = 5;
-            topScores = new List<int>(topScoreCapacity);
+            playerName        = pName;
+            totalLevel        = 10;
+            totalScore        = 0;
+            lastTotal         = 0;
+            currentLevel      = 1;
+            lastGameWon       = false;
+            middleUpdate      = false;
+            topScoreCapacity  = 5;
+            topScores         = new List<int>(topScoreCapacity);
             topScoresDateTime = new List<DateTime>(topScoreCapacity);
         }
     }

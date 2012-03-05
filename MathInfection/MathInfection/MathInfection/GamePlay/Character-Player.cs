@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -131,27 +131,27 @@ namespace MathInfection
         public void update(Vector2 dummy, GameTime gametime)
         {
             Vector2 speed = velocity;
-            if (startBoost)
+            if(startBoost)
             {
                 speed = velocity * 2;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W) ||
+            if(Keyboard.GetState().IsKeyDown(Keys.W) ||
                GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y > .25)
             {
                 position.Y -= speed.Y;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.S) ||
+            if(Keyboard.GetState().IsKeyDown(Keys.S) ||
                GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.Y < -.25)
             {
                 position.Y += speed.Y;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.A) ||
+            if(Keyboard.GetState().IsKeyDown(Keys.A) ||
                GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X < -.25)
             {
                 position.X -= speed.X;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.D) ||
+            if(Keyboard.GetState().IsKeyDown(Keys.D) ||
                GamePad.GetState(PlayerIndex.One).ThumbSticks.Left.X > .25)
             {
                 position.X += speed.X;
@@ -171,19 +171,19 @@ namespace MathInfection
 
         private void StopEdge()
         {
-            if (position.X < 0)
+            if(position.X < 0)
             {
                 position.X = 0;
             }
-            if (position.Y < 0)
+            if(position.Y < 0)
             {
                 position.Y = 0;
             }
-            if (position.X + characterSize.X > windowSize.X)
+            if(position.X + characterSize.X > windowSize.X)
             {
                 position.X = windowSize.X - characterSize.X;
             }
-            if (position.Y + characterSize.Y > windowSize.Y)
+            if(position.Y + characterSize.Y > windowSize.Y)
             {
                 position.Y = windowSize.Y - characterSize.Y;
             }

@@ -1,13 +1,12 @@
-namespace MathInfection
+﻿namespace MathInfection
 {
     class PauseMenuScreen : MenuScreen
     {
-        public PauseMenuScreen()
-            : base("Paused")
+        public PauseMenuScreen() : base("Paused")
         {
             MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
             MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
-
+            
             resumeGameMenuEntry.Selected += OnCancel;
             quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
 

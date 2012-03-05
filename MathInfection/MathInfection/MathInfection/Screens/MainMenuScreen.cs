@@ -4,8 +4,7 @@ namespace MathInfection
 {
     class MainMenuScreen : MenuScreen
     {
-        public MainMenuScreen()
-            : base("Math Infection")
+        public MainMenuScreen() : base("Math Infection")
         {
             MenuEntry newGameMenuEntry = new MenuEntry("New Game");
             MenuEntry loadGameMenuEntry = new MenuEntry("Load Game");
@@ -35,7 +34,7 @@ namespace MathInfection
 
         void loadGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-
+            
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, false,
                                     new GameplayScreen(ScreenManager, false));
         }

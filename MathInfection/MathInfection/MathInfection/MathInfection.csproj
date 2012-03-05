@@ -127,7 +127,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-
     <Compile Include="GamePlay\Character-Boss.cs" />
     <Compile Include="GamePlay\Character-Enemy.cs" />
     <Compile Include="GamePlay\Helper-Animation.cs" />
@@ -138,6 +137,7 @@
     <Compile Include="GamePlay\Helper-Mover-CatmullRom.cs" />
     <Compile Include="GamePlay\Helper-Mover-Lerp.cs" />
     <Compile Include="GamePlay\Helper-Mover-Velocity.cs" />
+    <Compile Include="GamePlay\PowerUp-Health.cs" />
     <Compile Include="GamePlay\PowerUp-Shield.cs" />
     <Compile Include="GamePlay\Scene-Background.cs" />
     <Compile Include="GamePlay\Scene-Bullet.cs" />

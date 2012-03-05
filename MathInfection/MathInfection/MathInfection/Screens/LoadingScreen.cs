@@ -24,7 +24,7 @@ namespace MathInfection
                                  PlayerIndex? controllingPlayer, bool isNewGame,
                                               params GameScreen[] screensToLoad)
         {
-            foreach (GameScreen screen in screenManager.GetScreens())
+            foreach(GameScreen screen in screenManager.GetScreens())
             {
                 screen.ExitScreen();
             }
@@ -38,12 +38,12 @@ namespace MathInfection
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
-            if (otherScreenAreGone)
+            if(otherScreenAreGone)
             {
                 ScreenManager.RemoveScreen(this);
-                foreach (GameScreen screen in screensToLoad)
+                foreach(GameScreen screen in screensToLoad)
                 {
-                    if (screen != null)
+                    if(screen != null)
                     {
                         ScreenManager.AddScreen(screen, ControllingPlayer);
                     }
@@ -54,13 +54,13 @@ namespace MathInfection
 
         public override void Draw(GameTime gameTime)
         {
-            if ((ScreenState == ScreenState.Active) &&
+            if((ScreenState == ScreenState.Active) &&
                (ScreenManager.GetScreens().Length == 1))
             {
                 otherScreenAreGone = true;
             }
 
-            if (loadingIsSlow)
+            if(loadingIsSlow)
             {
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
                 SpriteFont font = ScreenManager.Font;
@@ -71,14 +71,14 @@ namespace MathInfection
                 if (data != null)
                 {
                     uname = data.PlayerName;
-                    if (uname.Length > 0)
+                    if(uname.Length > 0)
                     {
                         char lowerInitial = uname[0];
                         char upperInitial = Char.ToUpper(lowerInitial);
                         uname = uname.Replace(lowerInitial, upperInitial);
                     }
                 }
-                if (loadingNewGame)
+                if(loadingNewGame)
                 {
                     message = "Hi, " + uname + ".  Starting a new game...";
                 }

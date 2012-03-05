@@ -13,14 +13,13 @@ namespace MathInfection
         public event EventHandler<PlayerIndexEventArgs> Accepted;
         public event EventHandler<PlayerIndexEventArgs> Cancelled;
 
-        public SummaryScreen(string message, bool win)
-            : this(message, true, win)
+        public SummaryScreen(string message, bool win) : this(message, true, win)
         { }
 
         public SummaryScreen(string message, bool includeUsageText, bool win)
         {
             string result = win ? "Next Level" : "Try Again";
-            if (win)
+            if(win)
             {
                 message += GameUpdate.GetTotalScore();
                 string hs = GameUpdate.GetHighScores(false);

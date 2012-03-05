@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 
 namespace MathInfection
@@ -52,11 +52,11 @@ namespace MathInfection
         public static bool RandomChasePlayer(bool isBoss)
         {
             float temp = (float)rand.NextDouble();
-            if (isBoss)
+            if(isBoss)
             {
                 temp *= 2;
             }
-            if (temp >= .7f)
+            if(temp >= .7f)
             {
                 return true;
             }
@@ -67,15 +67,15 @@ namespace MathInfection
         {
             int sign = PositiveOrNegative();
             float temp = (float)rand.NextDouble() * sign;
-            if (temp > .5f)
+            if(temp > .5f)
             {
                 temp -= .4f;
             }
-            if (temp < -.5f)
+            if(temp < -.5f)
             {
                 temp += .4f;
             }
-            if (isBoss && temp > 0)
+            if(isBoss && temp > 0)
             {
                 temp *= -1;
             }
@@ -86,19 +86,19 @@ namespace MathInfection
                                                          out float[] answers)
         {
             answer = rand.Next(1, 5);
-            answers = new float[] { 0, 0, 0, 0 };
+            answers = new float[] {0, 0, 0, 0};
 
             string question = "";
             float firstVal = rand.Next(10);
             float SecondVal = rand.Next(10);
-            while (SecondVal == 0)
+            while(SecondVal == 0)
             {
                 SecondVal = rand.Next(10);
             }
             int myOperator = Random4Choice1(currentScore);
             float correctAnswer;
 
-            switch (myOperator)
+            switch(myOperator)
             {
                 case 1:
                     question = firstVal + " + " + SecondVal + " = ?";
@@ -119,9 +119,9 @@ namespace MathInfection
                     break;
             }
 
-            for (int i = 1; i < 5; i++)
+            for(int i = 1; i < 5; i++)
             {
-                if (i == answer)
+                if(i == answer)
                 {
                     answers[i - 1] = correctAnswer;
                 }
@@ -136,15 +136,15 @@ namespace MathInfection
         private static int Random4Choice1(int cScore)
         {
             int choice = rand.Next();
-            if (choice % 2 == 0)
+            if(choice % 2 == 0)
             {
                 return 1;
             }
-            if (choice % 3 == 0)
+            if(choice % 3 == 0)
             {
                 return 2;
             }
-            if (choice % 5 == 0)
+            if(choice % 5 == 0)
             {
                 return 3;
             }
@@ -153,7 +153,7 @@ namespace MathInfection
 
         private static float WrongAnswer(float cAnswer)
         {
-            switch (Random4Choice1(0))
+            switch(Random4Choice1(0))
             {
                 case 1:
                     return cAnswer + 1;
@@ -174,23 +174,23 @@ namespace MathInfection
         private static float RandomFloatLessThanOne()
         {
             float temp = (float)rand.NextDouble();
-            if (temp >= .9f)
+            if(temp >= .9f)
             {
                 temp /= 9;
             }
-            else if (temp >= .7f)
+            else if(temp >= .7f)
             {
                 temp /= 7;
             }
-            else if (temp >= .5f)
+            else if(temp >= .5f)
             {
                 temp /= 5;
             }
-            else if (temp >= .3f)
+            else if(temp >= .3f)
             {
                 temp /= 3;
             }
-            else if (temp >= .1f)
+            else if(temp >= .1f)
             {
                 temp /= 1;
             }

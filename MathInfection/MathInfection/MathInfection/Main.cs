@@ -14,7 +14,7 @@ namespace MathInfection
             Content.RootDirectory = "Content";
 
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1000;
+            graphics.PreferredBackBufferWidth  = 1000;
             graphics.PreferredBackBufferHeight = 660;
 
             screenManager = new ScreenManager(this);
@@ -26,7 +26,7 @@ namespace MathInfection
 
         protected override void LoadContent()
         {
-            foreach (string asset in preloadAssets)
+            foreach(string asset in preloadAssets)
             {
                 Content.Load<object>(asset);
             }

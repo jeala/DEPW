@@ -27,7 +27,7 @@ namespace MathInfection
             resizeRatio = resize;
         }
 
-        public Vector2 Position
+        public  Vector2 Position
         {
             get
             {
@@ -102,7 +102,7 @@ namespace MathInfection
 
         private IMoverStrategy SetMover(int moverId)
         {
-            switch (moverId)
+            switch(moverId)
             {
                 case 0:
                     return new VelocityMover(this, RandomGenerator.RandomVelocity());
