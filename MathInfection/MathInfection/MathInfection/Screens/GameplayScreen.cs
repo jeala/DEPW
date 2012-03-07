@@ -272,7 +272,7 @@ namespace MathInfection
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss"));
 
-            Vector2 charSize = new Vector2(enemyTexList[0].Width, enemyTexList[0].Height);
+            Vector2 charSize = new Vector2(enemyTexList[0].Width / 2, enemyTexList[0].Height);
             int numEnemy = numEnemies;
             while(numEnemy > 0)
             {
@@ -353,22 +353,7 @@ namespace MathInfection
             foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);
-            }
-            foreach(Enemy e in enemyList)
-            {                
-                e.draw(spriteBatch);
-            }
-
-            foreach (Health h in healthList)
-            {
-                if (h.drawIcon)
-                {
-                    h.draw(healthIconF, spriteBatch);
-                }
-            }
-          
-            player1.draw(spriteBatch);
-            
+            }            
             foreach (Shield s in shieldList)
             {
                 if (s.drawShieldF)
@@ -376,6 +361,21 @@ namespace MathInfection
                     s.draw(shieldIconF, spriteBatch);
                 }                
             }
+            foreach (Health h in healthList)
+            {
+                if (h.drawIcon)
+                {
+                    h.draw(healthIconF, spriteBatch);
+                }
+            }
+            foreach(Enemy e in enemyList)
+            {                
+                e.draw(spriteBatch);
+            }
+          
+            player1.draw(spriteBatch);
+            
+
             if (shield.shield_active)
             {
                 GameUpdate.ModifyShield(ref shield, spriteBatch, player1, shieldIconP);
