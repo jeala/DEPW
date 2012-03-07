@@ -12,7 +12,7 @@ namespace MathInfection
         Vector2 WindowSize { get; }
         Vector2 PlayerPosition { get; }
 
-        void update(Vector2 playerPosition, GameTime gametime);
+        void update(Vector2 playerPosition);
         void draw(SpriteBatch spriteBatch);
     }
 }

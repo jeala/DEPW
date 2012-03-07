@@ -3,31 +3,32 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MathInfection
 {
-    public class Enemy : ICharacter
+    class Boss : ICharacter
     {
-        private readonly IMoverStrategy mover;
-        private readonly Helper_Animation anim;
+        private IMoverStrategy mover;
+        private readonly Texture2D texture;
         private Vector2 position;
-        private readonly Vector2 characterSize;
-        private readonly Vector2 windowSize;
+        private Vector2 characterSize;
+        private Vector2 windowSize;
         private Vector2 playerPosition;
         private int health;
-        private readonly float resizeRatio;
+        private float resizeRatio;
 
-        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
-                     Vector2 wSize, int hp, float resize)
+        public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
+                    Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
+            texture = tex;
             position = pos;
             characterSize = cSize;
-            windowSize = wSize;
+            windowSize.X = wSize.X - 210;
+            windowSize.Y = wSize.Y;
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
-            anim = new Helper_Animation(tex, pos, 2, 400, 0, 0, 64, 64);
         }
 
-        public  Vector2 Position
+        public Vector2 Position
         {
             get
             {
@@ -59,22 +60,6 @@ namespace MathInfection
             }
         }
 
-        public int Health
-        {
-            set
-            {
-                health = value;
-            }
-        }
-
-        public float ResizeRation
-        {
-            get
-            {
-                return resizeRatio;
-            }
-        }
-
         public bool IsAlive()
         {
             return health > 0;
@@ -85,19 +70,19 @@ namespace MathInfection
             health -= damage;
         }
 
-        public void update(Vector2 playerPos, GameTime gametime)
+        public void update(Vector2 playerPos)
         {
             if (health > 0)
             {
                 playerPosition = playerPos;
                 position = mover.update(position);
-                anim.Update(gametime, position);
             }
         }
 
         public void draw(SpriteBatch sb)
         {
-            anim.Draw(sb, resizeRatio);
+            sb.Draw(texture, position, null, Color.White, 0, Vector2.Zero,
+                    resizeRatio, SpriteEffects.None, 0);
         }
 
         private IMoverStrategy SetMover(int moverId)
