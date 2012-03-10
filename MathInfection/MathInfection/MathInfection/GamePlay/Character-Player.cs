@@ -31,8 +31,8 @@ namespace MathInfection
             startBoost = false;
             health = 100;
             wasHit = false;
-            jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 25, 6);
-            jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 25, 9);
+            jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 26, 6);
+            jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 26, 9);
         }
 
         public Vector2 CharacterSize

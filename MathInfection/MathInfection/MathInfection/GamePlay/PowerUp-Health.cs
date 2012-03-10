@@ -13,7 +13,7 @@ namespace MathInfection
         public Health(Vector2 position)
         {
             speed = new Vector2(2, 2);
-            healthDimensions = new Vector2(64, 64);
+            healthDimensions = new Vector2(46, 44);
             healthPosition = position;
             drawIcon = false;
         }

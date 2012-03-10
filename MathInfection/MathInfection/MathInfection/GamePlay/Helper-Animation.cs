@@ -16,7 +16,7 @@ namespace MathInfection
         private TimeSpan prevframe = TimeSpan.Zero;
         private Vector2 Position;
         public Texture2D texture;
-        private List<Rectangle> rects;
+        private List<Rectangle> rects = new List<Rectangle>();
 
         public Helper_Animation(Texture2D texture, Vector2 position, int framenum, int millisec, int left, int top, int width, int height)
         {
@@ -28,7 +28,6 @@ namespace MathInfection
             this.height = height;
             this.texture = texture;
             this.Position = position;
-            rects = new List<Rectangle>();
 
             //Find out how long each frame should last
             frameduration = TimeSpan.FromMilliseconds(millisec);
@@ -36,7 +35,8 @@ namespace MathInfection
             for (int i = 0; i < frames; i++)
             {
                 Rectangle r;
-                if (i == 0) {
+                if (i == 0)
+                {
                     r = new Rectangle(left, top, width, height);
                 }
                 else r = new Rectangle(left + (width * i), top, width, height);

@@ -6,25 +6,29 @@ namespace MathInfection
     public class Enemy : ICharacter
     {
         private readonly IMoverStrategy mover;
-        private readonly Helper_Animation anim;
+        private Helper_Animation anim;
         private Vector2 position;
-        private readonly Vector2 characterSize;
+        private Vector2 characterSize;
         private readonly Vector2 windowSize;
         private Vector2 playerPosition;
         private int health;
         private readonly float resizeRatio;
 
-        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
+        public Enemy(int moverId, Vector2 pos, 
                      Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             position = pos;
-            characterSize = cSize;
             windowSize = wSize;
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
-            anim = new Helper_Animation(tex, pos, 2, 400, 0, 0, 64, 64);
+        }
+
+        public void InitializeAnim(Texture2D tex, int framenum, int millisec, int width, int height)
+        {
+            anim = new Helper_Animation(tex, position, framenum, millisec, 0, 0, width, height);
+            characterSize = new Vector2(width, height);
         }
 
         public  Vector2 Position

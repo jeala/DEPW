@@ -271,16 +271,30 @@ namespace MathInfection
                                  playerSize, windowSize);
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/PurpleVirus"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
 
-            Vector2 charSize = new Vector2(enemyTexList[0].Width / 2, enemyTexList[0].Height);
+            Vector2 charSize = new Vector2(enemyTexList[0].Width , enemyTexList[0].Height);
             int numEnemy = numEnemies;
+            Random randnum = new Random();
+            int count = 0;
             while(numEnemy > 0)
             {
+                int r = randnum.Next(0, 3);
                 enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
-                                        enemyTexList[0],
                                         RandomGenerator.RandomPosition(windowSize, charSize),
-                                        charSize, windowSize, 100,
+                                        windowSize, 100,
                                         RandomGenerator.RandomEnemySize(false)));
+                switch (r)
+                {
+                    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
+                        break;
+                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
+                        break;
+                    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
+                        break;
+                }
+                count++;
                 numEnemy--;
             }
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
