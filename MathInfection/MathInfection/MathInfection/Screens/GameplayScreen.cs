@@ -279,7 +279,7 @@ namespace MathInfection
                 enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
                                         enemyTexList[0],
                                         RandomGenerator.RandomPosition(windowSize, charSize),
-                                        charSize, windowSize, 100,
+                                        windowSize, 100,
                                         RandomGenerator.RandomEnemySize(false)));
                 numEnemy--;
             }
