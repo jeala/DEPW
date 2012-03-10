@@ -353,13 +353,13 @@ namespace MathInfection
             foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);
-            }
+            }            
             foreach (Shield s in shieldList)
             {
                 if (s.drawShieldF)
                 {
                     s.draw(shieldIconF, spriteBatch);
-                }
+                }                
             }
             foreach (Health h in healthList)
             {
@@ -368,12 +368,12 @@ namespace MathInfection
                     h.draw(healthIconF, spriteBatch);
                 }
             }
-            foreach (Enemy e in enemyList)
+            foreach(Enemy e in enemyList)
             {                
                 e.draw(spriteBatch);
             }
-          
-            player1.draw(spriteBatch);            
+
+            player1.draw(spriteBatch);
 
             if (shield.shield_active)
             {

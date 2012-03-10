@@ -111,7 +111,8 @@ namespace MathInfection
                     Vector2 bPos = new Vector2(player1.PlayerPosition.X +
                                                player1.CharacterSize.X / 2,
                                                player1.PlayerPosition.Y);
-                    dBulletList.Add(new Bullet(bulletTexList[0], bPos, new Vector2(bSize.X /2, bSize.Y), wSize,
+
+                    dBulletList.Add(new Bullet(bulletTexList[0], bPos, new Vector2(bSize.X / 2, bSize.Y), wSize,
                                                      Vector2.Zero, 10, 20));
                     caller.PreviousFireTime = gameTime.TotalGameTime;
                 }
@@ -140,7 +141,7 @@ namespace MathInfection
                     foreach(var e in enemyList)
                     {
                         Random rand = new Random();
-                        int randInt = rand.Next(1, 3);
+                        int randInt = rand.Next(1, 5);
                         double ratio = Math.Sqrt(e.ResizeRation);
                         r2.Width = (int)Math.Round(e.CharacterSize.X * ratio);
                         r2.Height = (int)Math.Round(e.CharacterSize.Y * ratio);
