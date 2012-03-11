@@ -246,14 +246,14 @@
       <Processor>SongProcessor</Processor>
     </Compile>
     <Compile Include="Sounds\arcade_alarm_01_xh99210.mp3">
-      <Name>arcade_alarm_01_xh99210</Name>
+      <Name>grabShield</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
     <Compile Include="Sounds\arcade_power_up_03_ur64868.mp3">
-      <Name>arcade_power_up_03_ur64868</Name>
+      <Name>grabHealth</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -263,23 +263,30 @@
       <Processor>SongProcessor</Processor>
     </Compile>
     <Compile Include="Sounds\Fireworks explosion 1.wav">
-      <Name>Fireworks explosion 1</Name>
+      <Name>explosion</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sounds\radio_hit_descent_03_ry22254.mp3">
-      <Name>radio_hit_descent_03_ry22254</Name>
+      <Name>noHealth</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sounds\notice.mp3">
       <Name>notice</Name>
       <Importer>Mp3Importer</Importer>
-      <Processor>SongProcessor</Processor>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\Gun.wav">
+      <Name>shootGun</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

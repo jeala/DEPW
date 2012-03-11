@@ -66,6 +66,11 @@ namespace MathInfection
         private Vector2 vec;
 
         private Song gameplaySong;
+        private SoundEffect gunSound;
+        private SoundEffect getHealth;
+        private SoundEffect getShield;
+        private SoundEffect noHealth;
+        private SoundEffect questionNotice;
 
         public TimeSpan PreviousFireTime
         {
@@ -259,6 +264,12 @@ namespace MathInfection
             shieldIconP = content.Load<Texture2D>(@"PowerUps/Shield");
             gunIconF = content.Load<Texture2D>(@"PowerUps/GunFieldIcon");
 
+            gunSound = content.Load<SoundEffect>(@"Sounds/shootGun");
+            getHealth = content.Load<SoundEffect>(@"Sounds/grabHealth");
+            getShield = content.Load <SoundEffect>(@"Sounds/grabShield");
+            noHealth = content.Load<SoundEffect>(@"Sounds/noHealth");
+            questionNotice = content.Load<SoundEffect>(@"Sounds/notice");
+
             hudFont = content.Load<SpriteFont>("HUDFont");
             background = new Background();
             background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"));
@@ -297,15 +308,19 @@ namespace MathInfection
         {
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList,
                                   bulletTexList, previousFireTime,
-                                  defaultBulletFireRate, windowSize, this);
+                                  defaultBulletFireRate, windowSize, this, gunSound);
 
             player1.update(Vector2.Zero, gameTime);
             bool playerAlive = player1.IsAlive();
+            bool noHealthInstance = false;
             if(!playerAlive)
             {
+                noHealthInstance = noHealth.Play();
                 ScreenManager.AddScreen(new SummaryScreen("You loose", playerAlive),
                                                                  ControllingPlayer);
                 ExitScreen();
+                MediaPlayer.Stop();
+                MediaPlayer.Play(ScreenManager.menuSong);
             }
 
             foreach(Enemy e in enemyList)
@@ -330,7 +345,7 @@ namespace MathInfection
             GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
                                                           out currentScore, ref shield.shield_active, healthList,
-                                                          spriteBatch, healthIconF, shieldList);
+                                                          spriteBatch, healthIconF, shieldList, getHealth, getShield);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)
@@ -338,11 +353,15 @@ namespace MathInfection
                 ScreenManager.AddScreen(new SummaryScreen("You win", playerAlive),
                                                                ControllingPlayer);
                 ExitScreen();
+                MediaPlayer.Stop();
+                MediaPlayer.Play(ScreenManager.menuSong);
             }
+            bool questionNoticeInstance = false;
             if(player1.WasHit)
             {
                 ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
                                                                ControllingPlayer);
+                questionNoticeInstance = questionNotice.Play();
                 player1.WasHit = false;
             }
             hud.update(player1, enemyList.Count);

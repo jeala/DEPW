@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
+
 
 namespace MathInfection
 {
@@ -86,7 +88,8 @@ namespace MathInfection
 
         public static void CheckInput(GameTime gameTime, Player player1, List<Bullet> dBulletList,
                                          List<Texture2D> bulletTexList, TimeSpan previousFireTime,
-                                         TimeSpan dFireRate, Vector2 wSize, GameplayScreen caller)
+                                         TimeSpan dFireRate, Vector2 wSize, GameplayScreen caller,
+                                         SoundEffect gunSound)
         {
             // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
@@ -103,10 +106,12 @@ namespace MathInfection
             // endof BoostButton pressing
 
             // Bullet Generation
+            bool gunSoundInstance = false;
             if (gameTime.TotalGameTime - previousFireTime > dFireRate)
             {
                 if (newGamePadState.Triggers.Right > .2f || newKeyboardState.IsKeyDown(Keys.Space))
                 {
+                    gunSoundInstance = gunSound.Play();
                     Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
                     Vector2 bPos = new Vector2(player1.PlayerPosition.X +
                                                player1.CharacterSize.X / 2,
@@ -122,11 +127,14 @@ namespace MathInfection
 
         public static void CheckCollision(List<Bullet> defaultBulletList, List<Enemy> enemyList,
                                                                 Player p1, out int currentScore, ref bool shield_active,
-                                                                List<Health> hlist, SpriteBatch sb, Texture2D heart, List<Shield> sList)
+                                                                List<Health> hlist, SpriteBatch sb, Texture2D heart,
+                                                                List<Shield> sList, SoundEffect grabHealth, SoundEffect grabShield)
         {
             Vector2 vec = new Vector2();
             Rectangle r1 = new Rectangle();
             Rectangle r2 = new Rectangle();
+            bool grabShieldInstance = false;
+            bool grabHealthInstance = false;
 
             currentScore = 0;
             int index = 0;
@@ -229,6 +237,7 @@ namespace MathInfection
 
                     if (r1.Intersects(r2))
                     {
+                        grabHealthInstance = grabHealth.Play();
                         hlist[index].drawIcon = false;
                         p1.Health += 5;
                     }
@@ -247,6 +256,7 @@ namespace MathInfection
 
                     if (r1.Intersects(r2))
                     {
+                        grabShieldInstance = grabShield.Play();
                         sList[index].drawShieldF = false;
                         shield_active = true;
                         
