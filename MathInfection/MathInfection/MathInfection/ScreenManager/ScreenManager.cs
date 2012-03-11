@@ -65,6 +65,7 @@ namespace MathInfection
             topScoresFont = content.Load<SpriteFont>("HUDFont");
             blankTexture = content.Load<Texture2D>("blank");
             menuSong = content.Load<Song>("Sounds\\Announce");
+            MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(menuSong);
             foreach(GameScreen screen in screens)
             {
