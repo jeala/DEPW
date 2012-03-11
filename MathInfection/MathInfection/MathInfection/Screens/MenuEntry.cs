@@ -59,7 +59,7 @@ namespace MathInfection
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             SpriteFont font = screenManager.Font;
 
-            Vector2 origin = new Vector2(0, font.LineSpacing / 2f);
+            Vector2 origin = new Vector2(0, font.LineSpacing + 24 / 4f);
 
             spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);

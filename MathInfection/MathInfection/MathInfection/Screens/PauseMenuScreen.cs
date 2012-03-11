@@ -1,4 +1,7 @@
-﻿namespace MathInfection
+﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
+
+namespace MathInfection
 {
     class PauseMenuScreen : MenuScreen
     {
@@ -29,6 +32,8 @@
         {
             LoadingScreen.Load(ScreenManager, false, null, false,
                                    new BackgroundScreen(), new MainMenuScreen());
+            MediaPlayer.Stop();
+            MediaPlayer.Play(ScreenManager.menuSong);
         }
     }
 }

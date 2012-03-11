@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MathInfection
 {
@@ -63,6 +65,8 @@ namespace MathInfection
         private List<Shield> shieldList;
         private Vector2 vec;
 
+        private Song gameplaySong;
+
         public TimeSpan PreviousFireTime
         {
             set
@@ -111,7 +115,7 @@ namespace MathInfection
         {
             TransitionOnTime  = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(.5);
-
+            MediaPlayer.Stop();
             ScreenManager = sMgr;
             GameplayInit(isNewGame);
         }
@@ -125,7 +129,8 @@ namespace MathInfection
             gameFont = content.Load<SpriteFont>("gamefont");
             Score = content.Load<Texture2D>("Score");
             Health = content.Load<Texture2D>("Health");
-            
+            gameplaySong = content.Load<Song>("Sounds\\EndTimes");
+            MediaPlayer.Play(gameplaySong);            
             GameplayLoad();
             Thread.Sleep(1000);
             ScreenManager.Game.ResetElapsedTime();
@@ -285,6 +290,7 @@ namespace MathInfection
             }
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
+
         }
 
         private void GameplayUpdate(GameTime gameTime)

@@ -14,17 +14,17 @@ namespace MathInfection
         private int health;
         private readonly float resizeRatio;
 
-        public Enemy(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
+        public Enemy(int moverId, Texture2D tex, Vector2 pos,
                      Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             position = pos;
-            characterSize = cSize;
             windowSize = wSize;
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
             anim = new Helper_Animation(tex, pos, 2, 400, 0, 0, 64, 64);
+            characterSize = new Vector2(tex.Width / anim.frames, tex.Height);
         }
 
         public  Vector2 Position
