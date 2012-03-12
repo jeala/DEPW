@@ -19,7 +19,6 @@ namespace MathInfection
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private SpriteFont hudFont;
-        private bool windowMode;
 
         private HeadsUpDisplay hud;
 
@@ -49,10 +48,6 @@ namespace MathInfection
 
         private Background background;
         private GameData gameData;
-        private int tempScore;
-        private int tempHealth;
-        private bool answerCorrect;
-        private int answerTimeLeft;
 
         private Texture2D Score;
         private Texture2D Health;
@@ -64,7 +59,6 @@ namespace MathInfection
         Health heart;
         private List<Health> healthList;
         private List<Shield> shieldList;
-        private Vector2 vec;
 
         private Song gameplaySong;
         private SoundEffect gunSound;
@@ -90,30 +84,6 @@ namespace MathInfection
             set
             {
                 player1.Score = value;
-            }
-        }
-
-        public bool AnswerCorrect
-        {
-            set
-            {
-                answerCorrect = value;
-            }
-            get
-            {
-                return answerCorrect;
-            }
-        }
-
-        public int AnswerTimeLeft
-        {
-            get
-            {
-                return answerTimeLeft;
-            }
-            set
-            {
-                answerTimeLeft = value;
             }
         }
 
@@ -251,8 +221,6 @@ namespace MathInfection
                     FileIO.SerializeToXML(gameData);
                 }
             }
-            tempScore = 0;
-            tempHealth = 0;
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
         }
 
@@ -337,7 +305,6 @@ namespace MathInfection
             foreach(Enemy e in enemyList)
             {
                 e.update(player1.PlayerPosition, gameTime);
-                vec = e.Position;
             }
             foreach (Health h in healthList)
             {
@@ -355,10 +322,8 @@ namespace MathInfection
             GameUpdate.UpdateHealthList(ref healthList, player1);
             GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
-                            out tempScore, ref shield.shield_active, healthList,
-                       spriteBatch, healthIconF, shieldList, getHealth, getShield);
-            player1.Score += tempScore;
-            tempScore = 0;
+                          ref shield.shield_active, healthList, spriteBatch,
+                             healthIconF, shieldList, getHealth, getShield);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)

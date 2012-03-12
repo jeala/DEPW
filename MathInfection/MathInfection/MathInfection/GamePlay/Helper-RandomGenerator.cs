@@ -197,16 +197,31 @@ namespace MathInfection
             }
             else
             {
-                switch (Random4Choice1(0))
+                switch (rand.Next() % 10)
                 {
-                    case 1:
+                    case 0:
                         wAnswer = cAnswer + 1;
                         break;
-                    case 2:
+                    case 1:
                         wAnswer = cAnswer + 2;
                         break;
                     case 3:
-                        wAnswer = (cAnswer+1) * 2;
+                        wAnswer = cAnswer + 3;
+                        break;
+                    case 4:
+                        wAnswer = cAnswer + 4;
+                        break;
+                    case 5:
+                        wAnswer = (cAnswer + 1) * 2;
+                        break;
+                    case 6:
+                        wAnswer = cAnswer - 4;
+                        break;
+                    case 7:
+                        wAnswer = cAnswer - 3;
+                        break;
+                    case 8:
+                        wAnswer = cAnswer - 2;
                         break;
                     default:
                         wAnswer = cAnswer - 1;

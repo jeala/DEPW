@@ -120,18 +120,16 @@ namespace MathInfection
         }
 
         public static void CheckCollision(List<Bullet> defaultBulletList,
-                  List<Enemy> enemyList, Player p1, out int currentScore,
+                                        List<Enemy> enemyList, Player p1, 
                               ref bool shield_active, List<Health> hlist,
                      SpriteBatch sb, Texture2D heart, List<Shield> sList,
                           SoundEffect grabHealth, SoundEffect grabShield)
         {
-            Vector2 vec = new Vector2();
             Rectangle r1 = new Rectangle();
             Rectangle r2 = new Rectangle();
             bool grabShieldInstance = false;
             bool grabHealthInstance = false;
 
-            currentScore = 0;
             int index = 0;
             if(defaultBulletList.Count > 0)
             {
@@ -155,10 +153,10 @@ namespace MathInfection
                             {
                                 bool isBoss = e.GetType().ToString() ==
                                                      "MathInfection.Boss";
-                                currentScore = 50;
+                                p1.Score += 100;
                                 if (isBoss)
                                 {
-                                    currentScore += 50;
+                                    p1.Score += 100;
                                 }
                                 GeneratePowerUps(hlist, sList, e.Position, ref index);
                             }
