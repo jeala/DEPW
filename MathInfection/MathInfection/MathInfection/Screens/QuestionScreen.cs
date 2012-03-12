@@ -8,6 +8,8 @@ namespace MathInfection
     class QuestionScreen : GameScreen
     {
         private GameplayScreen parent;
+        private Player player;
+        private HeadsUpDisplay hud;
         private int correctAnswer;
         private int[] answers;
         private int lifeSpan;
@@ -19,9 +21,12 @@ namespace MathInfection
         private string message;
         private Texture2D questionFrameTex;
 
-        public QuestionScreen(string msg, GameplayScreen caller)
+        public QuestionScreen(string msg, GameplayScreen caller, HeadsUpDisplay HUD,
+                                                                          Player p1)
         {
             parent = caller;
+            player = p1;
+            hud = HUD;
             string question = RandomGenerator.RandomQuestion( parent.CurrentScore,
                                                   out correctAnswer, out answers);
             lifeSpan = 240;
@@ -33,7 +38,7 @@ namespace MathInfection
             message = questionMessage + answerMessage + timeMessage + usageText;
             IsPopup = true;
             TransitionOnTime = TimeSpan.FromSeconds(0.1);
-            TransitionOffTime = TimeSpan.FromSeconds(0.1);
+            TransitionOffTime = TimeSpan.Zero;
         }
 
         public override void LoadContent()
@@ -47,50 +52,22 @@ namespace MathInfection
         {
             if (input.IsMenuUp(ControllingPlayer))
             {
-                if(correctAnswer == 1)
-                {
-                    parent.ProcessAnswer(true, lifeSpan);
-                }
-                else
-                {
-                    parent.ProcessAnswer(false, 0);
-                }
+                ProcessAnswer(1);
                 ExitScreen();
             }
             else if (input.IsMenuDown(ControllingPlayer))
             {
-                if(correctAnswer == 2)
-                {
-                    parent.ProcessAnswer(true, lifeSpan);
-                }
-                else
-                {
-                    parent.ProcessAnswer(false, 0);
-                }
+                ProcessAnswer(4);
                 ExitScreen();
             }
             else if(input.IsMenuLeft(ControllingPlayer))
             {
-                if(correctAnswer == 3)
-                {
-                    parent.ProcessAnswer(true, lifeSpan);
-                }
-                else
-                {
-                    parent.ProcessAnswer(false, 0);
-                }
+                ProcessAnswer(2);
                 ExitScreen();
             }
             else if(input.IsMenuRight(ControllingPlayer))
             {
-                if(correctAnswer == 4)
-                {
-                    parent.ProcessAnswer(true, lifeSpan);
-                }
-                else
-                {
-                    parent.ProcessAnswer(false, 0);
-                }
+                ProcessAnswer(3);
                 ExitScreen();
             }
         }
@@ -100,9 +77,9 @@ namespace MathInfection
         {
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
             lifeSpan--;
-            if(lifeSpan < 0)
+            if(lifeSpan <= 0)
             {
-                parent.ProcessAnswer(false, 0);
+                ProcessAnswer(-1);
                 ExitScreen();
             }
             timeMessage = "\nTime Left: " + lifeSpan;
@@ -134,6 +111,29 @@ namespace MathInfection
             spriteBatch.Draw(questionFrameTex, backgroundRectangle, color);
             spriteBatch.DrawString(font, message, messagePosition, color);
             spriteBatch.End();
+        }
+
+        private void ProcessAnswer(int playerChoice)
+        {
+            bool isBoss = player.EnemyType == "MathInfection.Boss";
+            if(playerChoice == correctAnswer)
+            {
+                int bonus = lifeSpan * 2;
+                player.Score += (20 + bonus);
+                if(isBoss)
+                {
+                    player.Score += 80;
+                }
+            }
+            else
+            {
+                player.Health -= 10;
+                if(isBoss)
+                {
+                    player.Health -= 15;
+                }
+            }
+            hud.QuestionAnswered(player);
         }
     }
 }

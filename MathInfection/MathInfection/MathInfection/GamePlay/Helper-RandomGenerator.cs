@@ -28,6 +28,11 @@ namespace MathInfection
             return rand.Next(bound);
         }
 
+        public static int RandomInt(int min, int max)
+        {
+            return rand.Next(min, max);
+        }
+
         public static Vector2 RandomPosition(Vector2 winSize, Vector2 objSize)
         {
             Vector2 vec = new Vector2(rand.Next((int)Math.Round(winSize.X - objSize.X)),
@@ -185,17 +190,34 @@ namespace MathInfection
 
         private static int WrongAnswer(int cAnswer)
         {
-            switch(Random4Choice1(0))
+            int wAnswer;
+            if(cAnswer == 0)
             {
-                case 1:
-                    return cAnswer + 1;
-                case 2:
-                    return cAnswer + 2;
-                case 3:
-                    return (cAnswer+1) * 2;
-                default:
-                    return cAnswer - 1;
+                wAnswer = RandomInt(1, 10);
             }
+            else
+            {
+                switch (Random4Choice1(0))
+                {
+                    case 1:
+                        wAnswer = cAnswer + 1;
+                        break;
+                    case 2:
+                        wAnswer = cAnswer + 2;
+                        break;
+                    case 3:
+                        wAnswer = (cAnswer+1) * 2;
+                        break;
+                    default:
+                        wAnswer = cAnswer - 1;
+                        break;
+                }
+                while(wAnswer == cAnswer)
+                {
+                    wAnswer++;
+                }
+            }
+            return wAnswer;
         }
 
         private static int PositiveOrNegative()

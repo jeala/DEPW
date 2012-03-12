@@ -18,7 +18,8 @@ namespace MathInfection
                 if(!eList[index].IsAlive())
                 {
                     eList.RemoveAt(index);
-                } 
+                    index--;
+                }
                 index++;
             }
         }
@@ -37,20 +38,6 @@ namespace MathInfection
             }
         }
 
-        public static void DrawHealthList(ref List<Health> hList, List<Enemy> eList, SpriteBatch sb, Texture2D heart)
-        {
-            Vector2 vec;
-            int index = 0;
-            if (hList[index].drawIcon)
-            {
-                vec = eList[index].Position;
-                sb.Begin();
-                sb.Draw(heart, vec, Color.White);
-                sb.End();
-            }
-            index++;
-        }
-
         public static void UpdateShieldList(ref List<Shield> sList, Player p1)
         {
             int index = 0;
@@ -65,11 +52,14 @@ namespace MathInfection
             }
         }
 
-        public static void ModifyShield(ref Shield shield, SpriteBatch sb, Player player1, Texture2D player_shield)
+        public static void ModifyShield(ref Shield shield, SpriteBatch sb,
+                                  Player player1, Texture2D player_shield)
         {
             Color color = new Color(0, 155, 155, 75);
-            shield.player1_position.X = player1.PlayerPosition.X + (player_shield.Bounds.X / 2) - 6;
-            shield.player1_position.Y = player1.PlayerPosition.Y + (player_shield.Bounds.Y / 2);
+            shield.player1_position.X = player1.PlayerPosition.X +
+                                       (player_shield.Bounds.X / 2) - 6;
+            shield.player1_position.Y = player1.PlayerPosition.Y +
+                                           (player_shield.Bounds.Y / 2);
             sb.Draw(player_shield, shield.player1_position, color);
         }
 
@@ -81,15 +71,16 @@ namespace MathInfection
                 if(!bList[index].IsValid)
                 {
                     bList.RemoveAt(index);
+                    index--;
                 }
                 index++;
             }
         }
 
-        public static void CheckInput(GameTime gameTime, Player player1, List<Bullet> dBulletList,
-                                         List<Texture2D> bulletTexList, TimeSpan previousFireTime,
-                                         TimeSpan dFireRate, Vector2 wSize, GameplayScreen caller,
-                                         SoundEffect gunSound)
+        public static void CheckInput(GameTime gameTime, Player player1,
+                List<Bullet> dBulletList, List<Texture2D> bulletTexList, 
+                          TimeSpan previousFireTime, TimeSpan dFireRate,
+            Vector2 wSize, GameplayScreen caller, SoundEffect gunSound)
         {
             // BoostButton pressing
             GamePadState newGamePadState = GamePad.GetState(PlayerIndex.One);
@@ -109,26 +100,30 @@ namespace MathInfection
             bool gunSoundInstance = false;
             if (gameTime.TotalGameTime - previousFireTime > dFireRate)
             {
-                if (newGamePadState.Triggers.Right > .2f || newKeyboardState.IsKeyDown(Keys.Space))
+                if (newGamePadState.Triggers.Right > .2f ||
+                    newKeyboardState.IsKeyDown(Keys.Space))
                 {
                     gunSoundInstance = gunSound.Play();
-                    Vector2 bSize = new Vector2(bulletTexList[0].Width, bulletTexList[0].Height);
+                    Vector2 bSize = new Vector2(bulletTexList[0].Width,
+                                                bulletTexList[0].Height);
                     Vector2 bPos = new Vector2(player1.PlayerPosition.X +
                                                player1.CharacterSize.X / 2,
                                                player1.PlayerPosition.Y);
 
-                    dBulletList.Add(new Bullet(bulletTexList[0], bPos, new Vector2(bSize.X / 2, bSize.Y), wSize,
-                                                     Vector2.Zero, 10, 20));
+                    dBulletList.Add(new Bullet(bulletTexList[0], bPos,
+                                    new Vector2(bSize.X / 2, bSize.Y),
+                                        wSize, Vector2.Zero, 10, 20));
                     caller.PreviousFireTime = gameTime.TotalGameTime;
                 }
             }
             // endof Bullet Generation
         }
 
-        public static void CheckCollision(List<Bullet> defaultBulletList, List<Enemy> enemyList,
-                                                                Player p1, out int currentScore, ref bool shield_active,
-                                                                List<Health> hlist, SpriteBatch sb, Texture2D heart,
-                                                                List<Shield> sList, SoundEffect grabHealth, SoundEffect grabShield)
+        public static void CheckCollision(List<Bullet> defaultBulletList,
+                  List<Enemy> enemyList, Player p1, out int currentScore,
+                              ref bool shield_active, List<Health> hlist,
+                     SpriteBatch sb, Texture2D heart, List<Shield> sList,
+                          SoundEffect grabHealth, SoundEffect grabShield)
         {
             Vector2 vec = new Vector2();
             Rectangle r1 = new Rectangle();
@@ -148,8 +143,6 @@ namespace MathInfection
                     r1.Y = (int)Math.Round(b.Position.Y);
                     foreach(var e in enemyList)
                     {
-                        Random rand = new Random();
-                        int randInt = rand.Next(1, 5);
                         double ratio = Math.Sqrt(e.ResizeRation);
                         r2.Width = (int)Math.Round(e.CharacterSize.X * ratio);
                         r2.Height = (int)Math.Round(e.CharacterSize.Y * ratio);
@@ -160,32 +153,14 @@ namespace MathInfection
                             e.GetHit(b.Damage);
                             if (!e.IsAlive())
                             {
-                                bool isBoss = e.GetType().ToString() == "MathInfection.Boss";
+                                bool isBoss = e.GetType().ToString() ==
+                                                     "MathInfection.Boss";
                                 currentScore = 50;
                                 if (isBoss)
                                 {
                                     currentScore += 50;
                                 }
-                                switch(randInt)
-                                {
-                                    case 1:
-                                        {
-                                            vec = e.Position;
-                                            hlist.Add(new Health(vec));
-                                            hlist[index].drawIcon = true;
-                                            index++;
-                                            break;
-                                        }
-                                    case 2:
-                                        {
-                                            vec = e.Position;
-                                            sList.Add(new Shield(vec));
-                                            sList[index].drawShieldF = true;
-                                            index++;
-                                            break;
-                                        }
-                                    default: break;
-                                }
+                                GeneratePowerUps(hlist, sList, e.Position, ref index);
                             }
                             b.IsValid = false;
                         }
@@ -193,7 +168,7 @@ namespace MathInfection
                 }
             }
             // endof Bullet Collision Detection
-            index = 0;
+
             // Player Collision Detection
             r1.Width = (int)Math.Round(p1.CharacterSize.X);
             r1.Height = (int)Math.Round(p1.CharacterSize.Y);
@@ -209,18 +184,15 @@ namespace MathInfection
 
                 if (r1.Intersects(r2))
                 {
+                    p1.EnemyType = e.GetType().ToString();
+                    e.Health = 0;
                     if (shield_active)
                     {
                         shield_active = false;
-                        p1.EnemyType = e.GetType().ToString();
-                        e.Health = 0;
-                        index++;
                     }
                     else
                     {
                         p1.WasHit = true;
-                        p1.EnemyType = e.GetType().ToString();
-                        e.Health = 0;
                         break;
                     }
                 }
@@ -239,7 +211,7 @@ namespace MathInfection
                     {
                         grabHealthInstance = grabHealth.Play();
                         hlist[index].drawIcon = false;
-                        p1.Health += 5;
+                        p1.Health += 20;
                     }
                 }
                 index++;
@@ -259,11 +231,11 @@ namespace MathInfection
                         grabShieldInstance = grabShield.Play();
                         sList[index].drawShieldF = false;
                         shield_active = true;
-                        
                     }
                 }
                 index++;
             }
+            // endof Player Collision Detection
         }
 
         public static void UpdateGameData(GameData data, int currentLevel,
@@ -288,6 +260,27 @@ namespace MathInfection
         {
             int currentLevel = 0;
             return currentLevel;
+        }
+
+        private static void GeneratePowerUps(List<Health> hList, List<Shield> sList,
+                                                         Vector2 pos, ref int index)
+        {
+            int randInt = RandomGenerator.RandomInt(1, 8);
+            switch(randInt)
+            {
+                case 1:
+                        hList.Add(new Health(pos));
+                        hList[index].drawIcon = true;
+                        index++;
+                        break;
+                case 2:
+                        sList.Add(new Shield(pos));
+                        sList[index].drawShieldF = true;
+                        index++;
+                        break;
+                default:
+                    break;
+            }
         }
         // endof public static class GameUpdate
     }

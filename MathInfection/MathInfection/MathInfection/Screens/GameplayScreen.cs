@@ -49,7 +49,8 @@ namespace MathInfection
 
         private Background background;
         private GameData gameData;
-        private int currentScore;
+        private int tempScore;
+        private int tempHealth;
         private bool answerCorrect;
         private int answerTimeLeft;
 
@@ -84,11 +85,11 @@ namespace MathInfection
         {
             get
             {
-                return currentScore;
+                return player1.Score;
             }
             set
             {
-                currentScore = value;
+                player1.Score = value;
             }
         }
 
@@ -250,7 +251,8 @@ namespace MathInfection
                     FileIO.SerializeToXML(gameData);
                 }
             }
-            currentScore = 0;
+            tempScore = 0;
+            tempHealth = 0;
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
         }
 
@@ -316,9 +318,8 @@ namespace MathInfection
 
         private void GameplayUpdate(GameTime gameTime)
         {
-            GameUpdate.CheckInput(gameTime, player1, defaultBulletList,
-                                  bulletTexList, previousFireTime,
-                                  defaultBulletFireRate, windowSize, this, gunSound);
+            GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
+                 previousFireTime, defaultBulletFireRate, windowSize, this, gunSound);
 
             player1.update(Vector2.Zero, gameTime);
             bool playerAlive = player1.IsAlive();
@@ -354,8 +355,10 @@ namespace MathInfection
             GameUpdate.UpdateHealthList(ref healthList, player1);
             GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
-                            out currentScore, ref shield.shield_active, healthList,
+                            out tempScore, ref shield.shield_active, healthList,
                        spriteBatch, healthIconF, shieldList, getHealth, getShield);
+            player1.Score += tempScore;
+            tempScore = 0;
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)
@@ -369,12 +372,12 @@ namespace MathInfection
             bool questionNoticeInstance = false;
             if(player1.WasHit)
             {
-                ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
-                                                               ControllingPlayer);
+                ScreenManager.AddScreen(new QuestionScreen("Question Time", this,
+                                                hud, player1), ControllingPlayer);
                 questionNoticeInstance = questionNotice.Play();
                 player1.WasHit = false;
             }
-            hud.update(player1, enemyList.Count);
+            hud.update(player1);
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             background.Update(elapsed * 100);
@@ -411,38 +414,9 @@ namespace MathInfection
 
             if (shield.shield_active)
             {
-                GameUpdate.ModifyShield(ref shield, spriteBatch, player1, shieldIconP);
+                GameUpdate.ModifyShield(ref shield, spriteBatch, player1,
+                                                            shieldIconP);
             }
-        }
-
-        public void ProcessAnswer(bool correct, int timeLeft)
-        {
-            bool isBoss = player1.EnemyType == "MathInfection.Boss";
-            if(correct)
-            {
-                int bonus = timeLeft * 2;
-                if (isBoss)
-                {
-                    currentScore = (100 + bonus);
-                }
-                else
-                {
-                    currentScore = (20 + bonus);
-                }
-            }
-            else
-            {
-                if (isBoss)
-                {
-                    player1.Health -= 25;
-                }
-                else
-                {
-                    player1.Health -= 10;
-                }
-            }
-            player1.Score += currentScore;
-            currentScore = 0;
         }
         // endof class GameplayScreen
     }
