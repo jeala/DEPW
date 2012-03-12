@@ -18,7 +18,8 @@ namespace MathInfection
         public Texture2D texture;
         private List<Rectangle> rects = new List<Rectangle>();
 
-        public Helper_Animation(Texture2D texture, Vector2 position, int framenum, int millisec, int left, int top, int width, int height)
+        public Helper_Animation(Texture2D texture, Vector2 position, int framenum,
+                           int millisec, int left, int top, int width, int height)
         {
             //Create new 
             this.frames = framenum;
@@ -82,8 +83,8 @@ namespace MathInfection
         /// <param name="resizeRatio"></param>
         public void Draw(SpriteBatch sprite, float resizeRatio)
         {
-            sprite.Draw(texture, Position, rects[currentframe], Color.White, 0, Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
+            sprite.Draw(texture, Position, rects[currentframe], Color.White, 0,
+                              Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
         }
-
     }
 }

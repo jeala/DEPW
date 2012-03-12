@@ -30,8 +30,9 @@ namespace MathInfection
 
         public static Vector2 RandomPosition(Vector2 winSize, Vector2 objSize)
         {
-            return new Vector2(rand.Next((int)Math.Round(winSize.X - objSize.X)),
-                               rand.Next((int)Math.Round(winSize.Y - objSize.Y)));
+            Vector2 vec = new Vector2(rand.Next((int)Math.Round(winSize.X - objSize.X)),
+                                     rand.Next((int)Math.Round(winSize.Y - objSize.Y)));
+            return vec;
         }
 
         public static int RandomMoveStrategy(int numStrategies)
@@ -93,38 +94,41 @@ namespace MathInfection
         }
 
         public static string RandomQuestion(int currentScore, out int answer,
-                                                         out float[] answers)
+                                                           out int[] answers)
         {
             answer = rand.Next(1, 5);
-            answers = new float[] {0, 0, 0, 0};
+            answers = new[] {0, 0, 0, 0};
 
             string question = "";
-            float firstVal = rand.Next(10);
-            float SecondVal = rand.Next(10);
-            while(SecondVal == 0)
-            {
-                SecondVal = rand.Next(10);
-            }
+            int firstVal;
+            int SecondVal;
             int myOperator = Random4Choice1(currentScore);
-            float correctAnswer;
+            int correctAnswer;
 
             switch(myOperator)
             {
                 case 1:
+                    firstVal = rand.Next(20);
+                    SecondVal = rand.Next(20);
                     question = firstVal + " + " + SecondVal + " = ?";
                     correctAnswer = firstVal + SecondVal;
                     break;
                 case 2:
+                    firstVal = rand.Next(20);
+                    SecondVal = rand.Next(20);
                     question = firstVal + " - " + SecondVal + " = ?";
                     correctAnswer = firstVal - SecondVal;
                     break;
                 case 3:
+                    firstVal = rand.Next(10);
+                    SecondVal = rand.Next(10);
                     question = firstVal + " * " + SecondVal + " = ?";
                     correctAnswer = firstVal * SecondVal;
                     break;
                 default:
-                    correctAnswer = firstVal / SecondVal;
-                    correctAnswer = (float)Math.Round(correctAnswer, 1);
+                    firstVal = rand.Next(30);
+                    SecondVal = rand.Next(30);
+                    correctAnswer = HandleDivision(ref firstVal, ref SecondVal);
                     question = firstVal + " / " + SecondVal + " = ?";
                     break;
             }
@@ -141,6 +145,24 @@ namespace MathInfection
                 }
             }
             return question;
+        }
+
+        private static int HandleDivision(ref int firstVal, ref int secVal)
+        {
+            while(secVal == 0)
+            {
+                secVal = rand.Next(30);
+            }
+            while(firstVal % secVal != 0)
+            {
+                firstVal = rand.Next(30);
+                secVal = rand.Next(30);
+                while(secVal == 0)
+                {
+                    secVal = rand.Next(30);
+                }
+            }
+            return firstVal / secVal;
         }
 
         private static int Random4Choice1(int cScore)
@@ -161,18 +183,18 @@ namespace MathInfection
             return 4;
         }
 
-        private static float WrongAnswer(float cAnswer)
+        private static int WrongAnswer(int cAnswer)
         {
             switch(Random4Choice1(0))
             {
                 case 1:
                     return cAnswer + 1;
                 case 2:
-                    return cAnswer + 5;
+                    return cAnswer + 2;
                 case 3:
-                    return cAnswer * 4;
+                    return (cAnswer+1) * 2;
                 default:
-                    return cAnswer - 3;
+                    return cAnswer - 1;
             }
         }
 

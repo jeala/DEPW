@@ -9,7 +9,7 @@ namespace MathInfection
     {
         private GameplayScreen parent;
         private int correctAnswer;
-        private float[] answers;
+        private int[] answers;
         private int lifeSpan;
         private string questionMessage;
         private string answerMessage;

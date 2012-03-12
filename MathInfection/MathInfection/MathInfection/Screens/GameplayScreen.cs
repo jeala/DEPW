@@ -290,12 +290,11 @@ namespace MathInfection
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
 
             Vector2 charSize = new Vector2(enemyTexList[0].Width , enemyTexList[0].Height);
-            int numEnemy = numEnemies;
             int count = 0;
-            while(numEnemy > 0)
+            while(count < numEnemies)
             {
-                int r = RandomGenerator.RandomInt(3);
-                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies), 
+                int r = RandomGenerator.RandomInt(enemyTexList.Count);
+                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
                                         RandomGenerator.RandomPosition(windowSize, charSize),
                                         windowSize,
                                         100,
@@ -310,7 +309,6 @@ namespace MathInfection
                         break;
                 }
                 count++;
-                numEnemy--;
             }
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
@@ -356,8 +354,8 @@ namespace MathInfection
             GameUpdate.UpdateHealthList(ref healthList, player1);
             GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
-                                                          out currentScore, ref shield.shield_active, healthList,
-                                                          spriteBatch, healthIconF, shieldList, getHealth, getShield);
+                            out currentScore, ref shield.shield_active, healthList,
+                       spriteBatch, healthIconF, shieldList, getHealth, getShield);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)

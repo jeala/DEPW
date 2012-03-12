@@ -19,8 +19,8 @@ namespace MathInfection
         private bool wasHit;
         private string enemyType;
 
-        public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos, Vector2 vel,
-                                 Vector2 cSize, Vector2 wSize)
+        public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos,
+                                        Vector2 vel, Vector2 cSize, Vector2 wSize)
         {
             texture = tex;
             position = pos;
@@ -31,8 +31,10 @@ namespace MathInfection
             startBoost = false;
             health = 100;
             wasHit = false;
-            jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 26, 6);
-            jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80), 2, 100, 0, 0, 26, 9);
+            jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80),
+                                                               2, 100, 0, 0, 26, 6);
+            jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80),
+                                                               2, 100, 0, 0, 26, 9);
         }
 
         public Vector2 CharacterSize
