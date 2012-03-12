@@ -70,13 +70,13 @@ namespace MathInfection
 
         public override void LoadContent()
         {
-            if(content == null)
+            if (content == null)
             {
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
             backgroundTexture = content.Load<Texture2D>("TitleScreen");
-            AdditionSign = content.Load<Texture2D>("PlusSign");    
+            AdditionSign = content.Load<Texture2D>("PlusSign");
             MultiplicationSign = content.Load<Texture2D>("MultiplySign");
             SubtractionSign = content.Load<Texture2D>("MinusSign");
             DivisionSign = content.Load<Texture2D>("DivisionSign");

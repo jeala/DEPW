@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MathInfection
 {
@@ -11,7 +13,7 @@ namespace MathInfection
             MenuEntry optionsMenuEntry = new MenuEntry("Options");
             MenuEntry highscoreMenuEntry = new MenuEntry("High Scores");
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
-
+            
             newGameMenuEntry.Selected += newGameMenuEntrySelected;
             loadGameMenuEntry.Selected += loadGameMenuEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
@@ -23,6 +25,7 @@ namespace MathInfection
             MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(highscoreMenuEntry);
             MenuEntries.Add(exitMenuEntry);
+            //MediaPlayer.Play(ScreenManager.menuSong);  
         }
 
 
@@ -30,6 +33,8 @@ namespace MathInfection
         {
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, true,
                                    new GameplayScreen(ScreenManager, true));
+        //    MediaPlayer.Stop();
+            
         }
 
         void loadGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
@@ -37,6 +42,7 @@ namespace MathInfection
             
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, false,
                                     new GameplayScreen(ScreenManager, false));
+        //    MediaPlayer.Stop();
         }
 
         void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)

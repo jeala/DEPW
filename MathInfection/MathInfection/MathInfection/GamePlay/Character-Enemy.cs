@@ -14,7 +14,7 @@ namespace MathInfection
         private int health;
         private readonly float resizeRatio;
 
-        public Enemy(int moverId, Vector2 pos, 
+        public Enemy(int moverId, Texture2D tex, Vector2 pos,
                      Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
@@ -23,12 +23,8 @@ namespace MathInfection
             playerPosition = Vector2.Zero;
             health = hp;
             resizeRatio = resize;
-        }
-
-        public void InitializeAnim(Texture2D tex, int framenum, int millisec, int width, int height)
-        {
-            anim = new Helper_Animation(tex, position, framenum, millisec, 0, 0, width, height);
-            characterSize = new Vector2(width, height);
+            anim = new Helper_Animation(tex, pos, 2, 400, 0, 0, 64, 64);
+            characterSize = new Vector2(tex.Width / anim.frames, tex.Height);
         }
 
         public  Vector2 Position

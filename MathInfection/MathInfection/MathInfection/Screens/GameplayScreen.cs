@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MathInfection
 {
@@ -63,6 +65,13 @@ namespace MathInfection
         private List<Shield> shieldList;
         private Vector2 vec;
 
+        private Song gameplaySong;
+        private SoundEffect gunSound;
+        private SoundEffect getHealth;
+        private SoundEffect getShield;
+        private SoundEffect noHealth;
+        private SoundEffect questionNotice;
+
         public TimeSpan PreviousFireTime
         {
             set
@@ -111,7 +120,7 @@ namespace MathInfection
         {
             TransitionOnTime  = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(.5);
-
+            MediaPlayer.Stop();
             ScreenManager = sMgr;
             GameplayInit(isNewGame);
         }
@@ -125,7 +134,8 @@ namespace MathInfection
             gameFont = content.Load<SpriteFont>("gamefont");
             Score = content.Load<Texture2D>("Score");
             Health = content.Load<Texture2D>("Health");
-            
+            gameplaySong = content.Load<Song>("Sounds\\EndTimes");
+            MediaPlayer.Play(gameplaySong);
             GameplayLoad();
             Thread.Sleep(1000);
             ScreenManager.Game.ResetElapsedTime();
@@ -150,7 +160,6 @@ namespace MathInfection
             {
                 GameplayUpdate(gameTime);
             }
-            
         }
 
         public override void HandleInput(InputState input)
@@ -254,6 +263,12 @@ namespace MathInfection
             shieldIconP = content.Load<Texture2D>(@"PowerUps/Shield");
             gunIconF = content.Load<Texture2D>(@"PowerUps/GunFieldIcon");
 
+            gunSound = content.Load<SoundEffect>(@"Sounds/shootGun");
+            getHealth = content.Load<SoundEffect>(@"Sounds/grabHealth");
+            getShield = content.Load <SoundEffect>(@"Sounds/grabShield");
+            noHealth = content.Load<SoundEffect>(@"Sounds/noHealth");
+            questionNotice = content.Load<SoundEffect>(@"Sounds/notice");
+
             hudFont = content.Load<SpriteFont>("HUDFont");
             background = new Background();
             background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"));
@@ -299,21 +314,26 @@ namespace MathInfection
             }
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
+
         }
 
         private void GameplayUpdate(GameTime gameTime)
         {
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList,
                                   bulletTexList, previousFireTime,
-                                  defaultBulletFireRate, windowSize, this);
+                                  defaultBulletFireRate, windowSize, this, gunSound);
 
             player1.update(Vector2.Zero, gameTime);
             bool playerAlive = player1.IsAlive();
+            bool noHealthInstance = false;
             if(!playerAlive)
             {
+                noHealthInstance = noHealth.Play();
                 ScreenManager.AddScreen(new SummaryScreen("You loose", playerAlive),
                                                                  ControllingPlayer);
                 ExitScreen();
+                MediaPlayer.Stop();
+                MediaPlayer.Play(ScreenManager.menuSong);
             }
 
             foreach(Enemy e in enemyList)
@@ -338,7 +358,7 @@ namespace MathInfection
             GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
                                                           out currentScore, ref shield.shield_active, healthList,
-                                                          spriteBatch, healthIconF, shieldList);
+                                                          spriteBatch, healthIconF, shieldList, getHealth, getShield);
             GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)
@@ -346,11 +366,15 @@ namespace MathInfection
                 ScreenManager.AddScreen(new SummaryScreen("You win", playerAlive),
                                                                ControllingPlayer);
                 ExitScreen();
+                MediaPlayer.Stop();
+                MediaPlayer.Play(ScreenManager.menuSong);
             }
+            bool questionNoticeInstance = false;
             if(player1.WasHit)
             {
                 ScreenManager.AddScreen(new QuestionScreen("Question Time", this),
                                                                ControllingPlayer);
+                questionNoticeInstance = questionNotice.Play();
                 player1.WasHit = false;
             }
             hud.update(player1, enemyList.Count);
@@ -361,19 +385,18 @@ namespace MathInfection
 
         private void GameplayDraw(GameTime gameTime)
         {
-            
             background.Draw(spriteBatch);
             hud.draw(hudFont, spriteBatch, Score, Health);
             foreach(Bullet b in defaultBulletList)
             {
                 b.draw(spriteBatch);
-            }            
+            }
             foreach (Shield s in shieldList)
             {
                 if (s.drawShieldF)
                 {
                     s.draw(shieldIconF, spriteBatch);
-                }                
+                }
             }
             foreach (Health h in healthList)
             {
@@ -383,12 +406,11 @@ namespace MathInfection
                 }
             }
             foreach(Enemy e in enemyList)
-            {                
+            {
                 e.draw(spriteBatch);
             }
-          
+
             player1.draw(spriteBatch);
-            
 
             if (shield.shield_active)
             {

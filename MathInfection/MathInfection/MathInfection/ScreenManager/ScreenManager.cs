@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MathInfection
 {
@@ -17,6 +19,8 @@ namespace MathInfection
         private SpriteFont topScoresFont;
         private Texture2D blankTexture;
         private bool isInitialized;
+
+        public Song menuSong;
 
         public SpriteBatch SpriteBatch
         {
@@ -60,7 +64,9 @@ namespace MathInfection
             font = content.Load<SpriteFont>("menufont");
             topScoresFont = content.Load<SpriteFont>("HUDFont");
             blankTexture = content.Load<Texture2D>("blank");
-
+            menuSong = content.Load<Song>("Sounds\\Announce");
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(menuSong);
             foreach(GameScreen screen in screens)
             {
                 screen.LoadContent();
@@ -84,7 +90,7 @@ namespace MathInfection
             {
                 screensToUpdate.Add(screen);
             }
-
+            
             bool otherScreenHasFocus = !Game.IsActive;
             bool coveredByOtherScreen = false;
 
@@ -146,7 +152,6 @@ namespace MathInfection
             }
             screens.Remove(screen);
             screensToUpdate.Remove(screen);
-
         }
 
         public GameScreen[] GetScreens()

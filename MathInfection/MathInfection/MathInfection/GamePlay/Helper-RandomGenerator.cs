@@ -158,9 +158,9 @@ namespace MathInfection
                 case 1:
                     return cAnswer + 1;
                 case 2:
-                    return cAnswer + 2;
+                    return cAnswer + 5;
                 case 3:
-                    return cAnswer * 2;
+                    return cAnswer * 4;
                 default:
                     return cAnswer - 3;
             }
