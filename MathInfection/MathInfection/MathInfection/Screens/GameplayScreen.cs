@@ -295,21 +295,20 @@ namespace MathInfection
             while(numEnemy > 0)
             {
                 int r = RandomGenerator.RandomInt(3);
-                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
-                                        enemyTexList[0], 
+                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies), 
                                         RandomGenerator.RandomPosition(windowSize, charSize),
                                         windowSize,
                                         100,
                                         RandomGenerator.RandomEnemySize(false)));
-                //switch (r)
-                //{
-                //    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
-                //        break;
-                //    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
-                //        break;
-                //    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
-                //        break;
-                //}
+                switch (r)
+                {
+                    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
+                        break;
+                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
+                        break;
+                    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
+                        break;
+                }
                 count++;
                 numEnemy--;
             }

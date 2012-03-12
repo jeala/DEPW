@@ -74,7 +74,7 @@ namespace MathInfection
         {
             sprite.Draw(texture, Position, rects[currentframe], Color.White);
         }
-
+        
         /// <summary>
         /// Draw an animation with a scale
         /// </summary>
