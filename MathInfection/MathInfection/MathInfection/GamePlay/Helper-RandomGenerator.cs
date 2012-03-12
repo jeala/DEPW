@@ -18,6 +18,16 @@ namespace MathInfection
             weight = .1f;
         }
 
+        public static int RandomInt()
+        {
+            return rand.Next();
+        }
+
+        public static int RandomInt(int bound)
+        {
+            return rand.Next(bound);
+        }
+
         public static Vector2 RandomPosition(Vector2 winSize, Vector2 objSize)
         {
             return new Vector2(rand.Next((int)Math.Round(winSize.X - objSize.X)),

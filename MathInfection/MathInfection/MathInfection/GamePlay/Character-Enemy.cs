@@ -27,6 +27,15 @@ namespace MathInfection
             characterSize = new Vector2(tex.Width / anim.frames, tex.Height);
         }
 
+
+//        public void InitializeAnim(Texture2D tex, int framenum,
+//                           int millisec, int width, int height)
+//        {
+//            anim = new Helper_Animation(tex, position, framenum,
+//                                 millisec, 0, 0, width, height);
+//            characterSize = new Vector2(tex.Width, tex.Height);
+//        }
+
         public  Vector2 Position
         {
             get

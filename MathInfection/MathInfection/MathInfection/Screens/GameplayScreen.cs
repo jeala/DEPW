@@ -282,8 +282,8 @@ namespace MathInfection
                 // TODO: use player1's texture for now, might make another for player2 later.
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
-            player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition, playerVelocity,
-                                 playerSize, windowSize);
+            player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition,
+                                                        playerVelocity, playerSize, windowSize);
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/PurpleVirus"));
@@ -291,30 +291,30 @@ namespace MathInfection
 
             Vector2 charSize = new Vector2(enemyTexList[0].Width , enemyTexList[0].Height);
             int numEnemy = numEnemies;
-            Random randnum = new Random();
             int count = 0;
             while(numEnemy > 0)
             {
-                int r = randnum.Next(0, 3);
+                int r = RandomGenerator.RandomInt(3);
                 enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
+                                        enemyTexList[0], 
                                         RandomGenerator.RandomPosition(windowSize, charSize),
-                                        windowSize, 100,
+                                        windowSize,
+                                        100,
                                         RandomGenerator.RandomEnemySize(false)));
-                switch (r)
-                {
-                    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
-                        break;
-                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
-                        break;
-                    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
-                        break;
-                }
+                //switch (r)
+                //{
+                //    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
+                //        break;
+                //    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
+                //        break;
+                //    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
+                //        break;
+                //}
                 count++;
                 numEnemy--;
             }
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
-
         }
 
         private void GameplayUpdate(GameTime gameTime)
