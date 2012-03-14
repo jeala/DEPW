@@ -102,8 +102,8 @@ namespace MathInfection
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
             gameFont = content.Load<SpriteFont>("gamefont");
-            Score = content.Load<Texture2D>("Score");
-            Health = content.Load<Texture2D>("Health");
+            Score  = content.Load<Texture2D>(@"HUDimages/Score");
+            Health = content.Load<Texture2D>(@"HUDimages/Health");
             gameplaySong = content.Load<Song>("Sounds\\Turns");
             MediaPlayer.Play(gameplaySong);
             GameplayLoad();
@@ -223,25 +223,26 @@ namespace MathInfection
         {
             spriteBatch = ScreenManager.SpriteBatch;
 
+            gunIconF    = content.Load<Texture2D>(@"PowerUps/GunFieldIcon");
             healthIconF = content.Load<Texture2D>(@"PowerUps/HealthUpgrade");
-            shieldIconF = content.Load<Texture2D>(@"PowerUps/ShieldFieldIcon");
             shieldIconP = content.Load<Texture2D>(@"PowerUps/Shield");
-            gunIconF = content.Load<Texture2D>(@"PowerUps/GunFieldIcon");
+            shieldIconF = content.Load<Texture2D>(@"PowerUps/ShieldFieldIcon");
 
-            gunSound = content.Load<SoundEffect>(@"Sounds/shootGun");
-            getHealth = content.Load<SoundEffect>(@"Sounds/grabHealth");
-            getShield = content.Load <SoundEffect>(@"Sounds/grabShield");
-            noHealth = content.Load<SoundEffect>(@"Sounds/noHealth");
+            gunSound       = content.Load<SoundEffect>(@"Sounds/shootGun");
+            getHealth      = content.Load<SoundEffect>(@"Sounds/grabHealth");
+            getShield      = content.Load<SoundEffect>(@"Sounds/grabShield");
+            noHealth       = content.Load<SoundEffect>(@"Sounds/noHealth");
             questionNotice = content.Load<SoundEffect>(@"Sounds/notice");
 
-            hudFont = content.Load<SpriteFont>("HUDFont");
+            hudFont    = content.Load<SpriteFont>("HUDFont");
             background = new Background();
-            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"),
-                                                              content.Load<Texture2D>("BCbg"));
+            background.Load(ScreenManager.GraphicsDevice,
+                                     content.Load<Texture2D>(@"BackgroundImages/BloodVein"),
+                                     content.Load<Texture2D>(@"BackgroundImages/BloodCells"));
 
             player1Texture = content.Load<Texture2D>(@"CharacterImages/Player1");
-            jettexture = content.Load<Texture2D>(@"CharacterImages/Character Jets");
-            jettexture2 = content.Load<Texture2D>(@"CharacterImages/Character Jets2");
+            jettexture     = content.Load<Texture2D>(@"CharacterImages/Jet1Normal");
+            jettexture2    = content.Load<Texture2D>(@"CharacterImages/Jet1Boost");
             playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
             if(!singleMode)
             {
@@ -251,8 +252,8 @@ namespace MathInfection
             player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition,
                                                         playerVelocity, playerSize, windowSize);
 
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss"));
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/PurpleVirus"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusGreen"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusPurple"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
 
             GameUpdate.AddEnemy(enemyList, numEnemies, numMoveStrategies, enemyTexList, windowSize);

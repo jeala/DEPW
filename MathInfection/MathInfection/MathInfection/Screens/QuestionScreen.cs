@@ -127,10 +127,10 @@ namespace MathInfection
             }
             else
             {
-                player.Health -= 10;
+                player.Health -= 25;
                 if(isBoss)
                 {
-                    player.Health -= 15;
+                    player.Health -= 25;
                 }
             }
             hud.QuestionAnswered(player);

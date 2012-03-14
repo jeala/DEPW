@@ -232,7 +232,7 @@ namespace MathInfection
                     {
                         grabHealthInstance = grabHealth.Play();
                         hlist[index].drawIcon = false;
-                        p1.Health += 20;
+                        p1.Health += 10;
                     }
                 }
                 index++;

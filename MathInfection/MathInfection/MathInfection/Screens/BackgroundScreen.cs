@@ -72,14 +72,13 @@ namespace MathInfection
 
             for (int i = 0; i < 23; i++)
             {
-                backgroundTexture[i] = content.Load<Texture2D>(
-                                                 @"TitleScreenStuff//Untitled-" + i);
+                backgroundTexture[i] = content.Load<Texture2D>(@"TitleScreenImages/Title-" + i);
             }
 
-            AdditionSign = content.Load<Texture2D>("PlusSign");
-            MultiplicationSign = content.Load<Texture2D>("MultiplySign");
-            SubtractionSign = content.Load<Texture2D>("MinusSign");
-            DivisionSign = content.Load<Texture2D>("DivisionSign");
+            AdditionSign       = content.Load<Texture2D>(@"TitleScreenImages/PlusSign");
+            MultiplicationSign = content.Load<Texture2D>(@"TitleScreenImages/MultiplySign");
+            SubtractionSign    = content.Load<Texture2D>(@"TitleScreenImages/MinusSign");
+            DivisionSign       = content.Load<Texture2D>(@"TitleScreenImages/DivisionSign");
         }
 
         public override void UnloadContent()
