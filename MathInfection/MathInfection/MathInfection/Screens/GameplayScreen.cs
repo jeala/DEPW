@@ -105,7 +105,7 @@ namespace MathInfection
             gameFont = content.Load<SpriteFont>("gamefont");
             Score = content.Load<Texture2D>("Score");
             Health = content.Load<Texture2D>("Health");
-            gameplaySong = content.Load<Song>("Sounds\\EndTimes");
+            gameplaySong = content.Load<Song>("Sounds\\Turns");
             MediaPlayer.Play(gameplaySong);
             GameplayLoad();
             Thread.Sleep(1000);
