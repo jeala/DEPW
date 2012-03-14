@@ -6,7 +6,7 @@ namespace MathInfection
     public class GameData
     {
         private string playerName;
-        private int totalScore;
+        private int currentScore;
         private int topScoreCapacity;
         private List<int> topScores;
         private List<DateTime> topScoresDateTime;
@@ -23,15 +23,15 @@ namespace MathInfection
             }
         }
 
-        public int TotalScore
+        public int CurrentScore
         {
             get
             {
-                return totalScore;
+                return currentScore;
             }
             set
             {
-                totalScore = value;
+                currentScore = value;
             }
         }
 
@@ -79,7 +79,7 @@ namespace MathInfection
         public GameData(string pName)
         {
             playerName        = pName;
-            totalScore        = 0;
+            currentScore        = 0;
             topScoreCapacity  = 5;
             topScores         = new List<int>(topScoreCapacity);
             topScoresDateTime = new List<DateTime>(topScoreCapacity);

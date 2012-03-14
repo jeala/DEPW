@@ -23,14 +23,14 @@ namespace MathInfection
         private int maxDiv;
 
         public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos,
-                                        Vector2 vel, Vector2 cSize, Vector2 wSize)
+                             Vector2 vel, Vector2 cSize, Vector2 wSize, int cScore)
         {
             texture = tex;
             position = pos;
             velocity = vel;
             characterSize = cSize;
             windowSize = wSize;
-            score = 0;
+            score = cScore;
             startBoost = false;
             health = 100;
             wasHit = false;

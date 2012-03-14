@@ -23,6 +23,7 @@ namespace MathInfection
         private HeadsUpDisplay hud;
 
         private Player player1;
+        private int player1CurrentScore;
         private Player player2;
         private List<Enemy> enemyList;
         private List<Boss> bossList;
@@ -101,6 +102,8 @@ namespace MathInfection
 
         public override void UnloadContent()
         {
+            GameUpdate.UpdateGameData(gameData, player1);
+            FileIO.SerializeToXML(gameData);
             content.Unload();
         }
 
@@ -200,8 +203,13 @@ namespace MathInfection
             {
                 if(isNewGame)
                 {
-                    gameData.TotalScore = 0;
+                    gameData.CurrentScore = 0;
+                    player1CurrentScore = 0;
                     FileIO.SerializeToXML(gameData);
+                }
+                else
+                {
+                    player1CurrentScore = gameData.CurrentScore;
                 }
             }
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
@@ -238,7 +246,7 @@ namespace MathInfection
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
             player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition,
-                                                        playerVelocity, playerSize, windowSize);
+                                   playerVelocity, playerSize, windowSize, player1CurrentScore);
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusGreen"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusPurple"));
@@ -264,6 +272,8 @@ namespace MathInfection
                 noHealthInstance = noHealth.Play();
                 ScreenManager.AddScreen(new SummaryScreen("You loose", playerAlive),
                                                                  ControllingPlayer);
+                GameUpdate.UpdateGameData(gameData, player1);
+                FileIO.SerializeToXML(gameData);
                 ExitScreen();
                 MediaPlayer.Stop();
                 MediaPlayer.Play(ScreenManager.menuSong);
