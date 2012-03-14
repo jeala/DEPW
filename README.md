@@ -3,6 +3,9 @@
 ## About: ##
 * UCSC Winter 2012 - CMPS 20 Game Design Experience Project
 
+## Project Repository ##
+* https://github.com/andrewpsy/DEPW
+
 ## Members: ##
 * Thomas Deeb   tdeeb@ucsc.edu    (516) 528-6299
 * Jason Eala    jeala@ucsc.edu    (510) 427-7555
