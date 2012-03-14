@@ -240,7 +240,7 @@ namespace MathInfection
 
             hudFont = content.Load<SpriteFont>("HUDFont");
             background = new Background();
-            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"));
+            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"), content.Load<Texture2D>("BCbg"));
 
             player1Texture = content.Load<Texture2D>(@"CharacterImages/Player1");
             jettexture = content.Load<Texture2D>(@"CharacterImages/Character Jets");

@@ -100,11 +100,7 @@ namespace MathInfection
 
             if (gameTime.TotalGameTime - prevtime > framedur)
             {
-                if (curframe >= 22)
-                {
-
-                }
-                else
+                if (curframe != 22)
                 {
                     curframe++;
                     prevtime = gameTime.TotalGameTime;
