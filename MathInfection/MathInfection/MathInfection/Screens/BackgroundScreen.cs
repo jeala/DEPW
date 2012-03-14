@@ -16,12 +16,14 @@ namespace MathInfection
     class BackgroundScreen : GameScreen
     {
         private ContentManager content;
-        private Texture2D backgroundTexture;
+        private Texture2D[] backgroundTexture = new Texture2D[23];
         private Texture2D AdditionSign;
         private Texture2D MultiplicationSign;
         private Texture2D SubtractionSign;
         private Texture2D DivisionSign;
-
+        private TimeSpan prevtime = TimeSpan.Zero;
+        private TimeSpan framedur = TimeSpan.FromSeconds(.018f);
+        private int curframe = 0;
 
         Stack<Box> myBoxStack = new Stack<Box>();
         Stack<Box> myBoxStack2 = new Stack<Box>();
@@ -75,7 +77,11 @@ namespace MathInfection
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
-            backgroundTexture = content.Load<Texture2D>("TitleScreen");
+            for (int i = 0; i < 23; i++)
+            {
+                backgroundTexture[i] = content.Load<Texture2D>(@"TitleScreenStuff//Untitled-" + i);
+            }
+
             AdditionSign = content.Load<Texture2D>("PlusSign");
             MultiplicationSign = content.Load<Texture2D>("MultiplySign");
             SubtractionSign = content.Load<Texture2D>("MinusSign");
@@ -91,6 +97,19 @@ namespace MathInfection
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, false);
+
+            if (gameTime.TotalGameTime - prevtime > framedur)
+            {
+                if (curframe >= 22)
+                {
+
+                }
+                else
+                {
+                    curframe++;
+                    prevtime = gameTime.TotalGameTime;
+                }
+            }
 
             foreach (Box b in myBoxStack)
             {
@@ -124,8 +143,8 @@ namespace MathInfection
             Rectangle fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(backgroundTexture, fullscreen,
-                             new Color(TransitionAlpha, TransitionAlpha, TransitionAlpha));
+            
+            spriteBatch.Draw(backgroundTexture[curframe], new Rectangle(0, 0, 1000, 660), Color.White);
 
             foreach (Box b in myBoxStack)
             {
@@ -158,7 +177,6 @@ namespace MathInfection
 
                 spriteBatch.Draw(DivisionSign, boom4, Color.White);
             }
-
 
             spriteBatch.End();
         }

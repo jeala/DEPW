@@ -1,14 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Timers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Net;
+using Microsoft.Xna.Framework.Storage;
 
 namespace MathInfection
 {
     class LoadingScreen : GameScreen
     {
+        private ContentManager content;
         private bool loadingIsSlow;
         private bool otherScreenAreGone;
         private bool loadingNewGame;
+        private Texture2D loadingScreenTex;
         private GameScreen[] screensToLoad;
 
         private LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
@@ -18,6 +29,12 @@ namespace MathInfection
             this.screensToLoad = screensToLoad;
             loadingNewGame = isNewGame;
             TransitionOnTime = TimeSpan.FromSeconds(.5);
+        }
+
+        public override void LoadContent()
+        {
+            content = new ContentManager(ScreenManager.Game.Services, "Content");
+            loadingScreenTex = content.Load<Texture2D>("LoadingScreen");
         }
 
         public static void Load(ScreenManager screenManager, bool loadingIsSlow,
@@ -80,22 +97,26 @@ namespace MathInfection
                 }
                 if(loadingNewGame)
                 {
-                    message = "Hi, " + uname + ".  Starting a new game...";
+                    message = "Welcome, " + uname + ".  Starting New Game...";
                 }
                 else
                 {
-                    message = "Hi, " + uname + ".  Restoring your last game...";
+                    message = "Welcome Back, " + uname + ".  Restoring Game File...";
                 }
 
                 Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
                 Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
                 Vector2 textSize = font.MeasureString(message);
                 Vector2 textPosition = (viewportSize - textSize) / 2;
+                Vector2 loadingscreenimg = new Vector2(0, -3);
 
                 Color color = Color.White * TransitionAlpha;
 
                 spriteBatch.Begin();
-                spriteBatch.DrawString(font, message, textPosition, color);
+
+                    spriteBatch.DrawString(font, message, textPosition, color);
+                    spriteBatch.Draw(loadingScreenTex, loadingscreenimg, Color.White);
+
                 spriteBatch.End();
             }
         }

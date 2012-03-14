@@ -6,7 +6,7 @@ namespace MathInfection
 {
     class MainMenuScreen : MenuScreen
     {
-        public MainMenuScreen() : base("Math Infection")
+        public MainMenuScreen() : base("")
         {
             MenuEntry newGameMenuEntry = new MenuEntry("New Game");
             MenuEntry loadGameMenuEntry = new MenuEntry("Load Game");
@@ -27,7 +27,6 @@ namespace MathInfection
             MenuEntries.Add(exitMenuEntry);
             //MediaPlayer.Play(ScreenManager.menuSong);  
         }
-
 
         void newGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {

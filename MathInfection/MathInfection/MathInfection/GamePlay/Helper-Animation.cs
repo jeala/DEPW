@@ -16,6 +16,7 @@ namespace MathInfection
         private TimeSpan prevframe = TimeSpan.Zero;
         private Vector2 Position;
         public Texture2D texture;
+        bool isstopped = false;
         private List<Rectangle> rects = new List<Rectangle>();
 
         public Helper_Animation(Texture2D texture, Vector2 position, int framenum,
@@ -45,25 +46,39 @@ namespace MathInfection
             }
         }
 
+        public void StopAnimationAtEnd()
+        {
+            if (currentframe == (frames - 1)) isstopped = true;
+        }
+
+        public void RestartAnimation()
+        {
+            currentframe = 0;
+            isstopped = false;
+        }
+
         public void Update(GameTime Gametime, Vector2 NewPosition)
         {
-            //Get position to draw animation
-            Position = NewPosition;
-
-            //Loop the frames
-            if ((Gametime.TotalGameTime - prevframe) > frameduration)
+                //Get position to draw animation
+                Position = NewPosition;
+                
+            if (isstopped == false)
             {
-
-                if (currentframe >= (frames - 1))
+                //Loop the frames
+                if ((Gametime.TotalGameTime - prevframe) > frameduration)
                 {
-                    currentframe = 0;
-                }
-                else
-                {
-                    currentframe++;
-                }
 
-                prevframe = Gametime.TotalGameTime;
+                    if (currentframe >= (frames - 1))
+                    {
+                        currentframe = 0;
+                    }
+                    else
+                    {
+                        currentframe++;
+                    }
+
+                    prevframe = Gametime.TotalGameTime;
+                }
             }
         }
 

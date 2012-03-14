@@ -56,7 +56,6 @@ namespace MathInfection
         private Texture2D shieldIconP;
         private Texture2D gunIconF;
         Shield shield;
-        Health heart;
         private List<Health> healthList;
         private List<Shield> shieldList;
 
@@ -105,7 +104,7 @@ namespace MathInfection
             gameFont = content.Load<SpriteFont>("gamefont");
             Score = content.Load<Texture2D>("Score");
             Health = content.Load<Texture2D>("Health");
-            gameplaySong = content.Load<Song>("Sounds\\EndTimes");
+            gameplaySong = content.Load<Song>("Sounds\\Turns");
             MediaPlayer.Play(gameplaySong);
             GameplayLoad();
             Thread.Sleep(1000);
@@ -273,7 +272,7 @@ namespace MathInfection
                 {
                     case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
                         break;
-                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
+                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 50);
                         break;
                     case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
                         break;
