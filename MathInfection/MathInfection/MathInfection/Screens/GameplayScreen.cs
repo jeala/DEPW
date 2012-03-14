@@ -192,7 +192,7 @@ namespace MathInfection
             singleMode = true;
             numPlayers = singleMode ? 1 : 2;
             numMoveStrategies = 3;
-            numEnemies = 10;
+            numEnemies = 5;
             previousFireTime = TimeSpan.Zero;
             defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
 
@@ -213,10 +213,6 @@ namespace MathInfection
                 if(isNewGame)
                 {
                     gameData.TotalScore = 0;
-                    gameData.LastTotal = 0;
-                    gameData.CurrentLevel = 1;
-                    gameData.LastGameWon = false;
-                    gameData.MiddleUpdate = false;
                     FileIO.SerializeToXML(gameData);
                 }
             }
@@ -240,7 +236,8 @@ namespace MathInfection
 
             hudFont = content.Load<SpriteFont>("HUDFont");
             background = new Background();
-            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"), content.Load<Texture2D>("BCbg"));
+            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"),
+                                                              content.Load<Texture2D>("BCbg"));
 
             player1Texture = content.Load<Texture2D>(@"CharacterImages/Player1");
             jettexture = content.Load<Texture2D>(@"CharacterImages/Character Jets");
@@ -258,27 +255,8 @@ namespace MathInfection
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/PurpleVirus"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
 
-            Vector2 charSize = new Vector2(enemyTexList[0].Width , enemyTexList[0].Height);
-            int count = 0;
-            while(count < numEnemies)
-            {
-                int r = RandomGenerator.RandomInt(enemyTexList.Count);
-                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
-                                        RandomGenerator.RandomPosition(windowSize, charSize),
-                                        windowSize,
-                                        100,
-                                        RandomGenerator.RandomEnemySize(false)));
-                switch (r)
-                {
-                    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
-                        break;
-                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 50);
-                        break;
-                    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
-                        break;
-                }
-                count++;
-            }
+            GameUpdate.AddEnemy(enemyList, numEnemies, numMoveStrategies, enemyTexList, windowSize);
+
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
         }
@@ -323,7 +301,8 @@ namespace MathInfection
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
                           ref shield.shield_active, healthList, spriteBatch,
                              healthIconF, shieldList, getHealth, getShield);
-            GameUpdate.UpdateEnemyList(enemyList);
+            GameUpdate.UpdateEnemyList(enemyList, numEnemies, player1, enemyTexList,
+                                                     numMoveStrategies, windowSize);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)
             {
@@ -340,6 +319,13 @@ namespace MathInfection
                                                 hud, player1), ControllingPlayer);
                 questionNoticeInstance = questionNotice.Play();
                 player1.WasHit = false;
+            }
+            if (enemyList.Count < numEnemies)
+            {
+                int numToAdd = RandomGenerator.NumberToAdd(player1.Score,
+                                                        enemyList.Count);
+                GameUpdate.AddEnemy(enemyList, numToAdd, numMoveStrategies,
+                                                 enemyTexList, windowSize);
             }
             hud.update(player1);
 

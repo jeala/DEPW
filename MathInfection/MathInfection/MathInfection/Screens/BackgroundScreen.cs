@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Timers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
 
 namespace MathInfection
 {
@@ -79,7 +72,8 @@ namespace MathInfection
 
             for (int i = 0; i < 23; i++)
             {
-                backgroundTexture[i] = content.Load<Texture2D>(@"TitleScreenStuff//Untitled-" + i);
+                backgroundTexture[i] = content.Load<Texture2D>(
+                                                 @"TitleScreenStuff//Untitled-" + i);
             }
 
             AdditionSign = content.Load<Texture2D>("PlusSign");
@@ -140,7 +134,8 @@ namespace MathInfection
 
             spriteBatch.Begin();
             
-            spriteBatch.Draw(backgroundTexture[curframe], new Rectangle(0, 0, 1000, 660), Color.White);
+            spriteBatch.Draw(backgroundTexture[curframe], new Rectangle(0, 0, 1000, 660),
+                                                                            Color.White);
 
             foreach (Box b in myBoxStack)
             {

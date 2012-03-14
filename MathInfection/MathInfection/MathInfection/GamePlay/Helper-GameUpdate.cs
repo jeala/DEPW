@@ -5,15 +5,38 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-
 namespace MathInfection
 {
     public static class GameUpdate
     {
-        public static void UpdateEnemyList(List<Enemy> eList)
+        public static void AddEnemy(List<Enemy> eList, int numEnemies, int numMovers,
+                                         List<Texture2D> enemyTexList, Vector2 wSize)
+        {
+            int count = 0;
+            while(count < numEnemies)
+            {
+                int enemyType = RandomGenerator.RandomInt(enemyTexList.Count);
+                eList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMovers),
+                             wSize, 100, RandomGenerator.RandomEnemySize(false)));
+                int index = eList.Count - 1;
+                switch(enemyType)
+                {
+                    case 0: eList[index].InitializeAnim(enemyTexList[0], 2, 400, 44, 40);
+                        break;
+                    case 1: eList[index].InitializeAnim(enemyTexList[1], 8, 200, 46, 50);
+                        break;
+                    case 2: eList[index].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
+                        break;
+                }
+                count++;
+            }
+        }
+
+        public static void UpdateEnemyList(List<Enemy> eList, int numEnemies, Player p1,
+                             List<Texture2D> enemyTexList, int numMovers, Vector2 wSize)
         {
             int index = 0;
-            while (index < eList.Count)
+            while(index < eList.Count)
             {
                 if(!eList[index].IsAlive())
                 {

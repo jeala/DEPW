@@ -27,8 +27,8 @@ namespace MathInfection
             parent = caller;
             player = p1;
             hud = HUD;
-            string question = RandomGenerator.RandomQuestion( parent.CurrentScore,
-                                                  out correctAnswer, out answers);
+            string question = RandomGenerator.RandomQuestion(parent.CurrentScore,
+                                                 out correctAnswer, out answers);
             lifeSpan = 240;
             questionMessage = msg + "\n" + question;
             answerMessage = "\n" + answers[0].ToString().PadLeft(8) + "\n" +

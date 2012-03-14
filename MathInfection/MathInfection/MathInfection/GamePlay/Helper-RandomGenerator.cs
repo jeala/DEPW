@@ -269,5 +269,10 @@ namespace MathInfection
             }
             return temp * weight;
         }
+
+        public static int NumberToAdd(int score, int enemyNumber)
+        {
+            return 2;
+        }
     }
 }
