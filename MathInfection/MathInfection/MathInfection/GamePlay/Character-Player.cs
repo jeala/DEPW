@@ -18,6 +18,9 @@ namespace MathInfection
         private int health;
         private bool wasHit;
         private string enemyType;
+        private int maxAddSub;
+        private int maxMul;
+        private int maxDiv;
 
         public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos,
                                         Vector2 vel, Vector2 cSize, Vector2 wSize)
@@ -31,10 +34,49 @@ namespace MathInfection
             startBoost = false;
             health = 100;
             wasHit = false;
+            maxAddSub = 20;
+            maxMul = 10;
+            maxDiv = 30;
             jet1 = new Helper_Animation(jtex, new Vector2(pos.X, (float)pos.Y - 80),
                                                                2, 100, 0, 0, 26, 6);
             jet2 = new Helper_Animation(jtex2, new Vector2(pos.X, (float)pos.Y - 80),
                                                                2, 100, 0, 0, 26, 9);
+        }
+
+        public int MaxAddSub
+        {
+            get
+            {
+                return maxAddSub;
+            }
+            set
+            {
+                maxAddSub = value;
+            }
+        }
+
+        public int MaxMul
+        {
+            get
+            {
+                return maxMul;
+            }
+            set
+            {
+                maxMul = value;
+            }
+        }
+
+        public int MaxDiv
+        {
+            get
+            {
+                return maxDiv;
+            }
+            set
+            {
+                maxDiv = value;
+            }
         }
 
         public Vector2 CharacterSize
@@ -130,7 +172,7 @@ namespace MathInfection
             return health > 0;
         }
 
-        public void update(Vector2 dummy, GameTime gametime)
+        public void update(Vector2 dummy, GameTime gametime, int score)
         {
             Vector2 speed = velocity;
             if(startBoost)

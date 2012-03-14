@@ -74,18 +74,6 @@ namespace MathInfection
             }
         }
 
-        public int CurrentScore
-        {
-            get
-            {
-                return player1.Score;
-            }
-            set
-            {
-                player1.Score = value;
-            }
-        }
-
         public GameplayScreen(ScreenManager sMgr, bool isNewGame)
         {
             TransitionOnTime  = TimeSpan.FromSeconds(1.5);
@@ -256,7 +244,8 @@ namespace MathInfection
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusPurple"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
 
-            GameUpdate.AddEnemy(enemyList, numEnemies, numMoveStrategies, enemyTexList, windowSize);
+            GameUpdate.AddEnemy(enemyList, numEnemies, numMoveStrategies, enemyTexList,
+                                                                  windowSize, player1);
 
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
@@ -267,7 +256,7 @@ namespace MathInfection
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
                  previousFireTime, defaultBulletFireRate, windowSize, this, gunSound);
 
-            player1.update(Vector2.Zero, gameTime);
+            player1.update(Vector2.Zero, gameTime, 0);
             bool playerAlive = player1.IsAlive();
             bool noHealthInstance = false;
             if(!playerAlive)
@@ -282,7 +271,7 @@ namespace MathInfection
 
             foreach(Enemy e in enemyList)
             {
-                e.update(player1.PlayerPosition, gameTime);
+                e.update(player1.PlayerPosition, gameTime, player1.Score);
             }
             foreach (Health h in healthList)
             {
@@ -295,15 +284,14 @@ namespace MathInfection
 
             foreach(Bullet b in defaultBulletList)
             {
-                b.update(player1.PlayerPosition, gameTime);
+                b.update(player1.PlayerPosition, gameTime, 0);
             }
             GameUpdate.UpdateHealthList(ref healthList, player1);
             GameUpdate.UpdateShieldList(ref shieldList, player1);
             GameUpdate.CheckCollision(defaultBulletList, enemyList, player1,
                           ref shield.shield_active, healthList, spriteBatch,
                              healthIconF, shieldList, getHealth, getShield);
-            GameUpdate.UpdateEnemyList(enemyList, numEnemies, player1, enemyTexList,
-                                                     numMoveStrategies, windowSize);
+            GameUpdate.UpdateEnemyList(enemyList);
             GameUpdate.UpdateBulletList(defaultBulletList);
             if(enemyList.Count == 0)
             {
@@ -316,17 +304,16 @@ namespace MathInfection
             bool questionNoticeInstance = false;
             if(player1.WasHit)
             {
-                ScreenManager.AddScreen(new QuestionScreen("Question Time", this,
-                                                hud, player1), ControllingPlayer);
+                ScreenManager.AddScreen(new QuestionScreen("Question Time", hud,
+                                                   player1), ControllingPlayer);
                 questionNoticeInstance = questionNotice.Play();
                 player1.WasHit = false;
             }
             if (enemyList.Count < numEnemies)
             {
-                int numToAdd = RandomGenerator.NumberToAdd(player1.Score,
-                                                        enemyList.Count);
+                int numToAdd = RandomGenerator.RandomNumberToAdd(player1.Score);
                 GameUpdate.AddEnemy(enemyList, numToAdd, numMoveStrategies,
-                                                 enemyTexList, windowSize);
+                                        enemyTexList, windowSize, player1);
             }
             hud.update(player1);
 

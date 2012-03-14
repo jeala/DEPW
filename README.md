@@ -3,7 +3,7 @@
 ## About: ##
 * UCSC Winter 2012 - CMPS 20 Game Design Experience Project
 
-## Project Repository ##
+## Project Repository: ##
 * https://github.com/andrewpsy/DEPW
 
 ## Members: ##

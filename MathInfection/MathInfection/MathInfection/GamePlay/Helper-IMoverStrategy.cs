@@ -4,6 +4,6 @@ namespace MathInfection
 {
     interface IMoverStrategy
     {
-        Vector2 update(Vector2 position);
+        Vector2 update(Vector2 position, int score);
     }
 }

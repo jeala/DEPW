@@ -19,7 +19,7 @@ namespace MathInfection
             location = 0;
         }
 
-        public Vector2 update(Vector2 dummy)
+        public Vector2 update(Vector2 dummy, int score)
         {
             location += speed;
 
@@ -29,7 +29,7 @@ namespace MathInfection
             if(CheckEqual(newPosition))
             {
                 initialPosition = finalPosition;
-                finalPosition = TargetPlayer();
+                finalPosition = TargetPlayer(score);
                 newPosition = Vector2.Lerp(initialPosition, finalPosition, location);
             }
             return newPosition;
@@ -48,9 +48,11 @@ namespace MathInfection
             return false;
         }
 
-        private Vector2 TargetPlayer()
+        private Vector2 TargetPlayer(int score)
         {
-            if (RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "MathInfection.Boss"))
+            bool targetPlayer = RandomGenerator.RandomChasePlayer(parent.GetType().ToString()
+                                                              == "MathInfection.Boss", score);
+            if(targetPlayer)
             {
                 return parent.PlayerPosition;
             }

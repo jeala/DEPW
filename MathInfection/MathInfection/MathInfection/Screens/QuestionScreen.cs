@@ -7,7 +7,6 @@ namespace MathInfection
 {
     class QuestionScreen : GameScreen
     {
-        private GameplayScreen parent;
         private Player player;
         private HeadsUpDisplay hud;
         private int correctAnswer;
@@ -21,14 +20,12 @@ namespace MathInfection
         private string message;
         private Texture2D questionFrameTex;
 
-        public QuestionScreen(string msg, GameplayScreen caller, HeadsUpDisplay HUD,
-                                                                          Player p1)
+        public QuestionScreen(string msg, HeadsUpDisplay HUD, Player p1)
         {
-            parent = caller;
             player = p1;
             hud = HUD;
-            string question = RandomGenerator.RandomQuestion(parent.CurrentScore,
-                                                 out correctAnswer, out answers);
+            string question = RandomGenerator.RandomQuestion(player,
+                                                     out correctAnswer, out answers);
             lifeSpan = 240;
             questionMessage = msg + "\n" + question;
             answerMessage = "\n" + answers[0].ToString().PadLeft(8) + "\n" +

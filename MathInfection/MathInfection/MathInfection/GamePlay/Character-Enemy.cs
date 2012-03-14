@@ -90,12 +90,12 @@ namespace MathInfection
             health -= damage;
         }
 
-        public void update(Vector2 playerPos, GameTime gametime)
+        public void update(Vector2 playerPos, GameTime gametime, int score)
         {
             if (health > 0)
             {
                 playerPosition = playerPos;
-                position = mover.update(position);
+                position = mover.update(position, score);
                 anim.Update(gametime, position);
             }
         }

@@ -10,14 +10,14 @@ namespace MathInfection
     public static class GameUpdate
     {
         public static void AddEnemy(List<Enemy> eList, int numEnemies, int numMovers,
-                                         List<Texture2D> enemyTexList, Vector2 wSize)
+                              List<Texture2D> enemyTexList, Vector2 wSize, Player p1)
         {
             int count = 0;
             while(count < numEnemies)
             {
                 int enemyType = RandomGenerator.RandomInt(enemyTexList.Count);
-                eList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMovers),
-                             wSize, 100, RandomGenerator.RandomEnemySize(false)));
+                eList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMovers, p1.Score),
+                                       wSize, 100, RandomGenerator.RandomEnemySize(false)));
                 int index = eList.Count - 1;
                 switch(enemyType)
                 {
@@ -32,8 +32,7 @@ namespace MathInfection
             }
         }
 
-        public static void UpdateEnemyList(List<Enemy> eList, int numEnemies, Player p1,
-                             List<Texture2D> enemyTexList, int numMovers, Vector2 wSize)
+        public static void UpdateEnemyList(List<Enemy> eList)
         {
             int index = 0;
             while(index < eList.Count)
