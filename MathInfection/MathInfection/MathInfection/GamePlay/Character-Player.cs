@@ -23,7 +23,7 @@ namespace MathInfection
         private int maxDiv;
 
         public Player(Texture2D tex, Texture2D jtex, Texture2D jtex2, Vector2 pos,
-                             Vector2 vel, Vector2 cSize, Vector2 wSize, int cScore)
+                   Vector2 vel, Vector2 cSize, Vector2 wSize, int cScore, int cHealth)
         {
             texture = tex;
             position = pos;
@@ -32,7 +32,7 @@ namespace MathInfection
             windowSize = wSize;
             score = cScore;
             startBoost = false;
-            health = 100;
+            health = cHealth;
             wasHit = false;
             maxAddSub = 20;
             maxMul = 10;

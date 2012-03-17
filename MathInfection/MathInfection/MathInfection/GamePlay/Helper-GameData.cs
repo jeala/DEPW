@@ -7,6 +7,8 @@ namespace MathInfection
     {
         private string playerName;
         private int currentScore;
+        private int currentHealth;
+        private bool lastGameDied;
         private int topScoreCapacity;
         private List<int> topScores;
         private List<DateTime> topScoresDateTime;
@@ -32,6 +34,30 @@ namespace MathInfection
             set
             {
                 currentScore = value;
+            }
+        }
+
+        public int CurrentHealth
+        {
+            set
+            {
+                currentHealth = value;
+            }
+            get
+            {
+                return currentHealth;
+            }
+        }
+
+        public bool LastGameDied
+        {
+            get
+            {
+                return lastGameDied;
+            }
+            set
+            {
+                lastGameDied = value;
             }
         }
 
@@ -78,11 +104,13 @@ namespace MathInfection
 
         public GameData(string pName)
         {
-            playerName        = pName;
+            playerName          = pName;
             currentScore        = 0;
-            topScoreCapacity  = 5;
-            topScores         = new List<int>(topScoreCapacity);
-            topScoresDateTime = new List<DateTime>(topScoreCapacity);
+            currentHealth       = 100;
+            lastGameDied        = false;
+            topScoreCapacity    = 5;
+            topScores           = new List<int>(topScoreCapacity);
+            topScoresDateTime   = new List<DateTime>(topScoreCapacity);
         }
     }
 }

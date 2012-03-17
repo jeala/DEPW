@@ -262,19 +262,35 @@ namespace MathInfection
         public static void UpdateGameData(GameData data, Player player)
         {
             data.CurrentScore = player.Score;
-            if (data.TopScores.Count < data.TopScoreCapacity)
+            data.CurrentHealth = player.Health;
+            if(player.Health > 0)
             {
-                data.TopScores.Add(data.CurrentScore);
-                data.TopScoresDateTime.Add(DateTime.Now);
+                data.LastGameDied = false;
             }
-            else if (data.CurrentScore > data.TopScores.Min())
+            else
             {
-                int lowest = data.TopScores.Min();
-                int lowestIndex = data.TopScores.IndexOf(lowest);
-                data.TopScores.RemoveAt(lowestIndex);
-                data.TopScoresDateTime.RemoveAt(lowestIndex);
-                data.TopScores.Add(data.CurrentScore);
-                data.TopScoresDateTime.Add(DateTime.Now);
+                data.LastGameDied = true;
+            }
+
+            if(data.TopScores.Count < data.TopScoreCapacity && data.CurrentScore > 0)
+            {
+                if(!data.TopScores.Contains(data.CurrentScore) && !player.IsAlive())
+                {
+                    data.TopScores.Add(data.CurrentScore);
+                    data.TopScoresDateTime.Add(DateTime.Now);
+                }
+            }
+            else if(data.TopScores.Count > 0 && data.CurrentScore > data.TopScores.Min())
+            {
+                if (!data.TopScores.Contains(data.CurrentScore) && !player.IsAlive())
+                {
+                    int lowest = data.TopScores.Min();
+                    int lowestIndex = data.TopScores.IndexOf(lowest);
+                    data.TopScores.RemoveAt(lowestIndex);
+                    data.TopScoresDateTime.RemoveAt(lowestIndex);
+                    data.TopScores.Add(data.CurrentScore);
+                    data.TopScoresDateTime.Add(DateTime.Now);
+                }
             }
         }
 

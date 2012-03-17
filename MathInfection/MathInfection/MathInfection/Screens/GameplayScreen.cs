@@ -24,6 +24,7 @@ namespace MathInfection
 
         private Player player1;
         private int player1CurrentScore;
+        private int player1CurrentHealth;
         private Player player2;
         private List<Enemy> enemyList;
         private List<Boss> bossList;
@@ -197,6 +198,8 @@ namespace MathInfection
                     uname = nameArry[nameArry.Length - 1];
                 }
                 gameData = new GameData(uname);
+                player1CurrentHealth = 100;
+                player1CurrentScore = 0;
                 FileIO.SerializeToXML(gameData);
             }
             else
@@ -205,10 +208,18 @@ namespace MathInfection
                 {
                     gameData.CurrentScore = 0;
                     player1CurrentScore = 0;
+                    gameData.CurrentHealth = 100;
+                    player1CurrentHealth = 100;
+                    gameData.LastGameDied = false;
                     FileIO.SerializeToXML(gameData);
                 }
                 else
                 {
+                    player1CurrentHealth = gameData.CurrentHealth;
+                    if(gameData.LastGameDied)
+                    {
+                        player1CurrentHealth = 1;
+                    }
                     player1CurrentScore = gameData.CurrentScore;
                 }
             }
@@ -246,7 +257,8 @@ namespace MathInfection
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
             player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition,
-                                   playerVelocity, playerSize, windowSize, player1CurrentScore);
+                                    playerVelocity, playerSize, windowSize, player1CurrentScore,
+                                                                          player1CurrentHealth);
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusGreen"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusPurple"));
