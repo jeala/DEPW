@@ -10,7 +10,8 @@ namespace MathInfection
         private int screenHeight;
         private Texture2D cellTexture;
 
-        public void Load(GraphicsDevice device, Texture2D backgroundTexture, Texture2D cellOverlay)
+        public void Load(GraphicsDevice device, Texture2D backgroundTexture,
+                                                      Texture2D cellOverlay)
         {
             myTexture = backgroundTexture;
             screenHeight = device.Viewport.Height;
@@ -34,14 +35,14 @@ namespace MathInfection
             if(screenPos.Y < screenHeight)
             {
                 sb.Draw(myTexture, screenPos, null, Color.White, 0, origin, 1,
-                        SpriteEffects.None, 0f);
-                sb.Draw(cellTexture, screenPos, null, Color.White, 0, origin, 1,
-                        SpriteEffects.None, 0f);
+                                                      SpriteEffects.None, 0f);
+                sb.Draw(cellTexture, screenPos, null, Color.White, 0, origin,
+                                                  1, SpriteEffects.None, 0f);
             }
             sb.Draw(myTexture, screenPos - textureSize, null, Color.White, 0,
-                    origin, 1, SpriteEffects.None, 0f);
-            sb.Draw(cellTexture, screenPos - textureSize, null, Color.White, 0,
-                    origin, 1, SpriteEffects.None, 0f);
+                                          origin, 1, SpriteEffects.None, 0f);
+            sb.Draw(cellTexture, screenPos - textureSize, null, Color.White,
+                                      0, origin, 1, SpriteEffects.None, 0f);
         }
     }
 }

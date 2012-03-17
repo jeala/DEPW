@@ -5,7 +5,7 @@ namespace MathInfection
 {
     public class Enemy : ICharacter
     {
-        private readonly IMoverStrategy mover;
+        private IMoverStrategy mover;
         private Helper_Animation anim;
         private Vector2 position;
         private Vector2 characterSize;
@@ -13,10 +13,11 @@ namespace MathInfection
         private Vector2 playerPosition;
         private int health;
         private readonly float resizeRatio;
+        private readonly int moverID;
 
         public Enemy(int moverId, Vector2 wSize, int hp, float resize)
         {
-            mover = SetMover(moverId);
+            moverID = moverId;
             windowSize = wSize;
             playerPosition = Vector2.Zero;
             health = hp;
@@ -30,6 +31,7 @@ namespace MathInfection
                                                             0, 0, width, height);
             characterSize = new Vector2(tex.Width / anim.frames, tex.Height);
             position = RandomGenerator.RandomPosition(windowSize, characterSize);
+            mover = SetMover(moverID);
         }
 
         public  Vector2 Position

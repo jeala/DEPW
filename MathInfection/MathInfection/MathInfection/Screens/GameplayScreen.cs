@@ -262,7 +262,7 @@ namespace MathInfection
 
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusGreen"));
             enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusPurple"));
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingBloodCell"));
 
             GameUpdate.AddEnemy(enemyList, numEnemies, numMoveStrategies, enemyTexList,
                                                                   windowSize, player1);

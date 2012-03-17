@@ -56,14 +56,13 @@ namespace MathInfection
         public void Update(GameTime Gametime, Vector2 NewPosition)
         {
                 //Get position to draw animation
-                Position = NewPosition;
-                
+            Position = NewPosition;
+
             if (isstopped == false)
             {
                 //Loop the frames
                 if ((Gametime.TotalGameTime - prevframe) > frameduration)
                 {
-
                     if (currentframe >= (frames - 1))
                     {
                         currentframe = 0;
@@ -72,7 +71,6 @@ namespace MathInfection
                     {
                         currentframe++;
                     }
-
                     prevframe = Gametime.TotalGameTime;
                 }
             }
@@ -86,7 +84,7 @@ namespace MathInfection
         {
             sprite.Draw(texture, Position, rects[currentframe], Color.White);
         }
-        
+
         /// <summary>
         /// Draw an animation with a scale
         /// </summary>

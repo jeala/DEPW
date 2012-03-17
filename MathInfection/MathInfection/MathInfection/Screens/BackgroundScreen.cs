@@ -24,8 +24,6 @@ namespace MathInfection
         Stack<Box> myBoxStack4 = new Stack<Box>();
 
 
-        Random random = new Random();
-
         public BackgroundScreen()
         {
             TransitionOnTime = TimeSpan.FromSeconds(.5);
@@ -33,33 +31,32 @@ namespace MathInfection
 
             for (int i = 0; i < 4; i++)
             {
-                myBoxStack.Push(new Box(random.Next(784),
-                    random.Next(584), 6, 6,
-                    random.Next(4) + 1,
-                    random.Next(4) + 1));
+                myBoxStack.Push(new Box(RandomGenerator.RandomInt(784),
+                                  RandomGenerator.RandomInt(584), 6, 6,
+                                      RandomGenerator.RandomInt(4) + 1,
+                                    RandomGenerator.RandomInt(4) + 1));
             }
 
             for (int i = 0; i <= 2; i++)
             {
-                myBoxStack2.Push(new Box(random.Next(2),
-                    5, 6, 6,
-                    random.Next(4) + 1, 5));
+                myBoxStack2.Push(new Box(RandomGenerator.RandomInt(2),
+                       5, 6, 6, RandomGenerator.RandomInt(4) + 1, 5));
             }
 
             for (int i = 0; i < 3; i++)
             {
-                myBoxStack3.Push(new Box(random.Next(222),
-                    random.Next(555), 6, 6,
-                    random.Next(4) + 1,
-                    random.Next(4) + 1));
+                myBoxStack3.Push(new Box(RandomGenerator.RandomInt(222),
+                                   RandomGenerator.RandomInt(555), 6, 6,
+                                       RandomGenerator.RandomInt(4) + 1,
+                                     RandomGenerator.RandomInt(4) + 1));
             }
 
             for (int i = 0; i < 3; i++)
             {
-                myBoxStack4.Push(new Box(random.Next(700),
-                    random.Next(500), 6, 6,
-                    random.Next(4) + 1,
-                    random.Next(4) + 1));
+                myBoxStack4.Push(new Box(RandomGenerator.RandomInt(700),
+                                   RandomGenerator.RandomInt(500), 6, 6,
+                                       RandomGenerator.RandomInt(4) + 1,
+                                     RandomGenerator.RandomInt(4) + 1));
             }
         }
 

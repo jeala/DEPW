@@ -235,8 +235,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="CharacterImages\ShockingInfectedBloodCell.png">
-      <Name>ShockingInfectedBloodCell</Name>
+    <Compile Include="CharacterImages\ShockingInfectedBC.png">
+      <Name>ShockingBloodCell</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

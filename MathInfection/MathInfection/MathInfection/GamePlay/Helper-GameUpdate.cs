@@ -10,11 +10,11 @@ namespace MathInfection
 {
     public static class GameUpdate
     {
-        public static void AddEnemy(List<Enemy> eList, int numEnemies, int numMovers,
+        public static void AddEnemy(List<Enemy> eList, int numToAdd, int numMovers,
                               List<Texture2D> enemyTexList, Vector2 wSize, Player p1)
         {
             int count = 0;
-            while(count < numEnemies)
+            while(count < numToAdd)
             {
                 int enemyType = RandomGenerator.RandomInt(enemyTexList.Count);
                 eList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMovers, p1.Score),
