@@ -100,15 +100,11 @@ namespace MathInfection
                 Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
                 Vector2 textSize = font.MeasureString(message);
                 Vector2 textPosition = (viewportSize - textSize) / 2;
-// TODO: Derrick, we can see the message with the loading screen image.
-//                Vector2 textPosition = new Vector2(200, 0);
-//                Vector2 loadingscreenimg = new Vector2(0, -3);
-
-                Color color = Color.White * TransitionAlpha;
+                Vector2 loadingscreenimg = new Vector2(0, -3);
 
                 spriteBatch.Begin();
-//                spriteBatch.Draw(loadingScreenTex, loadingscreenimg, Color.White);
-                spriteBatch.DrawString(font, message, textPosition, color);
+                spriteBatch.Draw(loadingScreenTex, loadingscreenimg, Color.White);
+                spriteBatch.DrawString(font, message, textPosition, Color.DarkBlue);
                 spriteBatch.End();
             }
         }
