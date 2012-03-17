@@ -47,7 +47,7 @@ namespace MathInfection
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
 
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            Vector2 titlePosition = new Vector2(viewport.Width/2, 160);
+            Vector2 titlePosition = new Vector2(viewport.Width/2, 180);
             Vector2 titleOrigin = scoreFont.MeasureString("High Scores") / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;

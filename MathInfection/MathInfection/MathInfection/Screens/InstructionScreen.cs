@@ -20,7 +20,7 @@ namespace MathInfection
         public override void LoadContent()
         {
             ContentManager content = ScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("InstructionScreen");
+            backgroundTexture = content.Load<Texture2D>("InstructionScreenNew");
         }
 
         public override void HandleInput(InputState input)
@@ -45,7 +45,7 @@ namespace MathInfection
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
 
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            Vector2 titlePosition = new Vector2(viewport.Width/2, 160);
+            Vector2 titlePosition = new Vector2(viewport.Width/2, 180);
             Vector2 titleOrigin = scoreFont.MeasureString("Instructions") / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;

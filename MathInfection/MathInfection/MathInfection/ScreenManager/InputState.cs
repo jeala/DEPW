@@ -100,6 +100,7 @@ namespace MathInfection
                    IsNewButtonPress(Buttons.RightThumbstickUp, controllingPlayer, out playerIndex);
         }
 
+
         public bool IsMenuDown(PlayerIndex? controllingPlayer)
         {
             PlayerIndex playerIndex;
@@ -108,20 +109,40 @@ namespace MathInfection
                    IsNewButtonPress(Buttons.RightThumbstickDown, controllingPlayer, out playerIndex);
         }
 
-        public bool IsMenuLeft(PlayerIndex? controllingPlayer)
+        public bool IsAnswerUp(PlayerIndex? controllingPlayer)
+        {
+            PlayerIndex playerIndex;
+            return IsNewKeyPress(Keys.Up, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.Y, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.RightThumbstickUp, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.DPadUp, controllingPlayer, out playerIndex);
+        }
+
+        public bool IsAnswerDown(PlayerIndex? controllingPlayer)
+        {
+            PlayerIndex playerIndex;
+            return IsNewKeyPress(Keys.Down, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.A, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.RightThumbstickDown, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.DPadDown, controllingPlayer, out playerIndex);
+        }
+
+        public bool IsAnswerLeft(PlayerIndex? controllingPlayer)
         {
             PlayerIndex playerIndex;
             return IsNewKeyPress(Keys.Left, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.DPadLeft, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.RightThumbstickLeft, controllingPlayer, out playerIndex);
+                   IsNewButtonPress(Buttons.X, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.RightThumbstickLeft, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.DPadLeft, controllingPlayer, out playerIndex);
         }
 
-        public bool IsMenuRight(PlayerIndex? controllingPlayer)
+        public bool IsAnswerRight(PlayerIndex? controllingPlayer)
         {
             PlayerIndex playerIndex;
             return IsNewKeyPress(Keys.Right, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.DPadRight, controllingPlayer, out playerIndex) ||
-                   IsNewButtonPress(Buttons.RightThumbstickRight, controllingPlayer, out playerIndex);
+                   IsNewButtonPress(Buttons.B, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.RightThumbstickRight, controllingPlayer, out playerIndex) ||
+                   IsNewButtonPress(Buttons.DPadRight, controllingPlayer, out playerIndex);
         }
 
         public bool IsPauseGame(PlayerIndex? controllingPlayer)

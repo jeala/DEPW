@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
@@ -47,22 +48,22 @@ namespace MathInfection
 
         public override void HandleInput(InputState input)
         {
-            if (input.IsMenuUp(ControllingPlayer))
+            if (input.IsAnswerUp(ControllingPlayer))
             {
                 ProcessAnswer(1);
                 ExitScreen();
             }
-            else if (input.IsMenuDown(ControllingPlayer))
+            else if (input.IsAnswerDown(ControllingPlayer))
             {
                 ProcessAnswer(4);
                 ExitScreen();
             }
-            else if(input.IsMenuLeft(ControllingPlayer))
+            else if (input.IsAnswerLeft(ControllingPlayer))
             {
                 ProcessAnswer(2);
                 ExitScreen();
             }
-            else if(input.IsMenuRight(ControllingPlayer))
+            else if (input.IsAnswerRight(ControllingPlayer))
             {
                 ProcessAnswer(3);
                 ExitScreen();

@@ -374,8 +374,7 @@ namespace MathInfection
 
             if (shield.shield_active)
             {
-                GameUpdate.ModifyShield(ref shield, spriteBatch, player1,
-                                                            shieldIconP);
+                GameUpdate.ModifyShield(ref shield, spriteBatch, player1, shieldIconP);
             }
         }
         // endof class GameplayScreen
