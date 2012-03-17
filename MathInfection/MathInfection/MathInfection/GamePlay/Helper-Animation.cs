@@ -92,8 +92,9 @@ namespace MathInfection
         /// <param name="resizeRatio"></param>
         public void Draw(SpriteBatch sprite, float resizeRatio)
         {
-            sprite.Draw(texture, Position, rects[currentframe], Color.White, 0,
-                              Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
+            if(Position != Vector2.Zero)
+                sprite.Draw(texture, Position, rects[currentframe], Color.White, 0,
+                                  Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
         }
     }
 }
