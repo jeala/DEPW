@@ -30,8 +30,8 @@ namespace MathInfection
 
         void ConfirmQuitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, false, null, false, new BackgroundScreen(),
-                                                                   new MainMenuScreen());
+            LoadingScreen.Load(ScreenManager, false, null, false,
+                                   new BackgroundScreen(), new MainMenuScreen());
             MediaPlayer.Stop();
             MediaPlayer.Play(ScreenManager.menuSong);
         }

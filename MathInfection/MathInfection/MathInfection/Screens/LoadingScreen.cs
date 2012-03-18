@@ -19,8 +19,8 @@ namespace MathInfection
         private int curFrame;
         private bool exitGamePlayScreen;
 
-        private LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
-                              GameScreen[] screensToLoad, bool isNewGame)
+        private LoadingScreen(bool loadingIsSlow, GameScreen[] screensToLoad,
+                                                              bool isNewGame)
         {
             this.loadingIsSlow = loadingIsSlow;
             this.screensToLoad = screensToLoad;
@@ -61,8 +61,8 @@ namespace MathInfection
             {
                 screen.ExitScreen();
             }
-            LoadingScreen loadingScreen = new LoadingScreen(screenManager, loadingIsSlow,
-                                                               screensToLoad, isNewGame);
+            LoadingScreen loadingScreen = new LoadingScreen(loadingIsSlow, screensToLoad,
+                                                                              isNewGame);
             screenManager.AddScreen(loadingScreen, controllingPlayer);
         }
 
@@ -101,17 +101,17 @@ namespace MathInfection
 
         public override void Draw(GameTime gameTime)
         {
-            if(!exitGamePlayScreen)
+            if(exitGamePlayScreen || !loadingNewGame)
             {
-                if ((ScreenState == ScreenState.Active) && curFrame == 7 &&
-                                  (ScreenManager.GetScreens().Length == 1))
+                if ((ScreenState == ScreenState.Active) &&
+                    (ScreenManager.GetScreens().Length == 1))
                 {
                     otherScreenAreGone = true;
                 }
             }
             else
             {
-                if(ScreenState == ScreenState.Active &&
+                if(ScreenState == ScreenState.Active && curFrame == 7 &&
                                     ScreenManager.GetScreens().Length == 1)
                 {
                     otherScreenAreGone = true;
@@ -122,6 +122,7 @@ namespace MathInfection
             {
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
                 SpriteFont font = ScreenManager.Font;
+                SpriteFont newGameFont = ScreenManager.GreedingFont;
 
                 string message;
                 string uname = "";
@@ -164,8 +165,8 @@ namespace MathInfection
                     Rectangle introPosition = new Rectangle(0, 0, 1000, 660);
                     Vector2 textPosition = new Vector2(428, 480);
                     spriteBatch.Draw(introTexture[curFrame], introPosition, Color.White);
-                    spriteBatch.DrawString(ScreenManager.GreedingFont, message,
-                                                             textPosition, Color.Orange);
+                    spriteBatch.DrawString(newGameFont, message, textPosition,
+                                                                           Color.Orange);
                     spriteBatch.End();
                 }
             }

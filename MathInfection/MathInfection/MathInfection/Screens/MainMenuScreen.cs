@@ -31,14 +31,14 @@ namespace MathInfection
         void newGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, true,
-                                   new GameplayScreen(ScreenManager, true));
+                               new GameplayScreen(ScreenManager, true));
         }
 
         void loadGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, false,
-                                    new GameplayScreen(ScreenManager, false));
+                               new GameplayScreen(ScreenManager, false));
         }
 
 //        void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
