@@ -13,7 +13,6 @@ namespace MathInfection
     public class GameplayScreen : GameScreen
     {
         private ContentManager content;
-        private SpriteFont gameFont;
         private float pauseAlpha;
 
         private GraphicsDeviceManager graphics;
@@ -91,7 +90,6 @@ namespace MathInfection
             {
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
-            gameFont = content.Load<SpriteFont>("gamefont");
             Score  = content.Load<Texture2D>(@"HUDimages/Score");
             Health = content.Load<Texture2D>(@"HUDimages/Health");
             gameplaySong = content.Load<Song>("Sounds\\Turns");

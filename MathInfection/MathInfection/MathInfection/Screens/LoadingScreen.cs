@@ -139,7 +139,7 @@ namespace MathInfection
 
                 if(loadingNewGame)
                 {
-                    message = "Hello, " + uname + ".";
+                    message = "Hello, " + uname;
                 }
                 else
                 {
@@ -162,9 +162,10 @@ namespace MathInfection
                 {
                     spriteBatch.Begin();
                     Rectangle introPosition = new Rectangle(0, 0, 1000, 660);
-                    Vector2 textPosition = new Vector2(430, 490);
+                    Vector2 textPosition = new Vector2(428, 480);
                     spriteBatch.Draw(introTexture[curFrame], introPosition, Color.White);
-                    spriteBatch.DrawString(font, message, textPosition, Color.LightBlue);
+                    spriteBatch.DrawString(ScreenManager.GreedingFont, message,
+                                                             textPosition, Color.Orange);
                     spriteBatch.End();
                 }
             }

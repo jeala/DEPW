@@ -15,6 +15,7 @@ namespace MathInfection
 
         private SpriteBatch spriteBatch;
         private SpriteFont font;
+        private SpriteFont greedingFont;
         private SpriteFont topScoresFont;
         private Texture2D blankTexture;
         private bool isInitialized;
@@ -34,6 +35,14 @@ namespace MathInfection
             get
             {
                 return font;
+            }
+        }
+
+        public SpriteFont GreedingFont
+        {
+            get
+            {
+                return greedingFont;
             }
         }
 
@@ -61,6 +70,7 @@ namespace MathInfection
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = content.Load<SpriteFont>("menufont");
+            greedingFont = content.Load<SpriteFont>("gamefont");
             topScoresFont = content.Load<SpriteFont>("HUDFont");
             blankTexture = content.Load<Texture2D>("blank");
             menuSong = content.Load<Song>("Sounds\\New-N-Improved");
