@@ -227,7 +227,7 @@ namespace MathInfection
             int wAnswer;
             if(cAnswer == 0)
             {
-                wAnswer = RandomInt(1, 5);
+                wAnswer = rand.Next(1, 5);
             }
             else
             {
@@ -263,7 +263,7 @@ namespace MathInfection
                 }
                 while(wAnswer == cAnswer)
                 {
-                    wAnswer++;
+                    wAnswer += rand.Next();
                 }
             }
             return wAnswer;
