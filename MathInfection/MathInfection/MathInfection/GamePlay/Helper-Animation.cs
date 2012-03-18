@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
@@ -16,6 +12,7 @@ namespace MathInfection
         private TimeSpan prevframe = TimeSpan.Zero;
         private Vector2 Position;
         public Texture2D texture;
+        bool isstopped = false;
         private List<Rectangle> rects = new List<Rectangle>();
 
         public Helper_Animation(Texture2D texture, Vector2 position, int framenum,
@@ -45,25 +42,37 @@ namespace MathInfection
             }
         }
 
+        public void StopAnimationAtEnd()
+        {
+            if (currentframe == (frames - 1)) isstopped = true;
+        }
+
+        public void RestartAnimation()
+        {
+            currentframe = 0;
+            isstopped = false;
+        }
+
         public void Update(GameTime Gametime, Vector2 NewPosition)
         {
-            //Get position to draw animation
+                //Get position to draw animation
             Position = NewPosition;
 
-            //Loop the frames
-            if ((Gametime.TotalGameTime - prevframe) > frameduration)
+            if (isstopped == false)
             {
-
-                if (currentframe >= (frames - 1))
+                //Loop the frames
+                if ((Gametime.TotalGameTime - prevframe) > frameduration)
                 {
-                    currentframe = 0;
+                    if (currentframe >= (frames - 1))
+                    {
+                        currentframe = 0;
+                    }
+                    else
+                    {
+                        currentframe++;
+                    }
+                    prevframe = Gametime.TotalGameTime;
                 }
-                else
-                {
-                    currentframe++;
-                }
-
-                prevframe = Gametime.TotalGameTime;
             }
         }
 
@@ -75,7 +84,7 @@ namespace MathInfection
         {
             sprite.Draw(texture, Position, rects[currentframe], Color.White);
         }
-        
+
         /// <summary>
         /// Draw an animation with a scale
         /// </summary>
@@ -83,8 +92,9 @@ namespace MathInfection
         /// <param name="resizeRatio"></param>
         public void Draw(SpriteBatch sprite, float resizeRatio)
         {
-            sprite.Draw(texture, Position, rects[currentframe], Color.White, 0,
-                              Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
+            if(Position != Vector2.Zero)
+                sprite.Draw(texture, Position, rects[currentframe], Color.White, 0,
+                                  Vector2.Zero, resizeRatio, SpriteEffects.None, 0);
         }
     }
 }

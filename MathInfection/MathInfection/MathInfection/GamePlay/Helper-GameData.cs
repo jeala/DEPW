@@ -6,12 +6,9 @@ namespace MathInfection
     public class GameData
     {
         private string playerName;
-        private int totalLevel;
-        private int totalScore;
-        private int lastTotal;
-        private int currentLevel;
-        private bool lastGameWon;
-        private bool middleUpdate;
+        private int currentScore;
+        private int currentHealth;
+        private bool lastGameDied;
         private int topScoreCapacity;
         private List<int> topScores;
         private List<DateTime> topScoresDateTime;
@@ -28,75 +25,39 @@ namespace MathInfection
             }
         }
 
-        public int TotalLevel
+        public int CurrentScore
         {
             get
             {
-                return totalLevel;
+                return currentScore;
             }
             set
             {
-                totalLevel = value;
+                currentScore = value;
             }
         }
 
-        public int TotalScore
+        public int CurrentHealth
         {
-            get
-            {
-                return totalScore;
-            }
             set
             {
-                totalScore = value;
+                currentHealth = value;
+            }
+            get
+            {
+                return currentHealth;
             }
         }
 
-        public int LastTotal
+        public bool LastGameDied
         {
             get
             {
-                return lastTotal;
+                return lastGameDied;
             }
             set
             {
-                lastTotal = value;
-            }
-        }
-
-        public int CurrentLevel
-        {
-            get
-            {
-                return currentLevel;
-            }
-            set
-            {
-                currentLevel = value;
-            }
-        }
-
-        public bool LastGameWon
-        {
-            get
-            {
-                return lastGameWon;
-            }
-            set
-            {
-                lastGameWon = value;
-            }
-        }
-
-        public bool MiddleUpdate
-        {
-            get
-            {
-                return middleUpdate;
-            }
-            set
-            {
-                middleUpdate = value;
+                lastGameDied = value;
             }
         }
 
@@ -143,16 +104,13 @@ namespace MathInfection
 
         public GameData(string pName)
         {
-            playerName        = pName;
-            totalLevel        = 10;
-            totalScore        = 0;
-            lastTotal         = 0;
-            currentLevel      = 1;
-            lastGameWon       = false;
-            middleUpdate      = false;
-            topScoreCapacity  = 5;
-            topScores         = new List<int>(topScoreCapacity);
-            topScoresDateTime = new List<DateTime>(topScoreCapacity);
+            playerName          = pName;
+            currentScore        = 0;
+            currentHealth       = 100;
+            lastGameDied        = false;
+            topScoreCapacity    = 5;
+            topScores           = new List<int>(topScoreCapacity);
+            topScoresDateTime   = new List<DateTime>(topScoreCapacity);
         }
     }
 }

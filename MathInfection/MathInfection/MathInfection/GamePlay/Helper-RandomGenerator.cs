@@ -40,9 +40,17 @@ namespace MathInfection
             return vec;
         }
 
-        public static int RandomMoveStrategy(int numStrategies)
+        public static int RandomMoveStrategy(int numStrategies, int score)
         {
-            return rand.Next(numStrategies);
+            if(score < 10000)
+            {
+                return rand.Next(numStrategies);
+            }
+            if(score < 30000)
+            {
+                return rand.Next(1, numStrategies);
+            }
+            return 2;
         }
 
         public static Vector2 RandomVelocity()
@@ -65,9 +73,19 @@ namespace MathInfection
             return RandomFloatLessThanOne();
         }
 
-        public static bool RandomChasePlayer(bool isBoss)
+        public static bool RandomChasePlayer(bool isBoss, int score)
         {
             float temp = (float)rand.NextDouble();
+            int weight = 1;
+            if(score > 10000)
+            {
+                weight = 2;
+            }
+            else if(score > 30000)
+            {
+                weight = 3;
+            }
+            temp *= weight;
             if(isBoss)
             {
                 temp *= 2;
@@ -98,8 +116,7 @@ namespace MathInfection
             return 1 + temp;
         }
 
-        public static string RandomQuestion(int currentScore, out int answer,
-                                                           out int[] answers)
+        public static string RandomQuestion(Player p1, out int answer, out int[] answers)
         {
             answer = rand.Next(1, 5);
             answers = new[] {0, 0, 0, 0};
@@ -107,33 +124,34 @@ namespace MathInfection
             string question = "";
             int firstVal;
             int SecondVal;
-            int myOperator = Random4Choice1(currentScore);
+            int myOperator = Random4Choice1(p1.Score);
             int correctAnswer;
 
             switch(myOperator)
             {
                 case 1:
-                    firstVal = rand.Next(20);
-                    SecondVal = rand.Next(20);
+                    firstVal = rand.Next(p1.MaxAddSub);
+                    SecondVal = rand.Next(p1.MaxAddSub);
                     question = firstVal + " + " + SecondVal + " = ?";
                     correctAnswer = firstVal + SecondVal;
                     break;
                 case 2:
-                    firstVal = rand.Next(20);
-                    SecondVal = rand.Next(20);
+                    firstVal = rand.Next(p1.MaxAddSub);
+                    SecondVal = rand.Next(p1.MaxAddSub);
                     question = firstVal + " - " + SecondVal + " = ?";
                     correctAnswer = firstVal - SecondVal;
                     break;
                 case 3:
-                    firstVal = rand.Next(10);
-                    SecondVal = rand.Next(10);
+                    firstVal = rand.Next(p1.MaxMul);
+                    SecondVal = rand.Next(p1.MaxMul);
                     question = firstVal + " * " + SecondVal + " = ?";
                     correctAnswer = firstVal * SecondVal;
                     break;
                 default:
-                    firstVal = rand.Next(30);
-                    SecondVal = rand.Next(30);
-                    correctAnswer = HandleDivision(ref firstVal, ref SecondVal);
+                    firstVal = rand.Next(p1.MaxDiv);
+                    SecondVal = rand.Next(p1.MaxDiv);
+                    correctAnswer = HandleDivision(ref firstVal, ref SecondVal,
+                                                                    p1.MaxDiv);
                     question = firstVal + " / " + SecondVal + " = ?";
                     break;
             }
@@ -149,25 +167,41 @@ namespace MathInfection
                     answers[i - 1] = WrongAnswer(correctAnswer);
                 }
             }
+            p1.MaxAddSub++;
+            p1.MaxDiv++;
+            p1.MaxMul++;
             return question;
         }
 
-        private static int HandleDivision(ref int firstVal, ref int secVal)
+        public static int RandomNumberToAdd(int score)
         {
-            while(secVal == 0)
+            if(score < 10000)
             {
-                secVal = rand.Next(30);
+                return rand.Next(0, 2);
             }
-            while(firstVal % secVal != 0)
+            if(score < 30000)
             {
-                firstVal = rand.Next(30);
-                secVal = rand.Next(30);
-                while(secVal == 0)
+                return rand.Next(1, 3);
+            }
+            return rand.Next(2, 4);
+        }
+
+        private static int HandleDivision(ref int fVal, ref int sVal, int max)
+        {
+            while(sVal == 0)
+            {
+                sVal = rand.Next(max);
+            }
+            while(fVal % sVal != 0)
+            {
+                fVal = rand.Next(max);
+                sVal = rand.Next(max);
+                while(sVal == 0)
                 {
-                    secVal = rand.Next(30);
+                    sVal = rand.Next(max);
                 }
             }
-            return firstVal / secVal;
+            return fVal / sVal;
         }
 
         private static int Random4Choice1(int cScore)
@@ -193,7 +227,7 @@ namespace MathInfection
             int wAnswer;
             if(cAnswer == 0)
             {
-                wAnswer = RandomInt(1, 10);
+                wAnswer = rand.Next(1, 5);
             }
             else
             {
@@ -229,7 +263,7 @@ namespace MathInfection
                 }
                 while(wAnswer == cAnswer)
                 {
-                    wAnswer++;
+                    wAnswer += rand.Next();
                 }
             }
             return wAnswer;
@@ -269,5 +303,8 @@ namespace MathInfection
             }
             return temp * weight;
         }
+
+
+
     }
 }

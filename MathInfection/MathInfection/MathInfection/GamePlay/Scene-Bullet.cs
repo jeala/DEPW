@@ -79,7 +79,7 @@ namespace MathInfection
             }
         }
 
-        public void update(Vector2 playerPos, GameTime gametime)
+        public void update(Vector2 playerPos, GameTime gametime, int dummy)
         {
             playerPosition = playerPos;
             position.Y -= bulletSpeed;

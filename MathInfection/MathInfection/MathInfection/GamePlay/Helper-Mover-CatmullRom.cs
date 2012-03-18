@@ -20,7 +20,7 @@ namespace MathInfection
             location = 0;
         }
 
-        public Vector2 update(Vector2 dummy)
+        public Vector2 update(Vector2 dummy, int score)
         {
             location += speed;
             if (location > 1.0f || location < 0.0f) location = 0.0f;
@@ -30,7 +30,7 @@ namespace MathInfection
             {
                 vec1 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 vec2 = vec3;
-                vec3 = TargetPlayer();
+                vec3 = TargetPlayer(score);
                 vec4 = RandomGenerator.RandomPosition(parent.WindowSize, parent.CharacterSize);
                 location = 0;
                 newPosition = Vector2.CatmullRom(vec1, vec2, vec3, vec4, location);
@@ -76,9 +76,11 @@ namespace MathInfection
             return newPos;
         }
 
-        private Vector2 TargetPlayer()
+        private Vector2 TargetPlayer(int score)
         {
-            if(RandomGenerator.RandomChasePlayer(parent.GetType().ToString() == "MathInfection.Boss"))
+            bool targetPlayer = RandomGenerator.RandomChasePlayer(parent.GetType().ToString()
+                                                         == "MathInfection.Boss", score);
+            if(targetPlayer)
             {
                 return parent.PlayerPosition;
             }

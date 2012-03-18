@@ -1,35 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Timers;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
 
 namespace MathInfection
 {
     class BackgroundScreen : GameScreen
     {
         private ContentManager content;
-        private Texture2D backgroundTexture;
+        private Texture2D[] backgroundTexture = new Texture2D[23];
         private Texture2D AdditionSign;
         private Texture2D MultiplicationSign;
         private Texture2D SubtractionSign;
         private Texture2D DivisionSign;
-
+        private TimeSpan prevtime = TimeSpan.Zero;
+        private TimeSpan framedur = TimeSpan.FromSeconds(.018f);
+        private int curframe = 0;
 
         Stack<Box> myBoxStack = new Stack<Box>();
         Stack<Box> myBoxStack2 = new Stack<Box>();
         Stack<Box> myBoxStack3 = new Stack<Box>();
         Stack<Box> myBoxStack4 = new Stack<Box>();
 
-
-        Random random = new Random();
 
         public BackgroundScreen()
         {
@@ -38,33 +31,32 @@ namespace MathInfection
 
             for (int i = 0; i < 4; i++)
             {
-                myBoxStack.Push(new Box(random.Next(784),
-                    random.Next(584), 6, 6,
-                    random.Next(4) + 1,
-                    random.Next(4) + 1));
+                myBoxStack.Push(new Box(RandomGenerator.RandomInt(784),
+                                  RandomGenerator.RandomInt(584), 6, 6,
+                                      RandomGenerator.RandomInt(4) + 1,
+                                    RandomGenerator.RandomInt(4) + 1));
             }
 
             for (int i = 0; i <= 2; i++)
             {
-                myBoxStack2.Push(new Box(random.Next(2),
-                    5, 6, 6,
-                    random.Next(4) + 1, 5));
+                myBoxStack2.Push(new Box(RandomGenerator.RandomInt(2),
+                       5, 6, 6, RandomGenerator.RandomInt(4) + 1, 5));
             }
 
             for (int i = 0; i < 3; i++)
             {
-                myBoxStack3.Push(new Box(random.Next(222),
-                    random.Next(555), 6, 6,
-                    random.Next(4) + 1,
-                    random.Next(4) + 1));
+                myBoxStack3.Push(new Box(RandomGenerator.RandomInt(222),
+                                   RandomGenerator.RandomInt(555), 6, 6,
+                                       RandomGenerator.RandomInt(4) + 1,
+                                     RandomGenerator.RandomInt(4) + 1));
             }
 
             for (int i = 0; i < 3; i++)
             {
-                myBoxStack4.Push(new Box(random.Next(700),
-                    random.Next(500), 6, 6,
-                    random.Next(4) + 1,
-                    random.Next(4) + 1));
+                myBoxStack4.Push(new Box(RandomGenerator.RandomInt(700),
+                                   RandomGenerator.RandomInt(500), 6, 6,
+                                       RandomGenerator.RandomInt(4) + 1,
+                                     RandomGenerator.RandomInt(4) + 1));
             }
         }
 
@@ -75,11 +67,15 @@ namespace MathInfection
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
 
-            backgroundTexture = content.Load<Texture2D>("TitleScreen");
-            AdditionSign = content.Load<Texture2D>("PlusSign");
-            MultiplicationSign = content.Load<Texture2D>("MultiplySign");
-            SubtractionSign = content.Load<Texture2D>("MinusSign");
-            DivisionSign = content.Load<Texture2D>("DivisionSign");
+            for (int i = 0; i < 23; i++)
+            {
+                backgroundTexture[i] = content.Load<Texture2D>(@"TitleScreenImages/Title-" + i);
+            }
+
+            AdditionSign       = content.Load<Texture2D>(@"TitleScreenImages/PlusSign");
+            MultiplicationSign = content.Load<Texture2D>(@"TitleScreenImages/MultiplySign");
+            SubtractionSign    = content.Load<Texture2D>(@"TitleScreenImages/MinusSign");
+            DivisionSign       = content.Load<Texture2D>(@"TitleScreenImages/DivisionSign");
         }
 
         public override void UnloadContent()
@@ -91,6 +87,15 @@ namespace MathInfection
                                                        bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, false);
+
+            if (gameTime.TotalGameTime - prevtime > framedur)
+            {
+                if (curframe != 22)
+                {
+                    curframe++;
+                    prevtime = gameTime.TotalGameTime;
+                }
+            }
 
             foreach (Box b in myBoxStack)
             {
@@ -124,8 +129,9 @@ namespace MathInfection
             Rectangle fullscreen = new Rectangle(0, 0, viewport.Width, viewport.Height);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(backgroundTexture, fullscreen,
-                             new Color(TransitionAlpha, TransitionAlpha, TransitionAlpha));
+            
+            spriteBatch.Draw(backgroundTexture[curframe], new Rectangle(0, 0, 1000, 660),
+                                                                            Color.White);
 
             foreach (Box b in myBoxStack)
             {
@@ -158,7 +164,6 @@ namespace MathInfection
 
                 spriteBatch.Draw(DivisionSign, boom4, Color.White);
             }
-
 
             spriteBatch.End();
         }

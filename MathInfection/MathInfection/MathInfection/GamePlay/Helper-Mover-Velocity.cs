@@ -13,7 +13,7 @@ namespace MathInfection
             velocity = vel;
         }
 
-        public Vector2 update(Vector2 position)
+        public Vector2 update(Vector2 position, int score)
         {
             position += velocity;
             return BounceEdges(position);

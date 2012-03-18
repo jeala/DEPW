@@ -1,19 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-
 namespace MathInfection
 {
     public static class GameUpdate
     {
+        public static void AddEnemy(List<Enemy> eList, int numToAdd, int numMovers,
+                              List<Texture2D> enemyTexList, Vector2 wSize, Player p1)
+        {
+            int count = 0;
+            while(count < numToAdd)
+            {
+                int enemyType = RandomGenerator.RandomInt(enemyTexList.Count);
+                eList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMovers, p1.Score),
+                                       wSize, 100, RandomGenerator.RandomEnemySize(false)));
+                int index = eList.Count - 1;
+                switch(enemyType)
+                {
+                    case 0: eList[index].InitializeAnim(enemyTexList[0], 2, 400, 44, 40);
+                        break;
+                    case 1: eList[index].InitializeAnim(enemyTexList[1], 8, 200, 46, 50);
+                        break;
+                    case 2: eList[index].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
+                        break;
+                }
+                count++;
+            }
+        }
+
         public static void UpdateEnemyList(List<Enemy> eList)
         {
             int index = 0;
-            while (index < eList.Count)
+            while(index < eList.Count)
             {
                 if(!eList[index].IsAlive())
                 {
@@ -209,7 +232,7 @@ namespace MathInfection
                     {
                         grabHealthInstance = grabHealth.Play();
                         hlist[index].drawIcon = false;
-                        p1.Health += 20;
+                        p1.Health += 10;
                     }
                 }
                 index++;
@@ -236,28 +259,86 @@ namespace MathInfection
             // endof Player Collision Detection
         }
 
-        public static void UpdateGameData(GameData data, int currentLevel,
-                                                         int currentScore)
+        public static void UpdateGameData(GameData data, Player player)
         {
-            
+            data.CurrentScore = player.Score;
+            data.CurrentHealth = player.Health;
+            if(player.Health > 0)
+            {
+                data.LastGameDied = false;
+            }
+            else
+            {
+                data.LastGameDied = true;
+            }
+
+            if(data.TopScores.Count < data.TopScoreCapacity && data.CurrentScore > 0)
+            {
+                if(!data.TopScores.Contains(data.CurrentScore) && !player.IsAlive())
+                {
+                    data.TopScores.Add(data.CurrentScore);
+                    data.TopScoresDateTime.Add(DateTime.Now);
+                }
+            }
+            else if(data.TopScores.Count > 0 && data.CurrentScore > data.TopScores.Min())
+            {
+                if (!data.TopScores.Contains(data.CurrentScore) && !player.IsAlive())
+                {
+                    int lowest = data.TopScores.Min();
+                    int lowestIndex = data.TopScores.IndexOf(lowest);
+                    data.TopScores.RemoveAt(lowestIndex);
+                    data.TopScoresDateTime.RemoveAt(lowestIndex);
+                    data.TopScores.Add(data.CurrentScore);
+                    data.TopScoresDateTime.Add(DateTime.Now);
+                }
+            }
         }
 
         public static string GetHighScores(bool fromMainMenu)
         {
+            GameData data = FileIO.DeserializeFromXML();
             string highScores = "";
+            if(data != null)
+            {
+                if(data.TopScores.Count > 0 &&
+                  (data.TopScores.Count == data.TopScoresDateTime.Count))
+                {
+                    List<int> topscores = data.TopScores;
+                    List<DateTime> tScoreTD = data.TopScoresDateTime;
+                    int count = topscores.Count;
+                    for(int i = 0; i < count; i++)
+                    {
+                        if(highScores.Length == 0 && !fromMainMenu)
+                        {
+                            highScores = "\n\n\nTop Scores";
+                        }
+                        int highest = topscores.Max();
+                        int highestIndex = topscores.IndexOf(highest);
+                        DateTime highestDT = tScoreTD[highestIndex];
+                        string indexStr = (i + 1).ToString().PadLeft(2);
+                        string highestStr = highest.ToString().PadLeft(7);
+                        string space = "    :  ";
+                        space = space.PadLeft(2);
+                        highScores += "\n" + indexStr + "  " + highestStr +
+                                                          space + highestDT;
+                        topscores.RemoveAt(highestIndex);
+                        tScoreTD.RemoveAt(highestIndex);
+                    }
+                }
+            }
             return highScores;
         }
 
         public static string GetTotalScore()
         {
+            GameData data = FileIO.DeserializeFromXML();
             string totalScore = "";
+            if(data != null)
+            {
+                string total = data.CurrentScore.ToString();
+                totalScore += "    Current Total: " + total;
+            }
             return totalScore;
-        }
-
-        public static int GetCurrentLevel()
-        {
-            int currentLevel = 0;
-            return currentLevel;
         }
 
         private static void GeneratePowerUps(List<Health> hList, List<Shield> sList,

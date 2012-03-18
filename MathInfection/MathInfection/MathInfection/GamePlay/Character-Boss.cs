@@ -15,7 +15,7 @@ namespace MathInfection
         private float resizeRatio;
 
         public Boss(int moverId, Texture2D tex, Vector2 pos, Vector2 cSize,
-                    Vector2 wSize, int hp, float resize)
+                                       Vector2 wSize, int hp, float resize)
         {
             mover = SetMover(moverId);
             texture = tex;
@@ -69,12 +69,12 @@ namespace MathInfection
             health -= damage;
         }
 
-        public void update(Vector2 playerPos, GameTime gametime)
+        public void update(Vector2 playerPos, GameTime gametime, int score)
         {
             if (health > 0)
             {
                 playerPosition = playerPos;
-                position = mover.update(position);
+                position = mover.update(position, score);
             }
         }
 

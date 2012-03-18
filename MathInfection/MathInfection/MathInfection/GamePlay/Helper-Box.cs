@@ -1,10 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-
-namespace MathInfection
+﻿namespace MathInfection
 {
-    class Box : GameScreen
+    class Box
     {
         // X, Y is the upper left point of the box
         public int X { get; set; }

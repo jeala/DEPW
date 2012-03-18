@@ -61,7 +61,7 @@ namespace MathInfection
 
             Vector2 origin = new Vector2(0, font.LineSpacing + 24 / 4f);
 
-            spriteBatch.DrawString(font, text, position, color, 0,
+            spriteBatch.DrawString(font, text, new Vector2(position.X, position.Y - 30), color, 0,
                                    origin, scale, SpriteEffects.None, 0);
         }
 

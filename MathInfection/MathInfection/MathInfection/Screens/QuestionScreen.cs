@@ -2,12 +2,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MathInfection
 {
     class QuestionScreen : GameScreen
     {
-        private GameplayScreen parent;
         private Player player;
         private HeadsUpDisplay hud;
         private int correctAnswer;
@@ -21,14 +21,12 @@ namespace MathInfection
         private string message;
         private Texture2D questionFrameTex;
 
-        public QuestionScreen(string msg, GameplayScreen caller, HeadsUpDisplay HUD,
-                                                                          Player p1)
+        public QuestionScreen(string msg, HeadsUpDisplay HUD, Player p1)
         {
-            parent = caller;
             player = p1;
             hud = HUD;
-            string question = RandomGenerator.RandomQuestion( parent.CurrentScore,
-                                                  out correctAnswer, out answers);
+            string question = RandomGenerator.RandomQuestion(player,
+                                                     out correctAnswer, out answers);
             lifeSpan = 240;
             questionMessage = msg + "\n" + question;
             answerMessage = "\n" + answers[0].ToString().PadLeft(8) + "\n" +
@@ -50,22 +48,22 @@ namespace MathInfection
 
         public override void HandleInput(InputState input)
         {
-            if (input.IsMenuUp(ControllingPlayer))
+            if (input.IsAnswerUp(ControllingPlayer))
             {
                 ProcessAnswer(1);
                 ExitScreen();
             }
-            else if (input.IsMenuDown(ControllingPlayer))
+            else if (input.IsAnswerDown(ControllingPlayer))
             {
                 ProcessAnswer(4);
                 ExitScreen();
             }
-            else if(input.IsMenuLeft(ControllingPlayer))
+            else if (input.IsAnswerLeft(ControllingPlayer))
             {
                 ProcessAnswer(2);
                 ExitScreen();
             }
-            else if(input.IsMenuRight(ControllingPlayer))
+            else if (input.IsAnswerRight(ControllingPlayer))
             {
                 ProcessAnswer(3);
                 ExitScreen();
@@ -127,10 +125,10 @@ namespace MathInfection
             }
             else
             {
-                player.Health -= 10;
+                player.Health -= 25;
                 if(isBoss)
                 {
-                    player.Health -= 15;
+                    player.Health -= 25;
                 }
             }
             hud.QuestionAnswered(player);

@@ -9,26 +9,27 @@ namespace MathInfection
     {
         private readonly string highScores;
         private readonly string usage;
-        Texture2D backgroundTexture;
+        private Texture2D backgroundTexture;
 
         public event EventHandler<PlayerIndexEventArgs> Accepted;
 
         public HighscoreScreen() : base("High Scores")
         {
             highScores = GameUpdate.GetHighScores(true);
-            usage = "\n\n\nA-button, Space, Enter = Back to Main Screen";
+            usage = "\n\n\nA-button, B-button, Space, Enter = Back to Main Screen";
         }
 
         public override void LoadContent()
         {
             ContentManager content = ScreenManager.Game.Content;
-            backgroundTexture = content.Load<Texture2D>("TitleScreen");
+            backgroundTexture = content.Load<Texture2D>(@"TitleScreenImages/Title-22");
         }
 
         public override void HandleInput(InputState input)
         {
             PlayerIndex playerIndex;
-            if (input.IsMenuSelect(ControllingPlayer, out playerIndex))
+            if (input.IsMenuSelect(ControllingPlayer, out playerIndex) ||
+                input.IsMenuCancel(ControllingPlayer, out playerIndex))
             {
                 if (Accepted != null)
                     Accepted(this, new PlayerIndexEventArgs(playerIndex));
@@ -46,7 +47,7 @@ namespace MathInfection
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
 
             float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            Vector2 titlePosition = new Vector2(viewport.Width/2, 160);
+            Vector2 titlePosition = new Vector2(viewport.Width/2, 180);
             Vector2 titleOrigin = scoreFont.MeasureString("High Scores") / 2;
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             float titleScale = 1.25f;

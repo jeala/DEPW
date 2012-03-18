@@ -13,7 +13,6 @@ namespace MathInfection
     public class GameplayScreen : GameScreen
     {
         private ContentManager content;
-        private SpriteFont gameFont;
         private float pauseAlpha;
 
         private GraphicsDeviceManager graphics;
@@ -23,6 +22,8 @@ namespace MathInfection
         private HeadsUpDisplay hud;
 
         private Player player1;
+        private int player1CurrentScore;
+        private int player1CurrentHealth;
         private Player player2;
         private List<Enemy> enemyList;
         private List<Boss> bossList;
@@ -56,7 +57,6 @@ namespace MathInfection
         private Texture2D shieldIconP;
         private Texture2D gunIconF;
         Shield shield;
-        Health heart;
         private List<Health> healthList;
         private List<Shield> shieldList;
 
@@ -75,18 +75,6 @@ namespace MathInfection
             }
         }
 
-        public int CurrentScore
-        {
-            get
-            {
-                return player1.Score;
-            }
-            set
-            {
-                player1.Score = value;
-            }
-        }
-
         public GameplayScreen(ScreenManager sMgr, bool isNewGame)
         {
             TransitionOnTime  = TimeSpan.FromSeconds(1.5);
@@ -102,9 +90,8 @@ namespace MathInfection
             {
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             }
-            gameFont = content.Load<SpriteFont>("gamefont");
-            Score = content.Load<Texture2D>("Score");
-            Health = content.Load<Texture2D>("Health");
+            Score  = content.Load<Texture2D>(@"HUDimages/Score");
+            Health = content.Load<Texture2D>(@"HUDimages/Health");
             gameplaySong = content.Load<Song>("Sounds\\Turns");
             MediaPlayer.Play(gameplaySong);
             GameplayLoad();
@@ -114,6 +101,8 @@ namespace MathInfection
 
         public override void UnloadContent()
         {
+            GameUpdate.UpdateGameData(gameData, player1);
+            FileIO.SerializeToXML(gameData);
             content.Unload();
         }
 
@@ -193,7 +182,7 @@ namespace MathInfection
             singleMode = true;
             numPlayers = singleMode ? 1 : 2;
             numMoveStrategies = 3;
-            numEnemies = 10;
+            numEnemies = 5;
             previousFireTime = TimeSpan.Zero;
             defaultBulletFireRate = TimeSpan.FromSeconds(.15f);
 
@@ -207,18 +196,29 @@ namespace MathInfection
                     uname = nameArry[nameArry.Length - 1];
                 }
                 gameData = new GameData(uname);
+                player1CurrentHealth = 100;
+                player1CurrentScore = 0;
                 FileIO.SerializeToXML(gameData);
             }
             else
             {
                 if(isNewGame)
                 {
-                    gameData.TotalScore = 0;
-                    gameData.LastTotal = 0;
-                    gameData.CurrentLevel = 1;
-                    gameData.LastGameWon = false;
-                    gameData.MiddleUpdate = false;
+                    gameData.CurrentScore = 0;
+                    player1CurrentScore = 0;
+                    gameData.CurrentHealth = 100;
+                    player1CurrentHealth = 100;
+                    gameData.LastGameDied = false;
                     FileIO.SerializeToXML(gameData);
+                }
+                else
+                {
+                    player1CurrentHealth = gameData.CurrentHealth;
+                    if(gameData.LastGameDied)
+                    {
+                        player1CurrentHealth = 1;
+                    }
+                    player1CurrentScore = gameData.CurrentScore;
                 }
             }
             hud = new HeadsUpDisplay(new Vector2(windowSize.X / 2 - 200, 20));
@@ -228,24 +228,26 @@ namespace MathInfection
         {
             spriteBatch = ScreenManager.SpriteBatch;
 
+            gunIconF    = content.Load<Texture2D>(@"PowerUps/GunFieldIcon");
             healthIconF = content.Load<Texture2D>(@"PowerUps/HealthUpgrade");
-            shieldIconF = content.Load<Texture2D>(@"PowerUps/ShieldFieldIcon");
             shieldIconP = content.Load<Texture2D>(@"PowerUps/Shield");
-            gunIconF = content.Load<Texture2D>(@"PowerUps/GunFieldIcon");
+            shieldIconF = content.Load<Texture2D>(@"PowerUps/ShieldFieldIcon");
 
-            gunSound = content.Load<SoundEffect>(@"Sounds/shootGun");
-            getHealth = content.Load<SoundEffect>(@"Sounds/grabHealth");
-            getShield = content.Load <SoundEffect>(@"Sounds/grabShield");
-            noHealth = content.Load<SoundEffect>(@"Sounds/noHealth");
+            gunSound       = content.Load<SoundEffect>(@"Sounds/shootGun");
+            getHealth      = content.Load<SoundEffect>(@"Sounds/grabHealth");
+            getShield      = content.Load<SoundEffect>(@"Sounds/grabShield");
+            noHealth       = content.Load<SoundEffect>(@"Sounds/noHealth");
             questionNotice = content.Load<SoundEffect>(@"Sounds/notice");
 
-            hudFont = content.Load<SpriteFont>("HUDFont");
+            hudFont    = content.Load<SpriteFont>("HUDFont");
             background = new Background();
-            background.Load(ScreenManager.GraphicsDevice, content.Load<Texture2D>("BloodVein"));
+            background.Load(ScreenManager.GraphicsDevice,
+                                     content.Load<Texture2D>(@"BackgroundImages/BloodVein"),
+                                     content.Load<Texture2D>(@"BackgroundImages/BloodCells"));
 
             player1Texture = content.Load<Texture2D>(@"CharacterImages/Player1");
-            jettexture = content.Load<Texture2D>(@"CharacterImages/Character Jets");
-            jettexture2 = content.Load<Texture2D>(@"CharacterImages/Character Jets2");
+            jettexture     = content.Load<Texture2D>(@"CharacterImages/Jet1Normal");
+            jettexture2    = content.Load<Texture2D>(@"CharacterImages/Jet1Boost");
             playerSize = new Vector2(player1Texture.Width, player1Texture.Height);
             if(!singleMode)
             {
@@ -253,33 +255,16 @@ namespace MathInfection
                 // player2Texture = Content.Load<Texture2D>(@"CharacterImages/Player2");
             }
             player1 = new Player(player1Texture, jettexture, jettexture2, initialPlayerPosition,
-                                                        playerVelocity, playerSize, windowSize);
+                                    playerVelocity, playerSize, windowSize, player1CurrentScore,
+                                                                          player1CurrentHealth);
 
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/Boss"));
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/PurpleVirus"));
-            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingInfectedBloodCell"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusGreen"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/VirusPurple"));
+            enemyTexList.Add(content.Load<Texture2D>(@"CharacterImages/ShockingBloodCell"));
 
-            Vector2 charSize = new Vector2(enemyTexList[0].Width , enemyTexList[0].Height);
-            int count = 0;
-            while(count < numEnemies)
-            {
-                int r = RandomGenerator.RandomInt(enemyTexList.Count);
-                enemyList.Add(new Enemy(RandomGenerator.RandomMoveStrategy(numMoveStrategies),
-                                        RandomGenerator.RandomPosition(windowSize, charSize),
-                                        windowSize,
-                                        100,
-                                        RandomGenerator.RandomEnemySize(false)));
-                switch (r)
-                {
-                    case 0: enemyList[count].InitializeAnim(enemyTexList[0], 2, 400, 64, 64);
-                        break;
-                    case 1: enemyList[count].InitializeAnim(enemyTexList[1], 8, 200, 46, 45);
-                        break;
-                    case 2: enemyList[count].InitializeAnim(enemyTexList[2], 4, 150, 70, 50);
-                        break;
-                }
-                count++;
-            }
+            GameUpdate.AddEnemy(enemyList, numEnemies, numMoveStrategies, enemyTexList,
+                                                                  windowSize, player1);
+
             bulletTexList.Add(content.Load<Texture2D>(@"BulletImages/Bullets"));
             shield = new Shield(new Vector2(0, 0));
         }
@@ -289,7 +274,7 @@ namespace MathInfection
             GameUpdate.CheckInput(gameTime, player1, defaultBulletList, bulletTexList,
                  previousFireTime, defaultBulletFireRate, windowSize, this, gunSound);
 
-            player1.update(Vector2.Zero, gameTime);
+            player1.update(Vector2.Zero, gameTime, 0);
             bool playerAlive = player1.IsAlive();
             bool noHealthInstance = false;
             if(!playerAlive)
@@ -297,6 +282,8 @@ namespace MathInfection
                 noHealthInstance = noHealth.Play();
                 ScreenManager.AddScreen(new SummaryScreen("You loose", playerAlive),
                                                                  ControllingPlayer);
+                GameUpdate.UpdateGameData(gameData, player1);
+                FileIO.SerializeToXML(gameData);
                 ExitScreen();
                 MediaPlayer.Stop();
                 MediaPlayer.Play(ScreenManager.menuSong);
@@ -304,7 +291,7 @@ namespace MathInfection
 
             foreach(Enemy e in enemyList)
             {
-                e.update(player1.PlayerPosition, gameTime);
+                e.update(player1.PlayerPosition, gameTime, player1.Score);
             }
             foreach (Health h in healthList)
             {
@@ -317,7 +304,7 @@ namespace MathInfection
 
             foreach(Bullet b in defaultBulletList)
             {
-                b.update(player1.PlayerPosition, gameTime);
+                b.update(player1.PlayerPosition, gameTime, 0);
             }
             GameUpdate.UpdateHealthList(ref healthList, player1);
             GameUpdate.UpdateShieldList(ref shieldList, player1);
@@ -337,10 +324,16 @@ namespace MathInfection
             bool questionNoticeInstance = false;
             if(player1.WasHit)
             {
-                ScreenManager.AddScreen(new QuestionScreen("Question Time", this,
-                                                hud, player1), ControllingPlayer);
+                ScreenManager.AddScreen(new QuestionScreen("Question Time", hud,
+                                                   player1), ControllingPlayer);
                 questionNoticeInstance = questionNotice.Play();
                 player1.WasHit = false;
+            }
+            if (enemyList.Count < numEnemies)
+            {
+                int numToAdd = RandomGenerator.RandomNumberToAdd(player1.Score);
+                GameUpdate.AddEnemy(enemyList, numToAdd, numMoveStrategies,
+                                        enemyTexList, windowSize, player1);
             }
             hud.update(player1);
 
@@ -379,8 +372,7 @@ namespace MathInfection
 
             if (shield.shield_active)
             {
-                GameUpdate.ModifyShield(ref shield, spriteBatch, player1,
-                                                            shieldIconP);
+                GameUpdate.ModifyShield(ref shield, spriteBatch, player1, shieldIconP);
             }
         }
         // endof class GameplayScreen
