@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace MathInfection
 {
@@ -13,6 +14,10 @@ namespace MathInfection
         private bool loadingNewGame;
         private Texture2D loadingScreenTex;
         private GameScreen[] screensToLoad;
+        private Video introVidoe;
+        private VideoPlayer videoPlayer;
+        private Texture2D videoTexture;
+        private static GraphicsDevice graphicsDevice;
 
         private LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
                               GameScreen[] screensToLoad, bool isNewGame)
@@ -27,6 +32,8 @@ namespace MathInfection
         {
             content = new ContentManager(ScreenManager.Game.Services, "Content");
             loadingScreenTex = content.Load<Texture2D>("LoadingScreen");
+            introVidoe = content.Load<Video>("CutScene");
+            videoPlayer = new VideoPlayer();
         }
 
         public static void Load(ScreenManager screenManager, bool loadingIsSlow,
@@ -37,14 +44,21 @@ namespace MathInfection
             {
                 screen.ExitScreen();
             }
-            LoadingScreen loadingScreen = new LoadingScreen(screenManager,
-                                        loadingIsSlow, screensToLoad, isNewGame);
+            LoadingScreen loadingScreen = new LoadingScreen(screenManager, loadingIsSlow,
+                                                               screensToLoad, isNewGame);
             screenManager.AddScreen(loadingScreen, controllingPlayer);
+            graphicsDevice = screenManager.GraphicsDevice;
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
+            if(videoPlayer.State == MediaState.Stopped && loadingNewGame)
+            {
+                videoPlayer.IsLooped = false;
+                videoPlayer.Play(introVidoe);
+            }
+
             base.Update(gameTime, otherScreenHasFocus, coveredByOtherScreen);
 
             if(otherScreenAreGone)
@@ -89,12 +103,20 @@ namespace MathInfection
                 }
                 if(loadingNewGame)
                 {
+                    if(videoPlayer.State != MediaState.Stopped)
+                    {
+                        videoTexture = videoPlayer.GetTexture();
+                    }
                     message = "Welcome, " + uname + ".  Starting New Game...";
                 }
                 else
                 {
                     message = "Welcome Back, " + uname + ".  Restoring Game File...";
                 }
+
+                Rectangle videoPosition = new Rectangle(graphicsDevice.Viewport.X,
+                         graphicsDevice.Viewport.Y, graphicsDevice.Viewport.Width,
+                                                  graphicsDevice.Viewport.Height);
 
                 Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
                 Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
@@ -103,8 +125,18 @@ namespace MathInfection
                 Vector2 loadingscreenimg = new Vector2(0, -3);
 
                 spriteBatch.Begin();
-                spriteBatch.Draw(loadingScreenTex, loadingscreenimg, Color.White);
-                spriteBatch.DrawString(font, message, textPosition, Color.DarkBlue);
+                if(loadingNewGame)
+                {
+                    if(videoTexture != null)
+                    {
+                        spriteBatch.Draw(videoTexture, videoPosition, Color.White);
+                    }
+                }
+                else
+                {
+                    spriteBatch.Draw(loadingScreenTex, loadingscreenimg, Color.White);
+                    spriteBatch.DrawString(font, message, textPosition, Color.DarkBlue);
+                }
                 spriteBatch.End();
             }
         }
